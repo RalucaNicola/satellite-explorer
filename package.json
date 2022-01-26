@@ -1,0 +1,25 @@
+{
+  "name": "satellite-explorer",
+  "version": "1.0.0",
+  "description": "Explore and learn about satellites",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "keywords": [
+    "arcgis-js",
+    "satellite",
+    "3D"
+  ],
+  "author": "Raluca Nicola",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.1.4",
+    "vite": "^2.7.13"
+  },
+  "dependencies": {
+    "@arcgis/core": "^4.22.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

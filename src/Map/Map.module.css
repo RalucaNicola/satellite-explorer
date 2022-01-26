@@ -1,0 +1,8 @@
+@import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
+
+.mapDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
