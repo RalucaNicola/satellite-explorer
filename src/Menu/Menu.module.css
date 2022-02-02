@@ -3,7 +3,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--background-color);
   height: clamp(250px, 30%, 400px);
   color: white;
   padding: 1em;

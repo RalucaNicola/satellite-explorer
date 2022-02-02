@@ -1,3 +1,7 @@
+:root {
+  --background-color: rgba(0, 0, 0, 0.5);
+}
+
 html,
 body,
 #root {
