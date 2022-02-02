@@ -65,14 +65,13 @@ export function Map() {
   }, []);
 
   useEffect(() => {
-    console.log('View is', view);
-    console.log('Data is', data);
-
-    const satelliteGraphics = data.map((sat, index) => {
-      const { norad, satrec, metadata } = sat;
+    const satelliteGraphics = [];
+    for (let index = 0; index < data.length; index++) {
+      const sat = data[index];
+      const { satrec, metadata } = sat;
       const coordinate = getSatelliteLocation(satrec, NOW);
       if (!coordinate) {
-        console.log(norad);
+        continue;
       }
       const geometry = new Point(coordinate);
 
@@ -81,11 +80,13 @@ export function Map() {
         ...metadata
       };
 
-      return new Graphic({
-        attributes,
-        geometry
-      });
-    });
+      satelliteGraphics.push(
+        new Graphic({
+          attributes,
+          geometry
+        })
+      );
+    }
 
     const orbitGraphics = data.map((sat, index) => {
       const { satrec, metadata } = sat;
@@ -121,6 +122,9 @@ export function Map() {
         geometryType: 'point',
         source: satelliteGraphics,
         objectIdField,
+        spatialReference: {
+          wkid: 4326
+        },
         renderer: {
           type: 'simple',
           symbol: {
@@ -154,6 +158,9 @@ export function Map() {
         geometryType: 'polyline',
         objectIdField,
         source: orbitGraphics,
+        spatialReference: {
+          wkid: 4326
+        },
         renderer: {
           type: 'simple',
           symbol: {
