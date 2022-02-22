@@ -1,5 +1,5 @@
 import * as styles from './Map.module.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SceneView from '@arcgis/core/views/SceneView';
 import WebScene from '@arcgis/core/WebScene';
 import Graphic from '@arcgis/core/Graphic';
@@ -7,15 +7,19 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import { Point, Polyline } from '@arcgis/core/geometry';
 import { useData } from '../DataProvider';
 import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js';
+import { useAppState } from '../AppState';
 
 const NOW = new Date();
-let view = null;
 
 export function Map() {
   const mapDiv = useRef(null);
+  const [view, setView] = useState(null);
+  const [lyrViewOrbit, setLyrViewOrbit] = useState(null);
   const data = useData();
+  const { state } = useAppState();
 
   useEffect(() => {
+    console.log('Effect create map');
     if (mapDiv.current) {
       const webscene = new WebScene({
         portalItem: {
@@ -23,23 +27,23 @@ export function Map() {
         }
       });
 
-      view = new SceneView({
+      const sceneView = new SceneView({
         container: mapDiv.current,
         map: webscene,
         alphaCompositingEnabled: true,
         qualityProfile: 'high',
-        environment: {
-          background: {
-            type: 'color',
-            color: [0, 0, 0, 0]
-          },
-          starsEnabled: false,
-          atmosphereEnabled: false,
-          lighting: {
-            cameraTrackingEnabled: false,
-            directShadowsEnabled: false
-          }
-        },
+        // environment: {
+        //   background: {
+        //     type: 'color',
+        //     color: [0, 0, 0, 0]
+        //   },
+        //   starsEnabled: false,
+        //   atmosphereEnabled: false,
+        //   lighting: {
+        //     cameraTrackingEnabled: false,
+        //     directShadowsEnabled: false
+        //   }
+        // },
         camera: {
           position: {
             x: 0,
@@ -61,6 +65,8 @@ export function Map() {
           }
         }
       });
+
+      setView(sceneView);
     }
   }, []);
 
@@ -109,72 +115,100 @@ export function Map() {
     });
 
     const objectIdField = 'index';
-    view.map.addMany([
-      new FeatureLayer({
-        id: 'satellite',
-        fields: [
-          { name: 'index', type: 'oid' },
-          { name: 'name', type: 'string' },
-          { name: 'operator', type: 'string' }
-        ],
+    const satelliteFeatureLayer = new FeatureLayer({
+      id: 'satellite',
+      fields: [
+        { name: 'index', type: 'oid' },
+        { name: 'name', type: 'string' },
+        { name: 'operator', type: 'string' }
+      ],
 
-        popupTemplate: { title: '{name} - {operator}' },
-        geometryType: 'point',
-        source: satelliteGraphics,
-        objectIdField,
-        spatialReference: {
-          wkid: 4326
-        },
-        renderer: {
-          type: 'simple',
-          symbol: {
-            type: 'point-3d',
-            symbolLayers: [
-              {
-                type: 'icon',
-                resource: { primitive: 'circle' },
-                material: { color: [255, 255, 255, 1] },
-                size: 2
-              },
-              {
-                type: 'icon',
-                resource: { primitive: 'circle' },
-                material: { color: [255, 255, 255, 0] },
-                outline: { color: [255, 255, 255, 0.3] },
-                size: 6
-              }
-            ]
-          }
+      popupTemplate: { title: '{name} - {operator}' },
+      geometryType: 'point',
+      source: satelliteGraphics,
+      objectIdField,
+      spatialReference: {
+        wkid: 4326
+      },
+      renderer: {
+        type: 'simple',
+        symbol: {
+          type: 'point-3d',
+          symbolLayers: [
+            {
+              type: 'icon',
+              resource: { primitive: 'circle' },
+              material: { color: [255, 255, 255, 1] },
+              size: 2
+            },
+            {
+              type: 'icon',
+              resource: { primitive: 'circle' },
+              material: { color: [255, 255, 255, 0] },
+              outline: { color: [255, 255, 255, 0.3] },
+              size: 6
+            }
+          ]
         }
-      }),
-      new FeatureLayer({
-        id: 'orbit',
-        fields: [
-          { name: 'index', type: 'oid' },
-          { name: 'name', type: 'string' },
-          { name: 'operator', type: 'string' }
-        ],
-        popupTemplate: { title: '{name} - {operator}' },
-        geometryType: 'polyline',
-        objectIdField,
-        source: orbitGraphics,
-        spatialReference: {
-          wkid: 4326
-        },
-        renderer: {
-          type: 'simple',
-          symbol: {
-            type: 'simple-line',
-            width: 0.25,
-            color: [255, 255, 255, 0.6],
-            style: 'solid',
-            cap: 'round',
-            join: 'round'
-          }
+      }
+    });
+    const orbitFeatureLayer = new FeatureLayer({
+      id: 'orbit',
+      fields: [
+        { name: 'index', type: 'oid' },
+        { name: 'name', type: 'string' },
+        { name: 'operator', type: 'string' },
+        { name: 'orbit_class', type: 'string' }
+      ],
+      popupTemplate: { title: '{name} ---- {orbit_class}' },
+      geometryType: 'polyline',
+      objectIdField,
+      source: orbitGraphics,
+      spatialReference: {
+        wkid: 4326
+      },
+      renderer: {
+        type: 'simple',
+        symbol: {
+          type: 'simple-line',
+          width: 0.25,
+          color: [255, 255, 255, 0.6],
+          style: 'solid',
+          cap: 'round',
+          join: 'round'
         }
-      })
-    ]);
-  }, [data]);
+      }
+    });
+    console.log('Effect data');
+    if (view) {
+      view.map.addMany([satelliteFeatureLayer]);
+      // view.whenLayerView(orbitFeatureLayer).then((lyrView) => {
+      //   setLyrViewOrbit(lyrView);
+      // });
+    }
+  }, [data, view]);
+
+  useEffect(() => {
+    console.log('filter effect', lyrViewOrbit);
+    if (lyrViewOrbit) {
+      switch (state.filter) {
+        case 'meo':
+          lyrViewOrbit.filter = {
+            where: `orbit_class = 'MEO'`
+          };
+          break;
+        case 'leo':
+          lyrViewOrbit.filter = {
+            where: `orbit_class = 'LEO'`
+          };
+          break;
+        default:
+          lyrViewOrbit.filter = {
+            where: `1=1'`
+          };
+      }
+    }
+  }, [state.filter, lyrViewOrbit]);
   return <div className={styles.mapDiv} ref={mapDiv}></div>;
 }
 

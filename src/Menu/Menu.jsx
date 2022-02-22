@@ -16,14 +16,14 @@ export function Menu() {
       return (
         <div className={styles.menu}>
           <h1>Satellite Explorer</h1>
-          <OrbitCard onClick={(e) => showPanel(e, 'low')} imgSource='./assets/low-orbit.png'>
+          <OrbitCard onClick={(e) => showPanel(e, 'low')} type='leo' imgSource='./assets/low-orbit.png'>
             <h2>Low earth orbit</h2>
             <p>
               300km to 2,000km up is the closest safe orbit for satellites, home to famous names including the Hubble
               Space Telescope and the International Space Station (ISS)
             </p>
           </OrbitCard>
-          <OrbitCard onClick={(e) => showPanel(e, 'medium')} imgSource='./assets/medium-orbit.png'>
+          <OrbitCard onClick={(e) => showPanel(e, 'medium')} type='meo' imgSource='./assets/medium-orbit.png'>
             <h2>Medium earth orbit</h2>
             <p>
               300km to 2,000km up is the closest safe orbit for satellites, home to famous names including the Hubble

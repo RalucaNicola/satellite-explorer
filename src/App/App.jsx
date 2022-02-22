@@ -3,12 +3,15 @@ import { useState } from 'react';
 import { Menu } from '../Menu';
 import { Map } from '../Map';
 import { DataProvider } from '../DataProvider';
+import { AppStateProvider } from '../AppState';
 
 export function App() {
   return (
     <DataProvider>
-      <Map></Map>
-      <Menu></Menu>
+      <AppStateProvider>
+        <Map></Map>
+        <Menu></Menu>
+      </AppStateProvider>
     </DataProvider>
   );
 }

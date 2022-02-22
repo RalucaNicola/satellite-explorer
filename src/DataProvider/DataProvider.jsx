@@ -1,3 +1,5 @@
+// https://spin.atomicobject.com/2020/04/15/react-context-data-provider-pattern/
+
 import { createContext, useContext, useEffect, useState } from 'react';
 import { twoline2satrec } from 'satellite.js';
 import Papa from 'papaparse';
