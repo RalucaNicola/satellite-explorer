@@ -1,21 +1,9 @@
-import { createContext, useContext, useEffect, useState } from 'react';
 import { twoline2satrec } from 'satellite.js';
 import Papa from 'papaparse';
 
-const DataContext = createContext([]);
-
-export const useData = () => {
-  const dataContext = useContext(DataContext);
-  if (dataContext === null) {
-    throw new Error('useData can only be used within a DataContext');
-  }
-  return dataContext;
-};
-
-export const DataProvider = ({ children }) => {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    (async () => {
+export default class DataStore {
+  fetchData() {
+    return (async () => {
       /**
        * Metadata for active satellites
        * Union of Concerned Scientists Satellite Database
@@ -92,10 +80,7 @@ export const DataProvider = ({ children }) => {
           });
         }
       }
-
-      setData(satellites);
+      return satellites;
     })();
-  }, []);
-
-  return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
-};
+  }
+}
