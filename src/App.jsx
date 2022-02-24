@@ -4,6 +4,7 @@ import { Stories } from './components/Stories';
 import { PageNotFound } from './components/PageNotFound';
 import appStore from './stores/AppStore';
 import { observer } from 'mobx-react';
+
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SatelliteUsage } from './components/SatelliteUsage';
@@ -13,12 +14,12 @@ import { SatelliteInternet } from './components/SatelliteInternet';
 const App = observer(() => {
   let location = useLocation();
   useEffect(() => {
-    appStore.setLocation(location);
+    appStore.setLocation(location.pathname);
   }, [location]);
   return (
     <>
       <Routes>
-        <Route path='/' element={<Map map={appStore.map} />}>
+        <Route path='/' element={<Map />}>
           <Route path='*' element={<PageNotFound />} />
           <Route index element={<Stories />} />
           <Route path='satellite-usage' element={<SatelliteUsage />} />

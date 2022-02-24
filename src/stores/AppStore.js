@@ -9,6 +9,7 @@ class AppStore {
   viewIsReady = false;
   browserLocation = null;
   location = null;
+  visualizationFilter = null;
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -30,8 +31,10 @@ class AppStore {
     this.map = map;
   }
   setLocation(location) {
-    console.log('setting location', location);
     this.location = location;
+  }
+  setVisualizationFilter(filter) {
+    this.visualizationFilter = filter;
   }
 }
 

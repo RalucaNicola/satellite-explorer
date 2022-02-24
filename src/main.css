@@ -1,5 +1,5 @@
 :root {
-  --background-color: rgba(0, 0, 0, 0.5);
+  --background-color: rgba(0, 0, 0, 0.8);
 }
 
 @import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
@@ -35,6 +35,8 @@ a:hover {
   height: clamp(250px, 30%, 400px);
   color: white;
   padding: 1em;
+  font-size: 1.1rem;
+  overflow: auto;
 }
 
 @media (min-width: 550px) {

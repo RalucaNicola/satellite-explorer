@@ -3,6 +3,7 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
 import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js';
+import { fields } from '../config';
 
 const NOW = new Date();
 
@@ -58,68 +59,31 @@ class MapStore {
     });
 
     const objectIdField = 'index';
+    const layerFields = [
+      { name: 'index', type: 'oid' },
+      ...fields.map((field) => {
+        return { name: field.name, type: field.type };
+      })
+    ];
     map.addMany([
       new FeatureLayer({
         id: 'satellite',
-        fields: [
-          { name: 'index', type: 'oid' },
-          { name: 'name', type: 'string' },
-          { name: 'operator', type: 'string' }
-        ],
-
-        popupTemplate: { title: '{name} - {operator}' },
+        fields: layerFields,
         geometryType: 'point',
         source: satelliteGraphics,
         objectIdField,
         spatialReference: {
           wkid: 4326
-        },
-        renderer: {
-          type: 'simple',
-          symbol: {
-            type: 'point-3d',
-            symbolLayers: [
-              {
-                type: 'icon',
-                resource: { primitive: 'circle' },
-                material: { color: [255, 255, 255, 1] },
-                size: 2
-              },
-              {
-                type: 'icon',
-                resource: { primitive: 'circle' },
-                material: { color: [255, 255, 255, 0] },
-                outline: { color: [255, 255, 255, 0.3] },
-                size: 6
-              }
-            ]
-          }
         }
       }),
       new FeatureLayer({
         id: 'orbit',
-        fields: [
-          { name: 'index', type: 'oid' },
-          { name: 'name', type: 'string' },
-          { name: 'operator', type: 'string' }
-        ],
-        popupTemplate: { title: '{name} - {operator}' },
+        fields: layerFields,
         geometryType: 'polyline',
         objectIdField,
         source: orbitGraphics,
         spatialReference: {
           wkid: 4326
-        },
-        renderer: {
-          type: 'simple',
-          symbol: {
-            type: 'simple-line',
-            width: 0.25,
-            color: [255, 255, 255, 0.6],
-            style: 'solid',
-            cap: 'round',
-            join: 'round'
-          }
         }
       })
     ]);

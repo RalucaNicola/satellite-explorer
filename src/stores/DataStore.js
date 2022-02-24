@@ -1,5 +1,7 @@
 import { twoline2satrec } from 'satellite.js';
 import Papa from 'papaparse';
+import { fields } from '../config';
+import { convertToType } from '../utils/utils';
 
 export default class DataStore {
   fetchData() {
@@ -19,35 +21,10 @@ export default class DataStore {
       for (let i = 1; i < metadata.length; i++) {
         const item = metadata[i];
         const norad = Number(item[27]);
-        metadataCollection[norad] = {
-          name: item[1],
-          official_name: item[2],
-          country_UN_registry: item[3],
-          country_operator: item[4],
-          operator: item[5],
-          users: item[6],
-          purpose: item[7],
-          detailed_purpose: item[8],
-          orbit_class: item[9],
-          orbit_type: item[10],
-          perigee: item[12],
-          apogee: item[13],
-          eccentricity: item[14],
-          inclination: item[15],
-          period: item[16],
-          launch_mass: item[17],
-          dry_mass: item[18],
-          power: item[19],
-          launch_date: item[20],
-          expected_lifetime: item[21],
-          contractor: item[22],
-          launch_site: item[24],
-          launch_vehicle: item[25],
-          cospar: item[26],
-          norad,
-          source_orbital_data: item[28],
-          source: item[29]
-        };
+        metadataCollection[norad] = {};
+        fields.forEach((field) => {
+          metadataCollection[norad][field.name] = convertToType(item[field.metadataIndex], field.type);
+        });
       }
       /**
        * Active satellites TLE files

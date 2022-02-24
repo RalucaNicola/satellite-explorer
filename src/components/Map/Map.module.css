@@ -6,7 +6,3 @@
   height: 100%;
   width: 100%;
 }
-
-.mapDiv canvas {
-  filter: drop-shadow(0px 0px 10px rgba(240, 220, 130, 0.5));
-}
