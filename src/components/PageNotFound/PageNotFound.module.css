@@ -1,0 +1,36 @@
+.wrapper {
+  background-color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.container {
+  position: relative;
+  max-width: 80%;
+  max-height: 80%;
+}
+.container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.container p {
+  position: absolute;
+  top: 20%;
+  padding: 0 5rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 550px) {
+  .container p {
+    font-size: 1.4rem;
+  }
+}

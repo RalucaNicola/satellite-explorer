@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import SceneView from '@arcgis/core/views/SceneView';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import appStore from '../../stores/AppStore';
+import { Outlet } from 'react-router-dom';
 
 export const Map = ({ map }) => {
   const mapDiv = useRef(null);
@@ -61,5 +62,9 @@ export const Map = ({ map }) => {
     }
   }, [view]);
 
-  return <div className={styles.mapDiv} ref={mapDiv}></div>;
+  return (
+    <>
+      <div className={styles.mapDiv} ref={mapDiv}></div> <Outlet />
+    </>
+  );
 };

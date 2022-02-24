@@ -1,0 +1,16 @@
+.menu {
+  composes: rightPanel from '../../main.css';
+}
+
+.storiesList {
+  list-style: none;
+}
+
+@media (min-width: 550px) {
+  .menu {
+    top: 0;
+    width: clamp(350px, 30%, 500px);
+    left: revert;
+    height: revert;
+  }
+}
