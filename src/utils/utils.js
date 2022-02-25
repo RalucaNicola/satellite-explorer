@@ -32,7 +32,7 @@ export const convertToType = (value, type) => {
   return null;
 };
 
-const getPointSymbol = (color) => {
+const getPointSymbol = (color, size) => {
   return {
     type: 'point-3d',
     symbolLayers: [
@@ -40,23 +40,23 @@ const getPointSymbol = (color) => {
         type: 'icon',
         resource: { primitive: 'circle' },
         material: { color: [...color, 1] },
-        size: 2
+        size: size
       },
       {
         type: 'icon',
         resource: { primitive: 'circle' },
         material: { color: [...color, 0] },
         outline: { color: [...color, 0.3] },
-        size: 6
+        size: size * 2
       }
     ]
   };
 };
 
-const getLineSymbol = (color) => {
+const getLineSymbol = (color, size) => {
   return {
     type: 'simple-line',
-    width: 0.25,
+    width: size,
     color: [...color, 0.6],
     style: 'solid',
     cap: 'round',
@@ -74,7 +74,7 @@ export const setRenderers = (layers, location) => {
         uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
           return {
             value: info.value,
-            symbol: getPointSymbol(info.color)
+            symbol: getPointSymbol(info.color, 4)
           };
         })
       };
@@ -84,7 +84,7 @@ export const setRenderers = (layers, location) => {
         uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
           return {
             value: info.value,
-            symbol: getLineSymbol(info.color)
+            symbol: getLineSymbol(info.color, 1)
           };
         })
       };
@@ -92,11 +92,11 @@ export const setRenderers = (layers, location) => {
     default:
       pointRenderer = {
         type: 'simple',
-        symbol: getPointSymbol([255, 255, 255])
+        symbol: getPointSymbol([255, 255, 255], 3)
       };
       lineRenderer = {
         type: 'simple',
-        symbol: getLineSymbol([255, 255, 255])
+        symbol: getLineSymbol([255, 255, 255], 0.25)
       };
   }
   layers[0].renderer = lineRenderer;

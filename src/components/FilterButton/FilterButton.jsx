@@ -8,7 +8,7 @@ export function FilterButton({ active, filter, clickHandler, children }) {
   }, [active]);
   return (
     <button
-      className={`${styles.filterButton} ${activeState ? styles.active : ''}`}
+      className={`${styles.filterButton} ${styles[filter]} ${activeState ? styles.active : ''}`}
       onClick={() => {
         clickHandler(filter);
       }}

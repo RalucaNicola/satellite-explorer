@@ -37,6 +37,7 @@ const purple = [137, 109, 232];
 export const filterDefinition = {
   navigation: {
     color: pink,
+    id: 'navigation',
     expression: `purpose IN ('Navigation/Global Positioning', 'Navigation/Regional Positioning')`
   },
   gps: {
@@ -45,15 +46,33 @@ export const filterDefinition = {
   },
   glonass: {
     color: pink,
+    id: 'glonass',
     expression: `LOWER(name) LIKE '%glonass%'`
   },
   beidou: {
     color: pink,
+    id: 'beidou',
     expression: `LOWER(name) LIKE '%beidou%'`
   },
   galileo: {
     color: pink,
+    id: 'galileo',
     expression: `LOWER(name) LIKE '%galileo%'`
+  },
+  communications: {
+    color: blue,
+    id: 'communications',
+    expression: `purpose = 'Communications'`
+  },
+  earthObservation: {
+    color: green,
+    id: 'earthObservation',
+    expression: `purpose IN ('Earth Science', 'Earth Observation') `
+  },
+  spaceObservation: {
+    color: orange,
+    id: 'spaceObservation',
+    expression: `purpose IN ('Space Science', 'Space Observation') `
   }
 };
 

@@ -7,12 +7,56 @@
   margin: 4px 0;
 }
 
-.filterButton:hover {
+.filterButton:hover,
+.active {
   background-color: rgba(239, 138, 223, 0.6);
   color: white;
 }
 
-.active {
-  background-color: rgba(239, 138, 223, 0.6);
+.navigation {
+  composes: filterButton;
+  border: 1px solid var(--pink);
+  color: var(--pink);
+}
+
+.navigation:hover,
+.navigation.active {
+  background-color: var(--pink-background);
+  color: white;
+}
+
+.communications {
+  composes: filterButton;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+}
+
+.communications:hover,
+.communications.active {
+  background-color: var(--blue-background);
+  color: white;
+}
+
+.earthObservation {
+  composes: filterButton;
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+
+.earthObservation:hover,
+.earthObservation.active {
+  background-color: var(--green-background);
+  color: white;
+}
+
+.spaceObservation {
+  composes: filterButton;
+  border: 1px solid var(--orange);
+  color: var(--orange);
+}
+
+.spaceObservation:hover,
+.spaceObservation.active {
+  background-color: var(--orange-background);
   color: white;
 }

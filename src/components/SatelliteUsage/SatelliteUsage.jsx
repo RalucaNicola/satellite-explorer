@@ -3,10 +3,15 @@ import { Link } from 'react-router-dom';
 import { FilterButton } from '../FilterButton';
 import { useState } from 'react';
 import appStore from '../../stores/AppStore';
+import { filterDefinition } from '../../config';
+
+const navigation = filterDefinition.navigation.id;
+const communications = filterDefinition.communications.id;
+const earthObservation = filterDefinition.earthObservation.id;
+const spaceObservation = filterDefinition.spaceObservation.id;
 
 export function SatelliteUsage() {
   const [activeFilter, setActiveFilter] = useState(null);
-
   const handleFilter = (filter) => {
     setActiveFilter(filter);
     appStore.setVisualizationFilter(filter);
@@ -15,41 +20,38 @@ export function SatelliteUsage() {
     <div className={styles.menu}>
       <h2>Why do we need satellites?</h2>
       <p>
-        Did you ever search for "restaurants near you" on your phone or set the navigation system in the car to guide
-        you to a destination? Then you've used satellites. The{' '}
-        <FilterButton filter='navigation' active={activeFilter === 'navigation'} clickHandler={handleFilter}>
-          satellite navigation systems
-        </FilterButton>{' '}
-        determine the location, velocity and current time of small electronic receivers (like the ones in our smart
-        phones). Many industries use information from navigation satellites. A few examples include banking to manage
-        and synchronise transactions and authorise card activity. Emergency services like ambulances or fire fighters
-        use navigation systems to locate and plan interventions. There are a few fully operational global navigation
-        satellite systems (also called GNSS):
+        Did you ever get your location on your phone or set the navigation system in the car to guide you to a
+        destination? Or did you buy products in an airplane using your credit card or used the internet connection on a
+        plane? Then you've definitely used satellites.
       </p>
       <p>
-        <FilterButton filter='gps' active={activeFilter === 'gps'} clickHandler={handleFilter}>
-          GPS
+        <FilterButton filter={navigation} active={activeFilter === navigation} clickHandler={handleFilter}>
+          Position
         </FilterButton>{' '}
-        - the United States' Global Positioning System, originally Navstar GPS, was launched in 1973, by the U.S.
-        Department of Defence.
+        via satellite navigation systems is widely used in almost all industries: transportation, emergency response,
+        farming, banking, military, science. These satellites determine the location, velocity and current time of small
+        electronic devices (like the ones in our smart phones).
       </p>
       <p>
-        <FilterButton filter='glonass' active={activeFilter === 'glonass'} clickHandler={handleFilter}>
-          GLONASS
+        <FilterButton filter={communications} active={activeFilter === communications} clickHandler={handleFilter}>
+          Communications
         </FilterButton>{' '}
-        - the Russian space based satellite navigation system. Its development began in 1976.
+        satellites are used for television, radio and internet broadcasting. This sector increased lately with more and
+        more companies launching satellites to provide internet everywhere on the globe.
       </p>
       <p>
-        <FilterButton filter='beidou' active={activeFilter === 'beidou'} clickHandler={handleFilter}>
-          BeiDou
+        <FilterButton filter={earthObservation} active={activeFilter === earthObservation} clickHandler={handleFilter}>
+          Earth Observation
         </FilterButton>{' '}
-        - the Chinese global navigation system. The first system was launched in 2000.
+        satellites provide information about earth resources, weather, climate and environmental monitoring. Imaging
+        satellites produce high-resolution data of almost the entire landmass on earth.
       </p>
       <p>
-        <FilterButton filter='galileo' active={activeFilter === 'galileo'} clickHandler={handleFilter}>
-          Galileo
+        <FilterButton filter={spaceObservation} active={activeFilter === spaceObservation} clickHandler={handleFilter}>
+          Space Observation
         </FilterButton>{' '}
-        - created by the European Union through the Europen Space Agency. It went live in 2016.
+        also benefits from satellite data: satellite telescopes have been critical to understanding phenomena like
+        pulsars and black holes as well as measuring the age of the universe.
       </p>
       <Link to='/'>Back to homepage</Link>
     </div>

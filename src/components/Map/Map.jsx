@@ -96,6 +96,7 @@ export const Map = observer(() => {
         () => appStore.location,
         (location) => {
           setRenderers(layers, location);
+          appStore.setVisualizationFilter(null);
         }
       );
     }

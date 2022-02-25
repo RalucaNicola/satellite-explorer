@@ -1,5 +1,15 @@
 :root {
   --background-color: rgba(0, 0, 0, 0.8);
+  --pink: rgb(239, 138, 223);
+  --pink-background: rgba(239, 138, 223, 0.6);
+  --blue: rgb(109, 189, 232);
+  --blue-background: rgba(109, 189, 232, 0.6);
+  --orange: rgb(255, 118, 0);
+  --orange-background: rgba(255, 118, 0, 0.6);
+  --purple: rgb(137, 109, 232);
+  --purple-background: rgba(137, 109, 232, 0.6);
+  --green: rgb(193, 232, 118);
+  --green-background: rgba(193, 232, 118, 0.6);
 }
 
 @import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
