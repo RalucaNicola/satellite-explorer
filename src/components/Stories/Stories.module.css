@@ -1,8 +1,22 @@
 .menu {
-  composes: rightPanel from '../../main.css';
+  position: absolute;
+  bottom: 20px;
+  left: 10%;
+  right: 10%;
+  padding: 30px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 30px;
+  max-height: 30%;
+  overflow: auto;
 }
 
 .storiesList {
   list-style: none;
   padding: 0;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }

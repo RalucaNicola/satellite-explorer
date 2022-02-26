@@ -11,6 +11,7 @@
   --green: rgb(193, 232, 118);
   --green-background: rgba(193, 232, 118, 0.6);
   --font-source-sans: 'Poppins', sans-serif;
+  --primary: rgb(232 175 118);
 }
 
 @import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';

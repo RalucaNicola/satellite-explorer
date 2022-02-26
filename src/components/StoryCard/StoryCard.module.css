@@ -2,4 +2,18 @@
   max-height: 50px;
   vertical-align: middle;
   margin: 0 10px;
+  border-radius: 50%;
+  border: 3px solid var(--primary);
+}
+
+.title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.storyLink {
+  display: flex;
+  border-bottom: none;
 }
