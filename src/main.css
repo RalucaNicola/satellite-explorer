@@ -10,9 +10,11 @@
   --purple-background: rgba(137, 109, 232, 0.6);
   --green: rgb(193, 232, 118);
   --green-background: rgba(193, 232, 118, 0.6);
+  --font-source-sans: 'Poppins', sans-serif;
 }
 
 @import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 html,
 body,
@@ -22,7 +24,7 @@ body,
   height: 100%;
   width: 100%;
   background-color: black;
-  font-family: Avenir Next W01, Avenir Next W00, Avenir Next, Avenir, Helvetica Neue, sans-serif;
+  font-family: var(--font-source-sans);
 }
 
 a {
@@ -44,15 +46,17 @@ a:hover {
   background-color: var(--background-color);
   height: clamp(250px, 30%, 400px);
   color: white;
-  padding: 1em;
+  padding: 3em;
   font-size: 1.1rem;
   overflow: auto;
+  line-height: 1.9rem;
 }
 
 @media (min-width: 550px) {
   .rightPanel {
     top: 0;
     width: clamp(350px, 30%, 500px);
+    padding: 5rem;
     left: revert;
     height: revert;
   }

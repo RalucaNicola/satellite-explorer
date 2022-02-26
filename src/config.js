@@ -34,11 +34,23 @@ const orange = [255, 118, 0];
 const gray = [200, 200, 200];
 const purple = [137, 109, 232];
 
+export const purposeCategories = {
+  navigation: ['Navigation/Global Positioning', 'Navigation/Regional Positioning', 'Satellite Positioning'],
+  communications: ['Communications', 'Communication'],
+  earthObservation: [
+    'Earth Science',
+    'Earth Observation',
+    'Earth Observation/Communications',
+    'Earth Observation/Technology Development'
+  ],
+  spaceObservation: ['Space Science', 'Space Observation']
+};
+
 export const filterDefinition = {
   navigation: {
     color: pink,
     id: 'navigation',
-    expression: `purpose IN ('Navigation/Global Positioning', 'Navigation/Regional Positioning')`
+    expression: `purpose IN ('${purposeCategories.navigation.join("','")}')`
   },
   gps: {
     color: pink,
@@ -62,17 +74,17 @@ export const filterDefinition = {
   communications: {
     color: blue,
     id: 'communications',
-    expression: `purpose = 'Communications'`
+    expression: `purpose IN ('${purposeCategories.communications.join("','")}')`
   },
   earthObservation: {
     color: green,
     id: 'earthObservation',
-    expression: `purpose IN ('Earth Science', 'Earth Observation') `
+    expression: `purpose IN ('${purposeCategories.earthObservation.join("','")}') `
   },
   spaceObservation: {
     color: orange,
     id: 'spaceObservation',
-    expression: `purpose IN ('Space Science', 'Space Observation') `
+    expression: `purpose IN ('${purposeCategories.spaceObservation.join("','")}') `
   }
 };
 
@@ -82,9 +94,11 @@ export const usageRendererConfig = {
   var p = Dictionary(
     'Navigation/Global Positioning', 'Navigation',
     'Navigation/Regional Positioning', 'Navigation',
+    'Satellite Positioning', 'Navigation',
     'Communications', 'Communications',
     'Earth Observation', 'Earth Observation',
     'Earth Science', 'Earth Observation',
+    'Earth Observation/Technology Development', 'Earth Observation',
     'Technology Development', 'Technology Development',
     'Technology Demonstration', 'Technology Development',
     'Space Science', 'Space Observation',
