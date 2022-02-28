@@ -122,7 +122,6 @@ export const Map = observer(() => {
             bottom: mapPadding[2],
             left: mapPadding[3]
           };
-          console.log(view.padding);
         }
       );
     }

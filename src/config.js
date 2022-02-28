@@ -77,6 +77,16 @@ export const filterDefinition = {
     id: 'communications',
     expression: `purpose IN ('${purposeCategories.communications.join("','")}')`
   },
+  starlink: {
+    color: blue,
+    id: 'starlink',
+    expression: `LOWER(name) LIKE '%starlink%'`
+  },
+  oneweb: {
+    color: blue,
+    id: 'oneweb',
+    expression: `LOWER(name) LIKE '%oneweb%'`
+  },
   earthObservation: {
     color: green,
     id: 'earthObservation',
@@ -86,6 +96,11 @@ export const filterDefinition = {
     color: orange,
     id: 'spaceObservation',
     expression: `purpose IN ('${purposeCategories.spaceObservation.join("','")}') `
+  },
+  technologyDevelopment: {
+    id: 'technologyDevelopment',
+    color: purple,
+    expression: `purpose IN ('${purposeCategories.technologyDevelopment.join("','")}') `
   }
 };
 

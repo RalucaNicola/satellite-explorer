@@ -6,11 +6,13 @@ import appStore from '../../stores/AppStore';
 import { filterDefinition } from '../../config';
 import { UsageChart } from '../UsageChart';
 import { Accordion } from '../Accordion';
+import { BackButton } from '../BackButton';
 
 const navigation = filterDefinition.navigation.id;
 const communications = filterDefinition.communications.id;
 const earthObservation = filterDefinition.earthObservation.id;
 const spaceObservation = filterDefinition.spaceObservation.id;
+const technologyDevelopment = filterDefinition.technologyDevelopment.id;
 
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -39,6 +41,7 @@ export const SatelliteUsage = () => {
 
   return (
     <div className={styles.menu}>
+      <BackButton></BackButton>
       <h2>Why do we need satellites?</h2>
       <div className={styles.block}>
         Did you ever get your location on your phone or set the navigation system in the car to guide you to a
@@ -60,7 +63,7 @@ export const SatelliteUsage = () => {
           small electronic devices (like the ones in our smart phones).
         </p>
         {countsByPurpose ? <UsageChart category={navigation} data={countsByPurpose}></UsageChart> : ''}
-        <Accordion title='Show navigation satellite systems'>
+        <Accordion title='Global navigation satellite systems'>
           <p>
             <FilterButton filter='gps' active={activeFilter === 'gps'} clickHandler={handleFilter} constellation={true}>
               GPS
@@ -117,6 +120,32 @@ export const SatelliteUsage = () => {
           and more companies launching satellites to provide internet everywhere on the globe.
         </p>
         {countsByPurpose ? <UsageChart category={communications} data={countsByPurpose}></UsageChart> : ''}
+        <Accordion title='Biggest communications satellite systems'>
+          <p>
+            <FilterButton
+              filter='starlink'
+              active={activeFilter === 'starlink'}
+              clickHandler={handleFilter}
+              constellation={false}
+            >
+              Starlink satellites
+            </FilterButton>{' '}
+            - a satellite internet constellation operated by SpaceX providing satellite Internet access coverage to most
+            of the Earth.
+          </p>
+          <p>
+            <FilterButton
+              filter='oneweb'
+              active={activeFilter === 'oneweb'}
+              clickHandler={handleFilter}
+              constellation={true}
+            >
+              OneWeb satellites
+            </FilterButton>{' '}
+            - OneWeb is a global communications company building a capability to deliver broadband satellite Internet
+            services worldwide.
+          </p>
+        </Accordion>
       </div>
       <div className={styles.block}>
         <p>
@@ -148,7 +177,21 @@ export const SatelliteUsage = () => {
         </p>
         {countsByPurpose ? <UsageChart category={spaceObservation} data={countsByPurpose}></UsageChart> : ''}
       </div>
-      <Link to='/'>Back to homepage</Link>
+      <div className={styles.block}>
+        <p>
+          <FilterButton
+            filter={technologyDevelopment}
+            active={activeFilter === technologyDevelopment}
+            clickHandler={handleFilter}
+            constellation={false}
+          >
+            Technology development
+          </FilterButton>{' '}
+          to do: add description here
+        </p>
+        {countsByPurpose ? <UsageChart category={technologyDevelopment} data={countsByPurpose}></UsageChart> : ''}
+      </div>
+      <BackButton></BackButton>
     </div>
   );
 };

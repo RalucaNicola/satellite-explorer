@@ -77,7 +77,6 @@ class AppStore {
     }
   }
   setMapPadding() {
-    console.log(window.innerHeight, window.innerWidth, this.location);
     if (this.location === '/') {
       this.mapPadding = [0, 0, 0, 0];
     } else {
@@ -89,7 +88,6 @@ class AppStore {
         this.mapPadding = [0, clamp(350, 30, 600, width), 0, 0];
       }
     }
-    console.log('this ui padding', this.mapPadding);
   }
 }
 

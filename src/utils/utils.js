@@ -112,7 +112,7 @@ export const getUsageLineRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getLineSymbol(info.color, 1)
+        symbol: getLineSymbol(info.color, 0.4)
       };
     })
   };
@@ -126,7 +126,7 @@ export const getUsageConstellationsPointRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getPointSymbol({ color: info.color, size: 8, outlineSize: 4, outlineOpacity: 0.7 })
+        symbol: getPointSymbol({ color: info.color, size: 5, outlineSize: 2, outlineOpacity: 0.7 })
       };
     })
   };
@@ -140,7 +140,7 @@ export const getUsageConstellationsLineRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getLineSymbol(info.color, 1.5)
+        symbol: getLineSymbol(info.color, 1)
       };
     })
   };
