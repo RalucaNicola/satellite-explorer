@@ -74,7 +74,8 @@ class MapStore {
         objectIdField,
         spatialReference: {
           wkid: 4326
-        }
+        },
+        labelsVisible: true
       }),
       new FeatureLayer({
         id: 'orbit',

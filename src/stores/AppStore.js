@@ -11,6 +11,7 @@ class AppStore {
   browserLocation = null;
   location = null;
   visualizationFilter = null;
+  visualizationType = null;
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -37,9 +38,20 @@ class AppStore {
   }
   setLocation(location) {
     this.location = location;
+    switch (location) {
+      case '/satellite-usage':
+        this.setVisualizationType('usage');
+        break;
+      default:
+        this.setVisualizationType('general');
+    }
+    this.setVisualizationFilter(null);
   }
   setVisualizationFilter(filter) {
     this.visualizationFilter = filter;
+  }
+  setVisualizationType(type) {
+    this.visualizationType = type;
   }
   getCountsByPurpose() {
     if (this.data) {

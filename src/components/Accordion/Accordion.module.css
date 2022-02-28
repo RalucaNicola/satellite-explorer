@@ -1,0 +1,46 @@
+.accordionPanel {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  margin: 1em 0;
+}
+
+.accordionButton {
+  color: white;
+  cursor: pointer;
+  padding: 14px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: color 500ms;
+  background: none;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.accordionButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.buttonImage {
+  max-width: 20px;
+  transition: transform 500ms;
+}
+
+.active .buttonImage,
+.accordionButton:hover .buttonImage {
+  transform: rotate(180deg);
+}
+
+.accordionContent {
+  overflow: hidden;
+  padding: 0 14px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}

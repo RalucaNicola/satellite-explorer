@@ -7,7 +7,15 @@ import { Outlet } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { reaction } from 'mobx';
 import { filterDefinition } from '../../config';
-import { setRenderers } from '../../utils/utils';
+import {
+  getGeneralLineRenderer,
+  getGeneralPointRenderer,
+  getUsageLineRenderer,
+  getUsagePointRenderer,
+  getUsageConstellationsPointRenderer,
+  getUsageConstellationsLineRenderer,
+  getUsageLabelingInfo
+} from '../../utils/utils';
 
 export const Map = observer(() => {
   const mapDiv = useRef(null);
@@ -61,7 +69,7 @@ export const Map = observer(() => {
           const orbitFL = map.allLayers.find((layer) => layer.id === 'orbit');
           const satelliteFL = map.allLayers.find((layer) => layer.id === 'satellite');
           setLayers([orbitFL, satelliteFL]);
-          setRenderers([orbitFL, satelliteFL], appStore.location);
+          setVisualization(appStore.visualizationType, [orbitFL, satelliteFL]);
           const orbitLV = await view.whenLayerView(orbitFL);
           const satelliteLV = await view.whenLayerView(satelliteFL);
           setLayerViews([orbitLV, satelliteLV]);
@@ -93,10 +101,9 @@ export const Map = observer(() => {
   useEffect(() => {
     if (layers) {
       reaction(
-        () => appStore.location,
-        (location) => {
-          setRenderers(layers, location);
-          appStore.setVisualizationFilter(null);
+        () => appStore.visualizationType,
+        (visualizationType) => {
+          setVisualization(visualizationType, layers);
         }
       );
     }
@@ -107,6 +114,26 @@ export const Map = observer(() => {
       view.goTo({ zoom: 3 }, { speedFactor: 0.1 });
     }
   }, [view]);
+
+  function setVisualization(visualizationType, layers) {
+    switch (visualizationType) {
+      case 'usage':
+        layers[0].renderer = getUsageLineRenderer();
+        layers[1].renderer = getUsagePointRenderer();
+        layers[1].labelingInfo = null;
+        break;
+      case 'general':
+        layers[0].renderer = getGeneralLineRenderer();
+        layers[1].renderer = getGeneralPointRenderer();
+        layers[1].labelingInfo = null;
+        break;
+      case 'usage-constellation':
+        layers[1].renderer = getUsageConstellationsPointRenderer();
+        layers[0].renderer = getUsageConstellationsLineRenderer();
+        layers[1].labelingInfo = getUsageLabelingInfo();
+        break;
+    }
+  }
 
   return (
     <>

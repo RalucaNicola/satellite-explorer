@@ -14,7 +14,7 @@ export default class DataStore {
        */
       const satellites = [];
       const metadataCollection = {};
-      const metadataResponse = await fetch('../../data/sat_metadata.csv');
+      const metadataResponse = await fetch('../../data/sat_metadata_012022.csv');
       const metadataText = await metadataResponse.text();
       const result = Papa.parse(metadataText, { delimiter: ',' });
       const metadata = result.data;

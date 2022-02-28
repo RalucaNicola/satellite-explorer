@@ -27,23 +27,24 @@ export const fields = [
   { name: 'source', metadataIndex: 29, type: 'string' }
 ];
 
-const pink = [239, 138, 223];
-const blue = [109, 189, 232];
-const green = [193, 232, 118];
-const orange = [255, 118, 0];
-const gray = [200, 200, 200];
-const purple = [137, 109, 232];
+export const pink = [239, 138, 223];
+export const blue = [109, 189, 232];
+export const green = [193, 232, 118];
+export const orange = [255, 118, 0];
+export const gray = [200, 200, 200];
+export const purple = [137, 109, 232];
 
 export const purposeCategories = {
   navigation: ['Navigation/Global Positioning', 'Navigation/Regional Positioning', 'Satellite Positioning'],
-  communications: ['Communications', 'Communication'],
+  communications: ['Communications', 'Communications/Maritime Tracking', 'Communications/Technology Development'],
   earthObservation: [
     'Earth Science',
     'Earth Observation',
     'Earth Observation/Communications',
     'Earth Observation/Technology Development'
   ],
-  spaceObservation: ['Space Science', 'Space Observation']
+  spaceObservation: ['Space Science', 'Space Observation'],
+  technologyDevelopment: ['Technology Development', 'Technology Demonstration']
 };
 
 export const filterDefinition = {
@@ -92,42 +93,41 @@ export const usageRendererConfig = {
   expression: `
   var purpose = $feature.purpose;
   var p = Dictionary(
-    'Navigation/Global Positioning', 'Navigation',
-    'Navigation/Regional Positioning', 'Navigation',
-    'Satellite Positioning', 'Navigation',
-    'Communications', 'Communications',
-    'Earth Observation', 'Earth Observation',
-    'Earth Science', 'Earth Observation',
-    'Earth Observation/Technology Development', 'Earth Observation',
-    'Technology Development', 'Technology Development',
-    'Technology Demonstration', 'Technology Development',
-    'Space Science', 'Space Observation',
-    'Space Observation', 'Space Observation'
+    'Navigation/Global Positioning', 'navigation',
+    'Navigation/Regional Positioning', 'navigation',
+    'Satellite Positioning', 'navigation',
+    'Communications', 'communications',
+    'Earth Observation', 'earthObservation',
+    'Earth Science', 'earthObservation',
+    'Earth Observation/Technology Development', 'earthObservation',
+    'Technology Development', 'technologyDevelopment',
+    'Technology Demonstration', 'technologyDevelopment',
+    'Space Science', 'spaceObservation',
+    'Space Observation', 'spaceObservation'
   );
-  var value = IIf(hasKey(p, purpose), p[purpose], 'Others');
+  var value = IIf(hasKey(p, purpose), p[purpose], 'others');
   return value;
 `,
   uniqueValueInfos: [
     {
-      value: 'Communications',
+      value: 'communications',
       color: blue
     },
     {
-      value: 'Navigation',
+      value: 'navigation',
       color: pink
     },
     {
-      value: 'Earth Observation',
+      value: 'earthObservation',
       color: green
     },
     {
-      value: 'Space Observation',
+      value: 'spaceObservation',
       color: orange
     },
     {
-      value: 'Technology Development',
+      value: 'technologyDevelopment',
       color: purple
-    },
-    { value: 'Others', color: gray }
+    }
   ]
 };

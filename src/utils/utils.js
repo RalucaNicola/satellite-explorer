@@ -1,5 +1,6 @@
-import { usageRendererConfig } from '../config';
+import { usageRendererConfig, purposeCategories, gray } from '../config';
 
+import LabelClass from '@arcgis/core/layers/support/LabelClass';
 const checkForNaN = (value) => {
   if (isNaN(value)) {
     return null;
@@ -32,7 +33,7 @@ export const convertToType = (value, type) => {
   return null;
 };
 
-const getPointSymbol = (color, size) => {
+const getPointSymbol = ({ color = gray, size = 0, outlineSize = 0, outlineOpacity = 0 }) => {
   return {
     type: 'point-3d',
     symbolLayers: [
@@ -46,7 +47,7 @@ const getPointSymbol = (color, size) => {
         type: 'icon',
         resource: { primitive: 'circle' },
         material: { color: [...color, 0] },
-        outline: { color: [...color, 0.3] },
+        outline: { color: [...color, outlineOpacity], size: outlineSize },
         size: size * 2
       }
     ]
@@ -64,41 +65,101 @@ const getLineSymbol = (color, size) => {
   };
 };
 
-export const setRenderers = (layers, location) => {
-  let pointRenderer, lineRenderer;
-  switch (location) {
-    case '/satellite-usage':
-      pointRenderer = {
-        type: 'unique-value',
-        valueExpression: usageRendererConfig.expression,
-        uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
-          return {
-            value: info.value,
-            symbol: getPointSymbol(info.color, 4)
-          };
-        })
+export const getGeneralPointRenderer = () => {
+  return {
+    type: 'simple',
+    symbol: getPointSymbol({ color: [255, 255, 255], size: 3, outlineSize: 1, outlineOpacity: 0.4 })
+  };
+};
+
+export const getGeneralLineRenderer = () => {
+  return {
+    type: 'simple',
+    symbol: getLineSymbol([255, 255, 255], 0.25)
+  };
+};
+
+export const getUsagePointRenderer = () => {
+  return {
+    type: 'unique-value',
+    valueExpression: usageRendererConfig.expression,
+    defaultSymbol: getPointSymbol({}),
+    uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
+      return {
+        value: info.value,
+        symbol: getPointSymbol({ color: info.color, size: 4, outlineSize: 1, outlineOpacity: 0.4 })
       };
-      lineRenderer = {
-        type: 'unique-value',
-        valueExpression: usageRendererConfig.expression,
-        uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
-          return {
-            value: info.value,
-            symbol: getLineSymbol(info.color, 1)
-          };
-        })
+    })
+  };
+};
+
+export const getUsageLineRenderer = () => {
+  return {
+    type: 'unique-value',
+    valueExpression: usageRendererConfig.expression,
+    uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
+      return {
+        value: info.value,
+        symbol: getLineSymbol(info.color, 1)
       };
-      break;
-    default:
-      pointRenderer = {
-        type: 'simple',
-        symbol: getPointSymbol([255, 255, 255], 3)
+    })
+  };
+};
+
+export const getUsageConstellationsPointRenderer = () => {
+  return {
+    type: 'unique-value',
+    valueExpression: usageRendererConfig.expression,
+    defaultSymbol: getPointSymbol({}),
+    uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
+      return {
+        value: info.value,
+        symbol: getPointSymbol({ color: info.color, size: 8, outlineSize: 4, outlineOpacity: 0.7 })
       };
-      lineRenderer = {
-        type: 'simple',
-        symbol: getLineSymbol([255, 255, 255], 0.25)
+    })
+  };
+};
+
+export const getUsageConstellationsLineRenderer = () => {
+  return {
+    type: 'unique-value',
+    valueExpression: usageRendererConfig.expression,
+    uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
+      return {
+        value: info.value,
+        symbol: getLineSymbol(info.color, 1.5)
       };
-  }
-  layers[0].renderer = lineRenderer;
-  layers[1].renderer = pointRenderer;
+    })
+  };
+};
+
+export const getUsageLabelingInfo = () => {
+  const labelingInfo = usageRendererConfig.uniqueValueInfos.map((info) => {
+    console.log(info.value);
+    return new LabelClass({
+      labelExpressionInfo: { expression: '$feature.official_name' },
+      labelPlacement: 'center-right',
+      where: `purpose IN ('${purposeCategories[info.value].join("','")}')`,
+      symbol: {
+        type: 'label-3d',
+        symbolLayers: [
+          {
+            type: 'text',
+            material: {
+              color: [255, 255, 255]
+            },
+            halo: {
+              size: 1,
+              color: info.color
+            },
+            font: {
+              size: 11,
+              family: 'Poppins, sans-serif'
+            }
+          }
+        ]
+      }
+    });
+  });
+  return labelingInfo;
 };
