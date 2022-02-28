@@ -1,8 +1,9 @@
 import MapStore from './MapStore';
 import DataStore from './DataStore';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, makeObservable, observable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories } from '../config';
+import { clamp } from '../utils/utils';
 class AppStore {
   map = null;
   data = null;
@@ -12,6 +13,7 @@ class AppStore {
   location = null;
   visualizationFilter = null;
   visualizationType = null;
+  mapPadding = [0, 0, 0, 0];
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -21,6 +23,7 @@ class AppStore {
       const map = await mapStore.initializeMap(this.data);
       this.setMap(map);
       this.setIsLoading(false);
+      window.addEventListener('resize', this.setMapPadding.bind(this));
     })();
   }
 
@@ -46,6 +49,7 @@ class AppStore {
         this.setVisualizationType('general');
     }
     this.setVisualizationFilter(null);
+    this.setMapPadding();
   }
   setVisualizationFilter(filter) {
     this.visualizationFilter = filter;
@@ -71,6 +75,21 @@ class AppStore {
       }
       return countsByPurpose;
     }
+  }
+  setMapPadding() {
+    console.log(window.innerHeight, window.innerWidth, this.location);
+    if (this.location === '/') {
+      this.mapPadding = [0, 0, 0, 0];
+    } else {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      if (width < 550) {
+        this.mapPadding = [0, 0, clamp(250, 30, 400, height), 0];
+      } else {
+        this.mapPadding = [0, clamp(350, 30, 600, width), 0, 0];
+      }
+    }
+    console.log('this ui padding', this.mapPadding);
   }
 }
 

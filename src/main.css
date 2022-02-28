@@ -1,3 +1,6 @@
+@import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 :root {
   --background-color: rgba(0, 0, 0, 0.8);
   --pink: rgb(239, 138, 223);
@@ -13,9 +16,6 @@
   --font-source-sans: 'Poppins', sans-serif;
   --primary: rgb(232 175 118);
 }
-
-@import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 html,
 body,
@@ -47,18 +47,20 @@ a:hover {
   background-color: var(--background-color);
   height: clamp(250px, 30%, 400px);
   color: white;
-  padding: 3em;
+  padding: 20px;
   font-size: 1.1rem;
   overflow: auto;
   line-height: 1.9rem;
+  box-sizing: border-box;
 }
 
 @media (min-width: 550px) {
   .rightPanel {
     top: 0;
-    width: clamp(350px, 30%, 500px);
-    padding: 5rem;
+    width: clamp(350px, 30%, 600px);
+    padding: 40px;
     left: revert;
     height: revert;
+    box-sizing: border-box;
   }
 }

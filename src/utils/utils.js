@@ -33,6 +33,17 @@ export const convertToType = (value, type) => {
   return null;
 };
 
+export const clamp = (min, percentage, max, total) => {
+  const value = (percentage * total) / 100;
+  if (value < min) {
+    return min;
+  }
+  if (value > max) {
+    return max;
+  }
+  return value;
+};
+
 const getPointSymbol = ({ color = gray, size = 0, outlineSize = 0, outlineOpacity = 0 }) => {
   return {
     type: 'point-3d',
@@ -54,11 +65,11 @@ const getPointSymbol = ({ color = gray, size = 0, outlineSize = 0, outlineOpacit
   };
 };
 
-const getLineSymbol = (color, size) => {
+const getLineSymbol = (color = gray, size = 0) => {
   return {
     type: 'simple-line',
     width: size,
-    color: [...color, 0.6],
+    color: [...color, 0.7],
     style: 'solid',
     cap: 'round',
     join: 'round'
@@ -75,7 +86,7 @@ export const getGeneralPointRenderer = () => {
 export const getGeneralLineRenderer = () => {
   return {
     type: 'simple',
-    symbol: getLineSymbol([255, 255, 255], 0.25)
+    symbol: getLineSymbol([255, 255, 255], 0.1)
   };
 };
 
@@ -97,6 +108,7 @@ export const getUsageLineRenderer = () => {
   return {
     type: 'unique-value',
     valueExpression: usageRendererConfig.expression,
+    defaultSymbol: getLineSymbol(),
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
@@ -124,6 +136,7 @@ export const getUsageConstellationsLineRenderer = () => {
   return {
     type: 'unique-value',
     valueExpression: usageRendererConfig.expression,
+    defaultSymbol: getLineSymbol(),
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
@@ -135,7 +148,6 @@ export const getUsageConstellationsLineRenderer = () => {
 
 export const getUsageLabelingInfo = () => {
   const labelingInfo = usageRendererConfig.uniqueValueInfos.map((info) => {
-    console.log(info.value);
     return new LabelClass({
       labelExpressionInfo: { expression: '$feature.official_name' },
       labelPlacement: 'center-right',

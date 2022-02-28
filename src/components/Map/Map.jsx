@@ -82,6 +82,7 @@ export const Map = observer(() => {
       }
     );
   }, []);
+
   useEffect(() => {
     if (layerViews) {
       // setting filters when they change
@@ -112,6 +113,18 @@ export const Map = observer(() => {
   useEffect(() => {
     if (view) {
       view.goTo({ zoom: 3 }, { speedFactor: 0.1 });
+      reaction(
+        () => appStore.mapPadding,
+        (mapPadding) => {
+          view.padding = {
+            top: mapPadding[0],
+            right: mapPadding[1],
+            bottom: mapPadding[2],
+            left: mapPadding[3]
+          };
+          console.log(view.padding);
+        }
+      );
     }
   }, [view]);
 
