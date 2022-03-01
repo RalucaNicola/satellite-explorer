@@ -75,7 +75,11 @@ class MapStore {
         spatialReference: {
           wkid: 4326
         },
-        labelsVisible: true
+        labelsVisible: true,
+        screenSizePerspectiveEnabled: false,
+        featureReduction: {
+          type: 'selection'
+        }
       }),
       new FeatureLayer({
         id: 'orbit',

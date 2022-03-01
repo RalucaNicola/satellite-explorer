@@ -28,7 +28,9 @@
 
 .communications,
 .oneweb,
-.starlink {
+.starlink,
+.iridium,
+.globalstar {
   composes: filterButton;
   border: 1px solid var(--blue);
   color: var(--blue);
@@ -37,21 +39,31 @@
 .communications:hover,
 .oneweb:hover,
 .starlink:hover,
+.iridium:hover,
+.globalstar:hover,
 .communications.active,
 .oneweb.active,
-.starlink.active {
+.starlink.active,
+.iridium.active,
+.globalstar.active {
   background-color: var(--blue-background);
   color: white;
 }
 
-.earthObservation {
+.earthObservation,
+.doves,
+.landsat {
   composes: filterButton;
   border: 1px solid var(--green);
   color: var(--green);
 }
 
 .earthObservation:hover,
-.earthObservation.active {
+.doves:hover,
+.landsat:hover,
+.earthObservation.active,
+.doves.active,
+.landsat.active {
   background-color: var(--green-background);
   color: white;
 }

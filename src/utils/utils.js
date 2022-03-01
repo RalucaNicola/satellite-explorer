@@ -44,22 +44,29 @@ export const clamp = (min, percentage, max, total) => {
   return value;
 };
 
-const getPointSymbol = ({ color = gray, size = 0, outlineSize = 0, outlineOpacity = 0 }) => {
+const getPointSymbol = ({
+  color = gray,
+  size = 0,
+  outlineSize = 0,
+  outlineOpacity = 0,
+  outlineColor = gray,
+  outlineSizeFactor = 2
+}) => {
   return {
     type: 'point-3d',
     symbolLayers: [
       {
         type: 'icon',
         resource: { primitive: 'circle' },
-        material: { color: [...color, 1] },
-        size: size
+        material: { color: [0, 0, 0, 0] },
+        outline: { color: [...outlineColor, outlineOpacity], size: outlineSize },
+        size: size * outlineSizeFactor
       },
       {
         type: 'icon',
         resource: { primitive: 'circle' },
-        material: { color: [...color, 0] },
-        outline: { color: [...color, outlineOpacity], size: outlineSize },
-        size: size * 2
+        material: { color: [...color, 1] },
+        size: size
       }
     ]
   };
@@ -79,7 +86,13 @@ const getLineSymbol = (color = gray, size = 0) => {
 export const getGeneralPointRenderer = () => {
   return {
     type: 'simple',
-    symbol: getPointSymbol({ color: [255, 255, 255], size: 3, outlineSize: 1, outlineOpacity: 0.4 })
+    symbol: getPointSymbol({
+      color: [255, 255, 255],
+      size: 3,
+      outlineSize: 1,
+      outlineOpacity: 0.4,
+      outlineColor: [255, 255, 255]
+    })
   };
 };
 
@@ -98,7 +111,13 @@ export const getUsagePointRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getPointSymbol({ color: info.color, size: 4, outlineSize: 1, outlineOpacity: 0.4 })
+        symbol: getPointSymbol({
+          color: info.color,
+          size: 4,
+          outlineSize: 1,
+          outlineOpacity: 0.4,
+          outlineColor: info.color
+        })
       };
     })
   };
@@ -126,7 +145,14 @@ export const getUsageConstellationsPointRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getPointSymbol({ color: info.color, size: 5, outlineSize: 2, outlineOpacity: 0.7 })
+        symbol: getPointSymbol({
+          color: info.color,
+          size: 5,
+          outlineSize: 1,
+          outlineOpacity: 1,
+          outlineColor: info.lightColor,
+          outlineSizeFactor: 3
+        })
       };
     })
   };
@@ -149,7 +175,7 @@ export const getUsageConstellationsLineRenderer = () => {
 export const getUsageLabelingInfo = () => {
   const labelingInfo = usageRendererConfig.uniqueValueInfos.map((info) => {
     return new LabelClass({
-      labelExpressionInfo: { expression: '$feature.official_name' },
+      labelExpressionInfo: { expression: `'   ' + $feature.official_name` },
       labelPlacement: 'center-right',
       where: `purpose IN ('${purposeCategories[info.value].join("','")}')`,
       symbol: {
@@ -158,15 +184,17 @@ export const getUsageLabelingInfo = () => {
           {
             type: 'text',
             material: {
-              color: [255, 255, 255]
+              color: info.lightColor
             },
             halo: {
-              size: 1,
-              color: info.color
+              size: 0.2,
+              color: [100, 100, 100]
             },
             font: {
-              size: 11,
-              family: 'Poppins, sans-serif'
+              size: 10,
+              weight: 'lighter',
+              family: 'Poppins, sans-serif',
+              decoration: 'underline'
             }
           }
         ]

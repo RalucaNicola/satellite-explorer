@@ -28,11 +28,16 @@ export const fields = [
 ];
 
 export const pink = [239, 138, 223];
+export const lightPink = [250, 217, 245];
 export const blue = [109, 189, 232];
+export const lightBlue = [204, 237, 255];
 export const green = [193, 232, 118];
+export const lightGreen = [225, 240, 197];
 export const orange = [255, 118, 0];
+export const lightOrange = [255, 215, 181];
 export const gray = [200, 200, 200];
 export const purple = [137, 109, 232];
+export const lightPurple = [217, 207, 250];
 
 export const purposeCategories = {
   navigation: ['Navigation/Global Positioning', 'Navigation/Regional Positioning', 'Satellite Positioning'],
@@ -50,56 +55,91 @@ export const purposeCategories = {
 export const filterDefinition = {
   navigation: {
     color: pink,
+    lightColor: lightPink,
     id: 'navigation',
     expression: `purpose IN ('${purposeCategories.navigation.join("','")}')`
   },
   gps: {
     color: pink,
+    lightColor: lightPink,
     expression: `LOWER(name) LIKE '%gps%'`
   },
   glonass: {
     color: pink,
+    lightColor: lightPink,
     id: 'glonass',
     expression: `LOWER(name) LIKE '%glonass%'`
   },
   beidou: {
     color: pink,
+    lightColor: lightPink,
     id: 'beidou',
     expression: `LOWER(name) LIKE '%beidou%'`
   },
   galileo: {
     color: pink,
+    lightColor: lightPink,
     id: 'galileo',
     expression: `LOWER(name) LIKE '%galileo%'`
   },
   communications: {
     color: blue,
+    lightColor: lightBlue,
     id: 'communications',
     expression: `purpose IN ('${purposeCategories.communications.join("','")}')`
   },
   starlink: {
     color: blue,
+    lightColor: lightBlue,
     id: 'starlink',
     expression: `LOWER(name) LIKE '%starlink%'`
   },
   oneweb: {
     color: blue,
+    lightColor: lightBlue,
     id: 'oneweb',
     expression: `LOWER(name) LIKE '%oneweb%'`
   },
+  iridium: {
+    color: blue,
+    lightColor: lightBlue,
+    id: 'iridium',
+    expression: `LOWER(name) LIKE '%iridium%'`
+  },
+  globalstar: {
+    color: blue,
+    lightColor: lightBlue,
+    id: 'globalstar',
+    expression: `LOWER(name) LIKE '%globalstar%'`
+  },
   earthObservation: {
     color: green,
+    lightColor: lightGreen,
     id: 'earthObservation',
     expression: `purpose IN ('${purposeCategories.earthObservation.join("','")}') `
   },
+  landsat: {
+    color: green,
+    lightColor: lightGreen,
+    id: 'landsat',
+    expression: `LOWER(name) LIKE '%landsat%'`
+  },
+  doves: {
+    color: green,
+    lightColor: lightGreen,
+    id: 'doves',
+    expression: `LOWER(name) LIKE '%dove%'`
+  },
   spaceObservation: {
     color: orange,
+    lightColor: lightOrange,
     id: 'spaceObservation',
     expression: `purpose IN ('${purposeCategories.spaceObservation.join("','")}') `
   },
   technologyDevelopment: {
     id: 'technologyDevelopment',
     color: purple,
+    lightColor: lightPurple,
     expression: `purpose IN ('${purposeCategories.technologyDevelopment.join("','")}') `
   }
 };
@@ -126,23 +166,28 @@ export const usageRendererConfig = {
   uniqueValueInfos: [
     {
       value: 'communications',
-      color: blue
+      color: blue,
+      lightColor: lightBlue
     },
     {
       value: 'navigation',
-      color: pink
+      color: pink,
+      lightColor: lightPink
     },
     {
       value: 'earthObservation',
-      color: green
+      color: green,
+      lightColor: lightGreen
     },
     {
       value: 'spaceObservation',
-      color: orange
+      color: orange,
+      lightColor: lightOrange
     },
     {
       value: 'technologyDevelopment',
-      color: purple
+      color: purple,
+      lightColor: lightPurple
     }
   ]
 };

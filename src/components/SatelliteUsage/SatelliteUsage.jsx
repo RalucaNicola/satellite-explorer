@@ -126,11 +126,11 @@ export const SatelliteUsage = () => {
               filter='starlink'
               active={activeFilter === 'starlink'}
               clickHandler={handleFilter}
-              constellation={false}
+              constellation={true}
             >
-              Starlink satellites
+              Starlink
             </FilterButton>{' '}
-            - a satellite internet constellation operated by SpaceX providing satellite Internet access coverage to most
+            a satellite internet constellation operated by SpaceX providing satellite Internet access coverage to most
             of the Earth.
           </p>
           <p>
@@ -140,10 +140,31 @@ export const SatelliteUsage = () => {
               clickHandler={handleFilter}
               constellation={true}
             >
-              OneWeb satellites
+              OneWeb
             </FilterButton>{' '}
-            - OneWeb is a global communications company building a capability to deliver broadband satellite Internet
-            services worldwide.
+            a communications company whose focus is to deliver broadband satellite Internet services worldwide.
+          </p>
+          <p>
+            <FilterButton
+              filter='iridium'
+              active={activeFilter === 'iridium'}
+              clickHandler={handleFilter}
+              constellation={true}
+            >
+              Iridium
+            </FilterButton>{' '}
+            an operational constellation of 66 active satellites used to provide global satellite phone service.
+          </p>
+          <p>
+            <FilterButton
+              filter='globalstar'
+              active={activeFilter === 'globalstar'}
+              clickHandler={handleFilter}
+              constellation={true}
+            >
+              GlobalStar
+            </FilterButton>{' '}
+            a satellite phone and low-speed data communications.
           </p>
         </Accordion>
       </div>
@@ -161,6 +182,32 @@ export const SatelliteUsage = () => {
           satellites produce high-resolution data of almost the entire landmass on earth.
         </p>
         {countsByPurpose ? <UsageChart category={earthObservation} data={countsByPurpose}></UsageChart> : ''}
+        <Accordion title='Earth observation satellite systems'>
+          <p>
+            <FilterButton
+              filter='landsat'
+              active={activeFilter === 'landsat'}
+              clickHandler={handleFilter}
+              constellation={true}
+            >
+              Landsat programme
+            </FilterButton>{' '}
+            a joint NASA / USGS program launched on 23 July 1972.
+          </p>
+          <p>
+            <FilterButton
+              filter='doves'
+              active={activeFilter === 'doves'}
+              clickHandler={handleFilter}
+              constellation={true}
+            >
+              Doves satellites
+            </FilterButton>{' '}
+            operated by Planet Labs PBC, the Doves satellites weigh only 5.8 kg each and provides 3-meter multispectral
+            image resolution for humanitarian and environmental applications, from monitoring deforestation and
+            urbanization to improving natural disaster relief, and agricultural yields around the world.
+          </p>
+        </Accordion>
       </div>
       <div className={styles.block}>
         <p>
