@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { SatelliteUsage } from './components/SatelliteUsage';
 import { SatelliteNumber } from './components/SatelliteNumber';
 import { SatelliteInternet } from './components/SatelliteInternet';
+import { Search } from './components/Search';
 
 const App = observer(() => {
   let location = useLocation();
@@ -25,6 +26,7 @@ const App = observer(() => {
           <Route path='satellite-usage' element={<SatelliteUsage />} />
           <Route path='satellite-number' element={<SatelliteNumber />} />
           <Route path='satellite-internet' element={<SatelliteInternet />} />
+          <Route path='search' element={<Search />} />
         </Route>
       </Routes>
       {!appStore.viewIsReady && <Loading></Loading>}

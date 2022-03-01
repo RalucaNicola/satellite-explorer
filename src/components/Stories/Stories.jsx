@@ -23,6 +23,9 @@ export function Stories() {
         <StoryCard link='coming-soon' image='./assets/satellite-2.jpg'>
           The International Space Station
         </StoryCard>
+        <StoryCard link='search' image='./assets/satellite-2.jpg'>
+          Search for satellites
+        </StoryCard>
       </ul>
     </div>
   );

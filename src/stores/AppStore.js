@@ -1,6 +1,6 @@
 import MapStore from './MapStore';
 import DataStore from './DataStore';
-import { makeAutoObservable, makeObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories } from '../config';
 import { clamp } from '../utils/utils';
