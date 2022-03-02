@@ -131,18 +131,24 @@ export const Map = observer(() => {
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
       case 'usage':
+        layers[0].visible = false;
         layers[0].renderer = getUsageLineRenderer();
         layers[1].renderer = getUsagePointRenderer();
+        layers[1].visible = true;
         layers[1].labelingInfo = null;
         break;
       case 'general':
+        layers[1].visible = false;
         layers[0].renderer = getGeneralLineRenderer();
         layers[1].renderer = getGeneralPointRenderer();
+        layers[0].visible = true;
         layers[1].labelingInfo = null;
         break;
       case 'usage-constellation':
         layers[1].renderer = getUsageConstellationsPointRenderer();
         layers[0].renderer = getUsageConstellationsLineRenderer();
+        layers[0].visible = true;
+        layers[1].visible = false;
         layers[1].labelingInfo = getUsageLabelingInfo();
         break;
     }

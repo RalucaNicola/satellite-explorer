@@ -1,10 +1,19 @@
 import { filterDefinition } from '../../config';
 import { scaleLinear } from 'd3-scale';
 import * as styles from './UsageChart.module.css';
-const width = 350;
+import appStore from '../../stores/AppStore';
+import { observer } from 'mobx-react';
+let width = 350;
 const height = 15;
+const innerPaddingMobile = 20;
+const innerPaddingDesktop = 47;
 
-export function UsageChart({ data, category }) {
+export const UsageChart = observer(({ data, category }) => {
+  if (appStore.mapPadding[1] > 0) {
+    width = appStore.mapPadding[1] - innerPaddingDesktop * 2;
+  } else {
+    width = window.innerWidth - innerPaddingMobile * 2;
+  }
   const x = scaleLinear().domain([0, data.total]).range([0, width]);
   const categoryColor = filterDefinition[category].color;
   const rgbColor = `rgb(${categoryColor.join(',')})`;
@@ -23,4 +32,4 @@ export function UsageChart({ data, category }) {
       </div>
     </>
   );
-}
+});
