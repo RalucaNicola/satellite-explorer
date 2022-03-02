@@ -14,6 +14,7 @@ class AppStore {
   visualizationFilter = null;
   visualizationType = null;
   mapPadding = [0, 0, 0, 0];
+  searchString = null;
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -88,6 +89,9 @@ class AppStore {
         this.mapPadding = [0, clamp(350, 30, 600, width), 0, 0];
       }
     }
+  }
+  setSearchString(searchString) {
+    this.searchString = searchString;
   }
 }
 

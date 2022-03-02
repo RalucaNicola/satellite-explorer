@@ -1,36 +1,43 @@
 import * as styles from './Search.module.css';
 import appStore from '../../stores/AppStore';
 import { BackButton } from '../BackButton';
-import { debounce } from '../../utils/utils';
 import { useEffect, useState } from 'react';
+import { Link, Outlet, useSearchParams } from 'react-router-dom';
 
 export const Search = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   function getSuggestions(searchString) {
-    const searchRegExp = new RegExp(searchString, 'i');
-    const filteredData = appStore.data.filter((satellite) => {
-      return (
-        satellite.metadata.name.search(searchRegExp) >= 0 || satellite.metadata.official_name.search(searchRegExp) >= 0
-      );
-    });
-    const limitedFilteredData = filteredData.slice(0, 50);
-    console.log(limitedFilteredData);
+    let filteredData = [...appStore.data];
+    if (searchString) {
+      const searchRegExp = new RegExp(searchString, 'i');
+      filteredData = appStore.data.filter((satellite) => {
+        return (
+          satellite.metadata.name.search(searchRegExp) >= 0 ||
+          satellite.metadata.official_name.search(searchRegExp) >= 0
+        );
+      });
+    }
+    const limitedFilteredData = filteredData.slice(0, 100);
     setSearchResults(limitedFilteredData);
   }
-  const getLazySuggestions = debounce(getSuggestions, 250);
 
   useEffect(() => {
-    getLazySuggestions(searchTerm);
-  }, [searchTerm]);
+    if (appStore.data) {
+      const searchString = searchParams.get('filter');
+      getSuggestions(searchString);
+      appStore.setSearchString(searchString);
+    }
+  }, [searchParams, appStore.data]);
 
   function inputHandler(event) {
-    setSearchTerm(event.target.value);
-  }
-
-  function focusHandler() {
-    getLazySuggestions(searchTerm);
+    const filter = event.target.value.toLowerCase();
+    if (filter) {
+      setSearchParams({ filter });
+    } else {
+      setSearchParams({});
+    }
   }
 
   return (
@@ -40,21 +47,23 @@ export const Search = () => {
       <input
         className={styles.searchInput}
         type='text'
-        onInput={inputHandler}
-        onFocus={focusHandler}
+        onChange={inputHandler}
         placeholder='Search by name or operator'
+        value={searchParams.get('filter') || ''}
       ></input>
       {searchResults.length ? (
         <ul className={styles.listResults}>
-          {searchResults.map((satellite) => {
+          {searchResults.map((satellite, index) => {
             const attr = satellite.metadata;
             const date = new Date(attr.launch_date);
             return (
-              <li key={satellite.norad}>
-                <h5>{attr.official_name}</h5>
-                <p>
-                  {attr.operator}, {attr.country_operator} - {attr.launch_site}, {date.toLocaleDateString('en-US')}
-                </p>
+              <li key={index}>
+                <Link to={`/search/${satellite.norad}`} className={styles.satelliteLink}>
+                  <h5>{attr.official_name}</h5>
+                  <p>
+                    {attr.operator}, {attr.country_operator} - {attr.launch_site}, {date.toLocaleDateString('en-US')}
+                  </p>
+                </Link>
               </li>
             );
           })}
@@ -62,6 +71,7 @@ export const Search = () => {
       ) : (
         <p>No results found</p>
       )}
+      <Outlet />
 
       <BackButton></BackButton>
     </div>

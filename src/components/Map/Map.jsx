@@ -24,7 +24,7 @@ export const Map = observer(() => {
   const [layerViews, setLayerViews] = useState(null);
 
   useEffect(() => {
-    // setting the map once it's ready
+    // initializing the view
     reaction(
       () => appStore.map,
       async (map) => {
@@ -113,19 +113,38 @@ export const Map = observer(() => {
   useEffect(() => {
     if (view) {
       view.goTo({ zoom: 3 }, { speedFactor: 0.1 });
-      reaction(
-        () => appStore.mapPadding,
-        (mapPadding) => {
-          view.padding = {
-            top: mapPadding[0],
-            right: mapPadding[1],
-            bottom: mapPadding[2],
-            left: mapPadding[3]
-          };
-        }
-      );
+      if (appStore.mapPadding) {
+        setMapPadding(appStore.mapPadding);
+      }
+      reaction(() => appStore.mapPadding, setMapPadding);
+      if (appStore.searchString) {
+        setSearchFilter(appStore.searchString);
+      }
+      reaction(() => appStore.searchString, setSearchFilter);
     }
   }, [view]);
+
+  function setMapPadding(mapPadding) {
+    view.padding = {
+      top: mapPadding[0],
+      right: mapPadding[1],
+      bottom: mapPadding[2],
+      left: mapPadding[3]
+    };
+  }
+
+  function setSearchFilter(searchString) {
+    let searchFilter = null;
+    if (searchString) {
+      searchFilter = `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`;
+    }
+    layerViews.forEach(
+      (lyrView) =>
+        (lyrView.filter = {
+          where: searchFilter
+        })
+    );
+  }
 
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
