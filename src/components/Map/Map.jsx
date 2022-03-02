@@ -121,6 +121,11 @@ export const Map = observer(() => {
         setSearchFilter(appStore.searchString);
       }
       reaction(() => appStore.searchString, setSearchFilter);
+
+      if (appStore.selectedSatelliteID) {
+        setSelectedSatellite(appStore.selectedSatelliteID);
+      }
+      reaction(() => appStore.selectedSatelliteID, setSelectedSatellite);
     }
   }, [view]);
 
@@ -137,6 +142,19 @@ export const Map = observer(() => {
     let searchFilter = null;
     if (searchString) {
       searchFilter = `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`;
+    }
+    layerViews.forEach(
+      (lyrView) =>
+        (lyrView.filter = {
+          where: searchFilter
+        })
+    );
+  }
+
+  function setSelectedSatellite(id) {
+    let searchFilter = null;
+    if (id) {
+      searchFilter = `norad = ${id}`;
     }
     layerViews.forEach(
       (lyrView) =>

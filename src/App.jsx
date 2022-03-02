@@ -32,9 +32,8 @@ const App = observer(() => {
           <Route path='satellite-usage' element={<SatelliteUsage />} />
           <Route path='satellite-number' element={<SatelliteNumber />} />
           <Route path='satellite-internet' element={<SatelliteInternet />} />
-          <Route path='search' element={<Search />}>
-            <Route path=':noradID' element={<Satellite />} />
-          </Route>
+          <Route path='search' element={<Search />}></Route>
+          <Route path=':noradID' element={<Satellite />} />
         </Route>
       </Routes>
       {!appStore.viewIsReady && <Loading></Loading>}

@@ -1,10 +1,14 @@
 import * as styles from './BackButton.module.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export function BackButton() {
+export function BackButton({ navigateTo = -1 }) {
+  const navigate = useNavigate();
   return (
-    <Link to='/' className='noUnderline'>
-      <img src='./assets/arrows-back.svg' className={styles.backImage}></img>
-    </Link>
+    <button
+      className={styles.backButton}
+      onClick={() => {
+        navigate(navigateTo);
+      }}
+    ></button>
   );
 }

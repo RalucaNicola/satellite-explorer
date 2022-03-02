@@ -15,6 +15,7 @@ class AppStore {
   visualizationType = null;
   mapPadding = [0, 0, 0, 0];
   searchString = null;
+  selectedSatelliteID = null;
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -42,15 +43,29 @@ class AppStore {
   }
   setLocation(location) {
     this.location = location;
-    switch (location) {
-      case '/satellite-usage':
-        this.setVisualizationType('usage');
-        break;
-      default:
-        this.setVisualizationType('general');
-    }
     this.setVisualizationFilter(null);
     this.setMapPadding();
+    const satelliteRegEx = new RegExp(/^\/[0-9]+$/g);
+    const searchRegEx = new RegExp(/^\/search/g);
+    const usageRegEx = new RegExp(/^\/satellite-usage/g);
+    if (satelliteRegEx.test(location)) {
+      const id = location.match(/[0-9]+/g)[0];
+      this.setSelectedSatelliteID(id);
+    } else {
+      this.setSelectedSatelliteID(null);
+    }
+    if (searchRegEx.test(location)) {
+      this.setVisualizationType('general');
+    }
+    if (usageRegEx.test(location)) {
+      this.setVisualizationType('usage');
+    }
+    if (location === '/') {
+      this.setVisualizationType('general');
+    }
+  }
+  setSelectedSatelliteID(id) {
+    this.selectedSatelliteID = id;
   }
   setVisualizationFilter(filter) {
     this.visualizationFilter = filter;
