@@ -6,6 +6,7 @@ import { BackButton } from '../BackButton';
 
 export const Satellite = observer(() => {
   let params = useParams();
+
   let attr = null;
   if (appStore.data) {
     const selectedSatellite = appStore.data.filter((satellite) => satellite.norad === parseInt(params.noradID))[0];
@@ -14,7 +15,7 @@ export const Satellite = observer(() => {
 
   return (
     <div className={styles.menu}>
-      <BackButton></BackButton>
+      <BackButton navigateTo={appStore.inSearch ? -1 : '/'}></BackButton>
       {attr ? (
         <>
           <h2>{attr.official_name}</h2>

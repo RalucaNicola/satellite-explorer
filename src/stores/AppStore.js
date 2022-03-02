@@ -9,13 +9,13 @@ class AppStore {
   data = null;
   isLoading = true;
   viewIsReady = false;
-  browserLocation = null;
   location = null;
-  visualizationFilter = null;
+  mapFilter = null;
   visualizationType = null;
   mapPadding = [0, 0, 0, 0];
   searchString = null;
   selectedSatelliteID = null;
+  inSearch = false;
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -43,32 +43,55 @@ class AppStore {
   }
   setLocation(location) {
     this.location = location;
-    this.setVisualizationFilter(null);
     this.setMapPadding();
+
+    // the satellite selection path
     const satelliteRegEx = new RegExp(/^\/[0-9]+$/g);
-    const searchRegEx = new RegExp(/^\/search/g);
-    const usageRegEx = new RegExp(/^\/satellite-usage/g);
     if (satelliteRegEx.test(location)) {
       const id = location.match(/[0-9]+/g)[0];
       this.setSelectedSatelliteID(id);
+      this.setMapFilter(`norad = ${id}`);
     } else {
       this.setSelectedSatelliteID(null);
     }
+
+    // the search path
+    const searchRegEx = new RegExp(/^\/search/g);
     if (searchRegEx.test(location)) {
       this.setVisualizationType('general');
+      this.setInSearch(true);
+      const searchString = this.searchString;
+      if (searchString) {
+        this.setMapFilter(
+          `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
+        );
+      } else {
+        this.setMapFilter(null);
+      }
     }
+
+    // the satellite usage path
+    const usageRegEx = new RegExp(/^\/satellite-usage/g);
     if (usageRegEx.test(location)) {
       this.setVisualizationType('usage');
+      this.setInSearch(false);
+      this.setMapFilter(null);
     }
     if (location === '/') {
       this.setVisualizationType('general');
+      this.setInSearch(false);
+      this.setMapFilter(null);
     }
+  }
+
+  setInSearch(value) {
+    this.inSearch = value;
   }
   setSelectedSatelliteID(id) {
     this.selectedSatelliteID = id;
   }
-  setVisualizationFilter(filter) {
-    this.visualizationFilter = filter;
+  setMapFilter(filter) {
+    this.mapFilter = filter;
   }
   setVisualizationType(type) {
     this.visualizationType = type;

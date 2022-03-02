@@ -6,7 +6,7 @@ import appStore from '../../stores/AppStore';
 import { Outlet } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { reaction } from 'mobx';
-import { filterDefinition } from '../../config';
+
 import {
   getGeneralLineRenderer,
   getGeneralPointRenderer,
@@ -86,16 +86,10 @@ export const Map = observer(() => {
   useEffect(() => {
     if (layerViews) {
       // setting filters when they change
-      reaction(
-        () => appStore.visualizationFilter,
-        (visualizationFilter) => {
-          let filterExpression = null;
-          if (visualizationFilter) {
-            filterExpression = filterDefinition[visualizationFilter].expression;
-          }
-          layerViews.forEach((lyrView) => (lyrView.filter = { where: filterExpression }));
-        }
-      );
+      if (appStore.mapFilter) {
+        setMapFilter(appStore.mapFilter);
+      }
+      reaction(() => appStore.mapFilter, setMapFilter);
     }
   }, [layerViews]);
 
@@ -117,15 +111,6 @@ export const Map = observer(() => {
         setMapPadding(appStore.mapPadding);
       }
       reaction(() => appStore.mapPadding, setMapPadding);
-      if (appStore.searchString) {
-        setSearchFilter(appStore.searchString);
-      }
-      reaction(() => appStore.searchString, setSearchFilter);
-
-      if (appStore.selectedSatelliteID) {
-        setSelectedSatellite(appStore.selectedSatelliteID);
-      }
-      reaction(() => appStore.selectedSatelliteID, setSelectedSatellite);
     }
   }, [view]);
 
@@ -138,30 +123,9 @@ export const Map = observer(() => {
     };
   }
 
-  function setSearchFilter(searchString) {
-    let searchFilter = null;
-    if (searchString) {
-      searchFilter = `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`;
-    }
-    layerViews.forEach(
-      (lyrView) =>
-        (lyrView.filter = {
-          where: searchFilter
-        })
-    );
-  }
-
-  function setSelectedSatellite(id) {
-    let searchFilter = null;
-    if (id) {
-      searchFilter = `norad = ${id}`;
-    }
-    layerViews.forEach(
-      (lyrView) =>
-        (lyrView.filter = {
-          where: searchFilter
-        })
-    );
+  function setMapFilter(mapFilter) {
+    let filterExpression = mapFilter ? mapFilter : null;
+    layerViews.forEach((lyrView) => (lyrView.filter = { where: filterExpression }));
   }
 
   function setVisualization(visualizationType, layers) {

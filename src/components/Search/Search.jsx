@@ -15,7 +15,8 @@ export const Search = () => {
       filteredData = appStore.data.filter((satellite) => {
         return (
           satellite.metadata.name.search(searchRegExp) >= 0 ||
-          satellite.metadata.official_name.search(searchRegExp) >= 0
+          satellite.metadata.official_name.search(searchRegExp) >= 0 ||
+          satellite.metadata.operator.search(searchRegExp) >= 0
         );
       });
     }

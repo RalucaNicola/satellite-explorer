@@ -1,9 +1,8 @@
 import * as styles from './SatelliteUsage.module.css';
-import { Link } from 'react-router-dom';
+import { filterDefinition } from '../../config';
 import { FilterButton } from '../FilterButton';
 import { useEffect, useState } from 'react';
 import appStore from '../../stores/AppStore';
-import { filterDefinition } from '../../config';
 import { UsageChart } from '../UsageChart';
 import { Accordion } from '../Accordion';
 import { BackButton } from '../BackButton';
@@ -20,7 +19,8 @@ export const SatelliteUsage = () => {
   const [countsByPurpose, setCountsByPurpose] = useState(null);
   const handleFilter = ({ filter, constellation }) => {
     setActiveFilter(filter);
-    appStore.setVisualizationFilter(filter);
+    const filterExpression = filterDefinition[filter].expression;
+    appStore.setMapFilter(filterExpression);
     if (constellation !== isConstellation) {
       setIsConstellation(constellation);
     }
