@@ -6,6 +6,7 @@ import './main.css';
 
 ReactDOM.render(
   <React.StrictMode>
+    {/* <BrowserRouter basename='/demo-apps/satellite-explorer/dist'> */}
     <BrowserRouter>
       <App />
     </BrowserRouter>

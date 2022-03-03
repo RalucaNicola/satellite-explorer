@@ -14,7 +14,7 @@ export default class DataStore {
        */
       const satellites = [];
       const metadataCollection = {};
-      const metadataResponse = await fetch('../../data/sat_metadata_012022.csv');
+      const metadataResponse = await fetch('./data/sat_metadata_012022.csv');
       const metadataText = await metadataResponse.text();
       const result = Papa.parse(metadataText, { delimiter: ',' });
       const metadata = result.data;
@@ -31,7 +31,7 @@ export default class DataStore {
        * TLE format information: https://en.wikipedia.org/wiki/Two-line_element_set
        * Latest data on active satellites: https://celestrak.com/NORAD/elements/active.txt
        */
-      const tleResponse = await fetch('../../data/norad-tle.txt');
+      const tleResponse = await fetch('./data/norad-tle.txt');
       const tleData = await tleResponse.text();
       const tleLines = tleData.split('\n');
       const count = (tleLines.length - (tleLines.length % 3)) / 3;
