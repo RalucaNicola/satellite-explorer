@@ -1,5 +1,4 @@
 import * as styles from './Satellite.module.css';
-import { useParams } from 'react-router-dom';
 import appStore from '../../stores/AppStore';
 import { observer } from 'mobx-react';
 import { BackButton } from '../BackButton';
@@ -20,12 +19,9 @@ const ListItem = ({ field, value }) => {
 };
 
 export const Satellite = observer(() => {
-  let params = useParams();
-
   let attr = null;
-  if (appStore.data) {
-    const selectedSatellite = appStore.data.filter((satellite) => satellite.norad === parseInt(params.noradID))[0];
-    attr = selectedSatellite.metadata;
+  if (appStore.selectedSatellite) {
+    attr = appStore.selectedSatellite.metadata;
   }
 
   return (

@@ -1,6 +1,8 @@
 import * as styles from './Map.module.css';
 import { useEffect, useRef, useState } from 'react';
 import SceneView from '@arcgis/core/views/SceneView';
+import Graphic from '@arcgis/core/Graphic';
+import { Point } from '@arcgis/core/geometry';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import appStore from '../../stores/AppStore';
 import { Outlet } from 'react-router-dom';
@@ -14,8 +16,17 @@ import {
   getUsagePointRenderer,
   getUsageLabelingInfo,
   fadeIn,
-  fadeOut
+  getOrbit,
+  getSatelliteLocation
 } from '../../utils/utils';
+
+const featuredSatellites = [
+  {
+    id: 25544,
+    model: './assets/iss/scene.gltf',
+    model2: './assets/iss2/source/ISS_stationary.glb'
+  }
+];
 
 export const Map = observer(() => {
   const mapDiv = useRef(null);
@@ -55,7 +66,7 @@ export const Map = observer(() => {
             },
             constraints: {
               altitude: {
-                min: 1e6,
+                min: 1e4,
                 max: 1e9
               },
               clipDistance: {
@@ -111,6 +122,11 @@ export const Map = observer(() => {
         setMapPadding(appStore.mapPadding);
       }
       reaction(() => appStore.mapPadding, setMapPadding);
+
+      if (appStore.selectedSatellite) {
+        renderSatellite(appStore.selectedSatellite);
+      }
+      reaction(() => appStore.selectedSatellite, renderSatellite);
     }
   }, [view]);
 
@@ -131,6 +147,50 @@ export const Map = observer(() => {
         fadeIn(lyrView.layer);
       }
     });
+  }
+
+  function renderSatellite(satellite) {
+    if (satellite) {
+      const featuredSatellite = featuredSatellites.filter((sat) => sat.id === satellite.norad)[0];
+      const NOW = new Date();
+      let symbol = null;
+      const position = getSatelliteLocation(satellite.satrec, NOW, NOW);
+      console.log(satellite, featuredSatellite);
+      if (featuredSatellite.model) {
+        symbol = {
+          type: 'point-3d',
+          symbolLayers: [
+            {
+              type: 'object',
+              resource: { href: featuredSatellite.model2 },
+              material: { color: [255, 255, 255] },
+              height: 100000
+            }
+          ]
+        };
+      } else {
+        symbol = {
+          type: 'point-3d',
+          symbolLayers: [
+            {
+              type: 'icon',
+              resource: { primitive: 'circle' },
+              material: { color: [255, 255, 255] },
+              size: 20
+            }
+          ]
+        };
+      }
+      const graphic = new Graphic({
+        symbol,
+        geometry: new Point(position)
+      });
+      view.graphics.add(graphic);
+
+      view.goTo(graphic);
+    } else {
+      view.graphics.removeAll();
+    }
   }
 
   function setVisualization(visualizationType, layers) {
@@ -166,6 +226,9 @@ export const Map = observer(() => {
         fadeIn(layers[0]);
         fadeIn(layers[1]);
         break;
+      case 'satellite':
+        layers[1].opacity = 0;
+        layers[0].opacity = 0;
     }
   }
 

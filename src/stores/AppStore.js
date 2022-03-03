@@ -14,7 +14,7 @@ class AppStore {
   visualizationType = null;
   mapPadding = [0, 0, 0, 0];
   searchString = null;
-  selectedSatelliteID = null;
+  selectedSatellite = null;
   inSearch = false;
 
   constructor(dataStore, mapStore) {
@@ -49,10 +49,12 @@ class AppStore {
     const satelliteRegEx = new RegExp(/^\/[0-9]+$/g);
     if (satelliteRegEx.test(location)) {
       const id = location.match(/[0-9]+/g)[0];
-      this.setSelectedSatelliteID(id);
+      const satellite = this.getSatelliteById(id);
+      this.setSelectedSatellite(satellite);
+      this.setVisualizationType('satellite');
       this.setMapFilter(`norad = ${id}`);
     } else {
-      this.setSelectedSatelliteID(null);
+      this.setSelectedSatellite(null);
     }
 
     // the search path
@@ -73,7 +75,7 @@ class AppStore {
     // the satellite usage path
     const usageRegEx = new RegExp(/^\/satellite-usage/g);
     if (usageRegEx.test(location)) {
-      appStore.setVisualizationType('usage');
+      this.setVisualizationType('usage');
       this.setInSearch(false);
       this.setMapFilter(null);
     }
@@ -81,17 +83,14 @@ class AppStore {
       this.setVisualizationType('general');
       this.setInSearch(false);
       this.setMapFilter(null);
-      if (this.map) {
-        console.log(this.map.layers);
-      }
     }
   }
 
   setInSearch(value) {
     this.inSearch = value;
   }
-  setSelectedSatelliteID(id) {
-    this.selectedSatelliteID = id;
+  setSelectedSatellite(sat) {
+    this.selectedSatellite = sat;
   }
   setMapFilter(filter) {
     this.mapFilter = filter;
@@ -133,6 +132,13 @@ class AppStore {
   }
   setSearchString(searchString) {
     this.searchString = searchString;
+  }
+
+  getSatelliteById(id) {
+    if (appStore.data) {
+      return appStore.data.filter((satellite) => satellite.norad === parseInt(id))[0];
+    }
+    return null;
   }
 }
 

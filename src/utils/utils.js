@@ -1,4 +1,5 @@
 import { usageRendererConfig, purposeCategories, gray } from '../config';
+import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js';
 
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 const checkForNaN = (value) => {
@@ -184,12 +185,36 @@ export function fadeIn(layer) {
   fading(layer);
 }
 
-export function fadeOut(layer) {
-  const opacity = parseFloat((layer.opacity - 0.05).toFixed(2));
-  layer.opacity = opacity;
-  if (layer.opacity > 0) {
-    window.requestAnimationFrame(function () {
-      fadeOut(layer);
-    });
+export function getOrbit(satrec, period, start) {
+  const SEGMENTS = 100;
+  const milliseconds = (period * 60000) / SEGMENTS;
+
+  const vertices = [];
+  for (let i = 0; i <= SEGMENTS; i++) {
+    const date = new Date(start.getTime() + i * milliseconds);
+    const satelliteLocation = getSatelliteLocation(satrec, date, start);
+    if (!satelliteLocation) {
+      continue;
+    }
+    vertices.push(satelliteLocation);
   }
+
+  return vertices;
+}
+
+export function getSatelliteLocation(satrec, date, start) {
+  const propagation = propagate(satrec, date);
+  const position = propagation?.position;
+  if (!position || Number.isNaN(position.x) || Number.isNaN(position.y) || Number.isNaN(position.z)) {
+    return null;
+  }
+
+  const gmst = gstime(start);
+  const geographic = eciToGeodetic(position, gmst);
+  const { longitude, latitude, height } = geographic;
+
+  const x = radiansToDegrees(longitude);
+  const y = radiansToDegrees(latitude);
+  const z = height * 1000;
+  return { x, y, z };
 }
