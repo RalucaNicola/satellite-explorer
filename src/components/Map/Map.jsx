@@ -12,9 +12,9 @@ import {
   getGeneralPointRenderer,
   getUsageLineRenderer,
   getUsagePointRenderer,
-  getUsageConstellationsPointRenderer,
-  getUsageConstellationsLineRenderer,
-  getUsageLabelingInfo
+  getUsageLabelingInfo,
+  fadeIn,
+  fadeOut
 } from '../../utils/utils';
 
 export const Map = observer(() => {
@@ -125,31 +125,46 @@ export const Map = observer(() => {
 
   function setMapFilter(mapFilter) {
     let filterExpression = mapFilter ? mapFilter : null;
-    layerViews.forEach((lyrView) => (lyrView.filter = { where: filterExpression }));
+    layerViews.forEach((lyrView) => {
+      lyrView.filter = { where: filterExpression };
+      if (lyrView.layer.opacity === 1) {
+        fadeIn(lyrView.layer);
+      }
+    });
   }
 
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
+      case 'search':
+        layers[0].opacity = 0;
+        layers[1].renderer = getGeneralPointRenderer();
+        layers[0].renderer = getGeneralLineRenderer();
+        fadeIn(layers[1]);
+        layers[0].labelingInfo = null;
+        break;
       case 'usage':
-        layers[0].visible = false;
-        layers[0].renderer = getUsageLineRenderer();
         layers[1].renderer = getUsagePointRenderer();
-        layers[1].visible = true;
+        layers[0].opacity = 0;
+        layers[0].renderer = getUsageLineRenderer();
+        fadeIn(layers[1]);
+        layers[1].labelingInfo = null;
+        break;
+      case 'usage-filtered':
+        fadeIn(layers[1]);
+        fadeIn(layers[0]);
         layers[1].labelingInfo = null;
         break;
       case 'general':
-        layers[1].visible = false;
         layers[0].renderer = getGeneralLineRenderer();
         layers[1].renderer = getGeneralPointRenderer();
-        layers[0].visible = true;
+        layers[1].opacity = 0;
         layers[1].labelingInfo = null;
+        fadeIn(layers[0]);
         break;
       case 'usage-constellation':
-        layers[1].renderer = getUsageConstellationsPointRenderer();
-        layers[0].renderer = getUsageConstellationsLineRenderer();
-        layers[0].visible = true;
-        layers[1].visible = false;
         layers[1].labelingInfo = getUsageLabelingInfo();
+        fadeIn(layers[0]);
+        fadeIn(layers[1]);
         break;
     }
   }

@@ -58,15 +58,15 @@ const getPointSymbol = ({
       {
         type: 'icon',
         resource: { primitive: 'circle' },
-        material: { color: [0, 0, 0, 0] },
-        outline: { color: [...outlineColor, outlineOpacity], size: outlineSize },
-        size: size * outlineSizeFactor
+        material: { color: [...color, 1] },
+        size: size
       },
       {
         type: 'icon',
         resource: { primitive: 'circle' },
-        material: { color: [...color, 1] },
-        size: size
+        material: { color: [0, 0, 0, 0] },
+        outline: { color: [...outlineColor, outlineOpacity], size: outlineSize },
+        size: size * outlineSizeFactor
       }
     ]
   };
@@ -115,8 +115,9 @@ export const getUsagePointRenderer = () => {
           color: info.color,
           size: 4,
           outlineSize: 1,
-          outlineOpacity: 0.4,
-          outlineColor: info.color
+          outlineOpacity: 0.7,
+          outlineColor: info.color,
+          outlineSizeFactor: 2
         })
       };
     })
@@ -131,42 +132,7 @@ export const getUsageLineRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getLineSymbol(info.color, 0.4)
-      };
-    })
-  };
-};
-
-export const getUsageConstellationsPointRenderer = () => {
-  return {
-    type: 'unique-value',
-    valueExpression: usageRendererConfig.expression,
-    defaultSymbol: getPointSymbol({}),
-    uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
-      return {
-        value: info.value,
-        symbol: getPointSymbol({
-          color: info.color,
-          size: 5,
-          outlineSize: 1,
-          outlineOpacity: 1,
-          outlineColor: info.lightColor,
-          outlineSizeFactor: 3
-        })
-      };
-    })
-  };
-};
-
-export const getUsageConstellationsLineRenderer = () => {
-  return {
-    type: 'unique-value',
-    valueExpression: usageRendererConfig.expression,
-    defaultSymbol: getLineSymbol(),
-    uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
-      return {
-        value: info.value,
-        symbol: getLineSymbol(info.color, 1)
+        symbol: getLineSymbol(info.color, 0.8)
       };
     })
   };
@@ -203,3 +169,27 @@ export const getUsageLabelingInfo = () => {
   });
   return labelingInfo;
 };
+
+export function fadeIn(layer) {
+  layer.opacity = 0;
+  const fading = (layer) => {
+    const opacity = parseFloat((layer.opacity + 0.05).toFixed(2));
+    layer.opacity = opacity;
+    if (layer.opacity < 1) {
+      window.requestAnimationFrame(function () {
+        fading(layer);
+      });
+    }
+  };
+  fading(layer);
+}
+
+export function fadeOut(layer) {
+  const opacity = parseFloat((layer.opacity - 0.05).toFixed(2));
+  layer.opacity = opacity;
+  if (layer.opacity > 0) {
+    window.requestAnimationFrame(function () {
+      fadeOut(layer);
+    });
+  }
+}

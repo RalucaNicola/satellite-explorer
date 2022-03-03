@@ -16,9 +16,13 @@ const technologyDevelopment = filterDefinition.technologyDevelopment.id;
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
   const [isConstellation, setIsConstellation] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
   const [countsByPurpose, setCountsByPurpose] = useState(null);
   const handleFilter = ({ filter, constellation }) => {
     setActiveFilter(filter);
+    if (filter) {
+      setIsFiltered(true);
+    }
     const filterExpression = filterDefinition[filter].expression;
     appStore.setMapFilter(filterExpression);
     if (constellation !== isConstellation) {
@@ -34,10 +38,12 @@ export const SatelliteUsage = () => {
   useEffect(() => {
     if (isConstellation) {
       appStore.setVisualizationType('usage-constellation');
+    } else if (isFiltered) {
+      appStore.setVisualizationType('usage-filtered');
     } else {
       appStore.setVisualizationType('usage');
     }
-  }, [isConstellation]);
+  }, [isConstellation, isFiltered]);
 
   return (
     <div className={styles.menu}>

@@ -58,7 +58,7 @@ class AppStore {
     // the search path
     const searchRegEx = new RegExp(/^\/search/g);
     if (searchRegEx.test(location)) {
-      this.setVisualizationType('general');
+      this.setVisualizationType('search');
       this.setInSearch(true);
       const searchString = this.searchString;
       if (searchString) {
@@ -73,7 +73,7 @@ class AppStore {
     // the satellite usage path
     const usageRegEx = new RegExp(/^\/satellite-usage/g);
     if (usageRegEx.test(location)) {
-      this.setVisualizationType('usage');
+      appStore.setVisualizationType('usage');
       this.setInSearch(false);
       this.setMapFilter(null);
     }
@@ -81,6 +81,9 @@ class AppStore {
       this.setVisualizationType('general');
       this.setInSearch(false);
       this.setMapFilter(null);
+      if (this.map) {
+        console.log(this.map.layers);
+      }
     }
   }
 

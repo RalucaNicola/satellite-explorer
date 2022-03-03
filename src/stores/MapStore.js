@@ -76,10 +76,7 @@ class MapStore {
           wkid: 4326
         },
         labelsVisible: true,
-        screenSizePerspectiveEnabled: false,
-        featureReduction: {
-          type: 'selection'
-        }
+        screenSizePerspectiveEnabled: false
       }),
       new FeatureLayer({
         id: 'orbit',
