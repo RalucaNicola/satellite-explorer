@@ -45,11 +45,11 @@ export const clamp = (min, percentage, max, total) => {
   return value;
 };
 
-const getPointSymbol = ({
+export const getPointSymbol = ({
   color = gray,
-  size = 0,
-  outlineSize = 0,
-  outlineOpacity = 0,
+  size = 4,
+  outlineSize = 1,
+  outlineOpacity = 1,
   outlineColor = gray,
   outlineSizeFactor = 2
 }) => {
@@ -73,7 +73,7 @@ const getPointSymbol = ({
   };
 };
 
-const getLineSymbol = (color = gray, size = 0) => {
+export const getLineSymbol = (color = gray, size = 0) => {
   return {
     type: 'simple-line',
     width: size,
@@ -83,6 +83,23 @@ const getLineSymbol = (color = gray, size = 0) => {
     join: 'round'
   };
 };
+
+export function getStippledLineSymbol(color, size) {
+  return {
+    type: 'line-3d',
+    symbolLayers: [
+      {
+        type: 'line',
+        size,
+        material: { color },
+        pattern: {
+          type: 'style',
+          style: 'dash'
+        }
+      }
+    ]
+  };
+}
 
 export const getGeneralPointRenderer = () => {
   return {
@@ -185,13 +202,12 @@ export function fadeIn(layer) {
   fading(layer);
 }
 
-export function getOrbit(satrec, period, start) {
-  const SEGMENTS = 100;
-  const milliseconds = (period * 60000) / SEGMENTS;
+export function getOrbit(satrec, period, start, segments = 100) {
+  const milliseconds = (period * 60000) / segments;
 
   const vertices = [];
-  for (let i = 0; i <= SEGMENTS; i++) {
-    const date = new Date(start.getTime() + i * milliseconds);
+  for (let i = 0; i <= segments; i++) {
+    const date = new Date(start.getTime() - i * milliseconds);
     const satelliteLocation = getSatelliteLocation(satrec, date, start);
     if (!satelliteLocation) {
       continue;
@@ -218,3 +234,19 @@ export function getSatelliteLocation(satrec, date, start) {
   const z = height * 1000;
   return { x, y, z };
 }
+
+export const formatOrbitClass = (value) => {
+  switch (value) {
+    case 'LEO':
+      return 'The satellite has a low earth orbit.';
+    case 'MEO':
+      return 'The satellite has a medium earth orbit.';
+    case 'GEO':
+      return 'The satellite has a geosynchronous orbit.';
+    case 'HEO':
+      return 'The satellite has a high earth orbit.';
+    case 'Elliptical':
+      return 'The satellite has a high elliptical orbit.';
+  }
+  return value;
+};

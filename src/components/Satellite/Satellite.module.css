@@ -13,3 +13,22 @@
 .itemValue {
   margin: 0 0 20px 0;
 }
+
+.inclinationText {
+  color: var(--orange);
+}
+
+.inclinationContainer {
+  display: flex;
+  align-items: center;
+}
+
+.inclinationImage {
+  height: 100px;
+  padding: 10px;
+}
+
+.legendImage {
+  height: 40px;
+  vertical-align: middle;
+}

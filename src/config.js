@@ -39,6 +39,9 @@ export const gray = [200, 200, 200];
 export const purple = [137, 109, 232];
 export const lightPurple = [217, 207, 250];
 
+export const perigeeYellow = [255, 217, 0];
+export const apogeeBlue = [66, 135, 245];
+
 export const purposeCategories = {
   navigation: ['Navigation/Global Positioning', 'Navigation/Regional Positioning', 'Satellite Positioning'],
   communications: ['Communications', 'Communications/Maritime Tracking', 'Communications/Technology Development'],
