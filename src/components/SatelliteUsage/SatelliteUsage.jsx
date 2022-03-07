@@ -62,7 +62,7 @@ export const SatelliteUsage = () => {
             clickHandler={handleFilter}
             constellation={false}
           >
-            Position
+            Localization
           </FilterButton>{' '}
           via satellite navigation systems is widely used in almost all industries: transportation, emergency response,
           farming, banking, military, science. These satellites determine the location, velocity and current time of

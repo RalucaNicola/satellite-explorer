@@ -38,6 +38,9 @@ export const lightOrange = [255, 215, 181];
 export const gray = [200, 200, 200];
 export const purple = [137, 109, 232];
 export const lightPurple = [217, 207, 250];
+export const orbitOrange = [255, 147, 0];
+export const orbitYellow = [255, 206, 0];
+export const orbitGreen = [111, 170, 0];
 
 export const perigeeYellow = [255, 217, 0];
 export const apogeeBlue = [66, 135, 245];
@@ -53,6 +56,13 @@ export const purposeCategories = {
   ],
   spaceObservation: ['Space Science', 'Space Observation'],
   technologyDevelopment: ['Technology Development', 'Technology Demonstration']
+};
+
+export const orbitTypes = {
+  leo: 'LEO',
+  meo: 'MEO',
+  geo: 'GEO',
+  heo: 'Elliptical'
 };
 
 export const filterDefinition = {
@@ -144,6 +154,29 @@ export const filterDefinition = {
     color: purple,
     lightColor: lightPurple,
     expression: `purpose IN ('${purposeCategories.technologyDevelopment.join("','")}') `
+  },
+  leo: {
+    id: 'leo',
+    color: orbitOrange,
+    lightColor: [...orbitOrange, 0.7],
+    expression: `orbit_class = 'LEO'`
+  },
+  meo: {
+    id: 'meo',
+    color: orbitYellow,
+    lightColor: [...orbitYellow, 0.7],
+    expression: `orbit_class = 'MEO'`
+  },
+  geo: {
+    id: 'geo',
+    color: orbitGreen,
+    lightColor: [...orbitGreen, 0.7],
+    expression: `orbit_class = 'GEO'`
+  },
+  heo: {
+    id: 'heo',
+    color: orbitYellow,
+    lightColor: [...orbitYellow, 0.7]
   }
 };
 

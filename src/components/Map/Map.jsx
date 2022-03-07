@@ -296,29 +296,24 @@ export const Map = observer(() => {
         layers[1].renderer = getGeneralPointRenderer();
         layers[0].renderer = getGeneralLineRenderer();
         fadeIn(layers[1]);
-        layers[0].labelingInfo = null;
         break;
       case 'usage':
         layers[1].renderer = getUsagePointRenderer();
         layers[0].opacity = 0;
         layers[0].renderer = getUsageLineRenderer();
         fadeIn(layers[1]);
-        layers[1].labelingInfo = null;
         break;
       case 'usage-filtered':
         fadeIn(layers[1]);
         fadeIn(layers[0]);
-        layers[1].labelingInfo = null;
         break;
       case 'general':
         layers[0].renderer = getGeneralLineRenderer();
         layers[1].renderer = getGeneralPointRenderer();
         layers[1].opacity = 0;
-        layers[1].labelingInfo = null;
         fadeIn(layers[0]);
         break;
       case 'usage-constellation':
-        layers[1].labelingInfo = getUsageLabelingInfo();
         fadeIn(layers[0]);
         fadeIn(layers[1]);
         break;

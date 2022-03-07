@@ -9,7 +9,7 @@ import { Routes, Route, useLocation, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SatelliteUsage } from './components/SatelliteUsage';
 import { SatelliteNumber } from './components/SatelliteNumber';
-import { SatelliteInternet } from './components/SatelliteInternet';
+import { SatelliteOrbits } from './components/SatelliteOrbits';
 import { Search } from './components/Search';
 import { Satellite } from './components/Satellite';
 
@@ -31,7 +31,7 @@ const App = observer(() => {
           <Route index element={<Stories />} />
           <Route path='satellite-usage' element={<SatelliteUsage />} />
           <Route path='satellite-number' element={<SatelliteNumber />} />
-          <Route path='satellite-internet' element={<SatelliteInternet />} />
+          <Route path='satellite-orbits' element={<SatelliteOrbits />} />
           <Route path='search' element={<Search />}></Route>
           <Route path=':noradID' element={<Satellite />} />
         </Route>

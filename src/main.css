@@ -15,8 +15,18 @@
   --green-background: rgba(193, 232, 118, 0.6);
   --font-source-sans: 'Poppins', sans-serif;
   --primary: rgb(232 175 118);
+
   --perigee-yellow: rgb(255, 217, 0);
   --apogee-blue: rgb(66, 135, 245);
+
+  --orbit-orange: rgb(255, 147, 0);
+  --orbit-orange-background: rgb(255, 147, 0, 0.6);
+  --orbit-yellow: rgb(255, 206, 0);
+  --orbit-yellow-background: rgba(255, 206, 0, 0.6);
+  --orbit-green: rgb(111, 170, 0);
+  --orbit-green-background: rgba(111, 170, 0, 0.6);
+
+  --outline-gray: rgb(100, 100, 100);
 }
 
 html,
@@ -59,7 +69,7 @@ a:hover {
 @media (min-width: 550px) {
   .rightPanel {
     top: 0;
-    width: clamp(350px, 30%, 600px);
+    width: clamp(350px, 40%, 600px);
     padding: 40px;
     left: revert;
     height: revert;

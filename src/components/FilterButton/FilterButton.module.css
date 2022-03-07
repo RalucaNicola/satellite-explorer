@@ -1,27 +1,40 @@
 .filterButton {
   background-color: transparent;
-  border: 1px solid #ef8adf;
-  color: #ef8adf;
+  border: 1px solid #ffffff;
+  color: #ffffff;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px;
   margin: 4px 0;
   font-size: 1rem;
+  border-radius: 5px;
 }
 
 .filterButton:hover,
 .active {
-  background-color: rgba(239, 138, 223, 0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   color: white;
 }
 
-.navigation {
+.navigation,
+.gps,
+.galileo,
+.glonass,
+.beidou {
   composes: filterButton;
-  border: 1px solid var(--pink);
+  border-color: var(--pink);
   color: var(--pink);
 }
 
 .navigation:hover,
-.navigation.active {
+.gps:hover,
+.galileo:hover,
+.glonass:hover,
+.beidou:hover,
+.navigation.active,
+.gps.active,
+.galileo.active,
+.glonass.active,
+.beidou.active {
   background-color: var(--pink-background);
   color: white;
 }
@@ -32,7 +45,7 @@
 .iridium,
 .globalstar {
   composes: filterButton;
-  border: 1px solid var(--blue);
+  border-color: var(--blue);
   color: var(--blue);
 }
 
@@ -54,7 +67,7 @@
 .doves,
 .landsat {
   composes: filterButton;
-  border: 1px solid var(--green);
+  border-color: var(--green);
   color: var(--green);
 }
 
@@ -70,7 +83,7 @@
 
 .spaceObservation {
   composes: filterButton;
-  border: 1px solid var(--orange);
+  border-color: var(--orange);
   color: var(--orange);
 }
 
@@ -82,12 +95,48 @@
 
 .technologyDevelopment {
   composes: filterButton;
-  border: 1px solid var(--purple);
+  border-color: var(--purple);
   color: var(--purple);
 }
 
 .technologyDevelopment:hover,
 .technologyDevelopment.active {
   background-color: var(--purple-background);
+  color: white;
+}
+
+.leo {
+  composes: filterButton;
+  border-color: var(--orbit-orange);
+  color: var(--orbit-orange);
+}
+
+.leo:hover,
+.leo.active {
+  background-color: var(--orbit-orange-background);
+  color: white;
+}
+
+.meo {
+  composes: filterButton;
+  border-color: var(--orbit-yellow);
+  color: var(--orbit-yellow);
+}
+
+.meo:hover,
+.meo.active {
+  background-color: var(--orbit-yellow-background);
+  color: white;
+}
+
+.geo {
+  composes: filterButton;
+  border-color: var(--orbit-green);
+  color: var(--orbit-green);
+}
+
+.geo:hover,
+.geo.active {
+  background-color: var(--orbit-green-background);
   color: white;
 }

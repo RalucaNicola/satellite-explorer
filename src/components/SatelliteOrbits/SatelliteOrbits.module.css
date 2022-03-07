@@ -1,0 +1,37 @@
+.menu {
+  composes: rightPanel from '../../main.css';
+}
+
+.block {
+  margin: 40px 0;
+}
+
+.orbitTitle {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.orbitTitle:before,
+.orbitTitle:after {
+  content: '';
+  flex: 1 1;
+  border-bottom: 1px solid var(--outline-gray);
+  margin: auto;
+}
+
+.orbitTitle:before {
+  margin-right: 10px;
+}
+
+.orbitTitle:after {
+  margin-left: 10px;
+}
+
+.orbitContent {
+  border-left: 1px dashed var(--outline-gray);
+  padding: 30px 20px;
+  margin-top: -28px;
+  margin-bottom: -55px;
+}
