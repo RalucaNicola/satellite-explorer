@@ -11,19 +11,20 @@
   align-items: center;
   color: white;
 }
-.wrapper img {
-  max-width: 100%;
-  max-height: 100%;
-  z-index: 2;
-}
 
-.wrapper p {
-  font-size: 1rem;
+.textWrapper {
   z-index: 2;
+  max-width: min(80%, 600px);
+  text-align: center;
+  font-size: 1rem;
+}
+.textWrapper img {
+  max-width: 60%;
+  max-height: 60%;
 }
 
 @media (min-width: 550px) {
-  .wrapper p {
+  .textWrapper {
     font-size: 1.4rem;
   }
 }
@@ -44,12 +45,12 @@
 
 .stars {
   background: #000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
-  z-index: 0;
+  z-index: 1;
 }
 
 .twinkling {
   background: transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
-  z-index: 1;
+  z-index: 2;
 
   -moz-animation: move-twink-back 200s linear infinite;
   -ms-animation: move-twink-back 200s linear infinite;
