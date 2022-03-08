@@ -1,4 +1,4 @@
-import { Map } from './components/Map';
+import { Home } from './components/Home';
 import { Loading } from './components/Loading';
 import { Stories } from './components/Stories';
 import { PageNotFound } from './components/PageNotFound';
@@ -26,7 +26,7 @@ const App = observer(() => {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Map />}>
+        <Route path='/' element={<Home />}>
           <Route path='*' element={<PageNotFound />} />
           <Route index element={<Stories />} />
           <Route path='satellite-usage' element={<SatelliteUsage />} />

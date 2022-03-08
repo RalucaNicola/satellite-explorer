@@ -5,7 +5,7 @@ import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import appStore from '../../stores/AppStore';
-import { Outlet } from 'react-router-dom';
+
 import { observer } from 'mobx-react';
 import { reaction } from 'mobx';
 
@@ -79,6 +79,8 @@ export const Map = observer(() => {
               }
             }
           });
+          view.ui.empty('top-left');
+          view.ui.add(['navigation-toggle', 'compass', 'zoom'], 'top-right');
           // get access to layers/layerViews on the component level
           const orbitFL = map.allLayers.find((layer) => layer.id === 'orbit');
           const satelliteFL = map.allLayers.find((layer) => layer.id === 'satellite');
@@ -354,7 +356,7 @@ export const Map = observer(() => {
 
   return (
     <>
-      <div className={styles.mapDiv} ref={mapDiv}></div> <Outlet />
+      <div className={styles.mapDiv} ref={mapDiv}></div>
     </>
   );
 });
