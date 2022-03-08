@@ -9,20 +9,19 @@ import { Outlet } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { reaction } from 'mobx';
 
-import { apogeeBlue, perigeeYellow } from '../../config';
+import { apogeeBlue, orbitOrange, orbitYellow, orbitGreen, perigeeYellow } from '../../config';
 
 import {
   getGeneralLineRenderer,
   getGeneralPointRenderer,
   getUsageLineRenderer,
   getUsagePointRenderer,
-  getUsageLabelingInfo,
   getPointSymbol,
-  getLineSymbol,
   getStippledLineSymbol,
   fadeIn,
   getOrbit,
-  getSatelliteLocation
+  getSatelliteLocation,
+  getOrbitRangeGraphic
 } from '../../utils/utils';
 
 const featuredSatellites = [
@@ -53,7 +52,7 @@ export const Map = observer(() => {
               starsEnabled: true,
               atmosphereEnabled: true,
               lighting: {
-                cameraTrackingEnabled: false,
+                type: 'sun',
                 directShadowsEnabled: false
               }
             },
@@ -131,6 +130,11 @@ export const Map = observer(() => {
         renderSatellite(appStore.selectedSatellite);
       }
       reaction(() => appStore.selectedSatellite, renderSatellite);
+
+      if (appStore.orbitalRangesVisible) {
+        drawOrbitRanges();
+      }
+      reaction(() => appStore.orbitalRangesVisible, drawOrbitRanges);
     }
   }, [view]);
 
@@ -289,18 +293,35 @@ export const Map = observer(() => {
     });
   };
 
+  const drawOrbitRanges = (rangesVisible) => {
+    if (rangesVisible) {
+      const leoOrbit = getOrbitRangeGraphic(160000, 2000000, orbitOrange);
+      const meoOrbit = getOrbitRangeGraphic(2000000, 34000000, orbitYellow);
+      const geoOrbit = getOrbitRangeGraphic(35500000, 36500000, orbitGreen);
+
+      view.graphics.addMany([leoOrbit, meoOrbit, geoOrbit]);
+    } else {
+      view.graphics.removeAll();
+    }
+  };
+
+  const generalPointRenderer = getGeneralPointRenderer();
+  const generalLineRenderer = getGeneralLineRenderer();
+  const usagePointRenderer = getUsagePointRenderer();
+  const usageLineRenderer = getUsageLineRenderer();
+
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
       case 'search':
         layers[0].opacity = 0;
-        layers[1].renderer = getGeneralPointRenderer();
-        layers[0].renderer = getGeneralLineRenderer();
+        layers[1].renderer = generalPointRenderer;
+        layers[0].renderer = generalLineRenderer;
         fadeIn(layers[1]);
         break;
       case 'usage':
-        layers[1].renderer = getUsagePointRenderer();
+        layers[1].renderer = usagePointRenderer;
         layers[0].opacity = 0;
-        layers[0].renderer = getUsageLineRenderer();
+        layers[0].renderer = usageLineRenderer;
         fadeIn(layers[1]);
         break;
       case 'usage-filtered':
@@ -308,8 +329,8 @@ export const Map = observer(() => {
         fadeIn(layers[0]);
         break;
       case 'general':
-        layers[0].renderer = getGeneralLineRenderer();
-        layers[1].renderer = getGeneralPointRenderer();
+        layers[0].renderer = generalLineRenderer;
+        layers[1].renderer = generalPointRenderer;
         layers[1].opacity = 0;
         fadeIn(layers[0]);
         break;
@@ -320,6 +341,13 @@ export const Map = observer(() => {
       case 'satellite':
         layers[1].opacity = 0;
         layers[0].opacity = 0;
+        break;
+      case 'orbits':
+        layers[0].renderer = generalLineRenderer;
+        layers[1].renderer = generalPointRenderer;
+        layers[0].opacity = 0;
+        layers[1].opacity = 1;
+        break;
     }
   }
 

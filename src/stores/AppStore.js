@@ -16,6 +16,7 @@ class AppStore {
   searchString = null;
   selectedSatellite = null;
   inSearch = false;
+  orbitalRangesVisible = false;
 
   constructor(dataStore, mapStore) {
     makeAutoObservable(this);
@@ -79,6 +80,16 @@ class AppStore {
       this.setInSearch(false);
       this.setMapFilter(null);
     }
+
+    // the satellite usage path
+    const orbitsRegEx = new RegExp(/^\/satellite-orbits/g);
+    if (orbitsRegEx.test(location)) {
+      this.setVisualizationType('orbits');
+      this.setOrbitalRangesVisible(true);
+      this.setMapFilter('1=2');
+    } else {
+      this.setOrbitalRangesVisible(false);
+    }
     if (location === '/') {
       this.setVisualizationType('general');
       this.setInSearch(false);
@@ -91,6 +102,9 @@ class AppStore {
   }
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
+  }
+  setOrbitalRangesVisible(value) {
+    this.orbitalRangesVisible = value;
   }
   setMapFilter(filter) {
     this.mapFilter = filter;

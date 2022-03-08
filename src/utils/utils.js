@@ -2,6 +2,10 @@ import { usageRendererConfig, purposeCategories, gray } from '../config';
 import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js';
 
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
+import Mesh from '@arcgis/core/geometry/Mesh';
+import Graphic from '@arcgis/core/Graphic';
+import MeshMaterialMetallicRoughness from '@arcgis/core/geometry/support/MeshMaterialMetallicRoughness';
+import { Polygon } from '@arcgis/core/geometry';
 const checkForNaN = (value) => {
   if (isNaN(value)) {
     return null;
@@ -249,4 +253,83 @@ export const formatOrbitClass = (value) => {
       return 'The satellite has a high elliptical orbit.';
   }
   return value;
+};
+
+export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
+  const rings = [];
+  for (let x = 180; x >= -175; x -= 5) {
+    const ring = [
+      [x, 0, minHeight],
+      [x - 5, 0, minHeight],
+      [x - 5, 0.1, maxHeight],
+      [x, 0.1, maxHeight]
+    ];
+    rings.push(ring);
+  }
+
+  const graphic = new Graphic({
+    geometry: new Polygon({
+      rings: rings
+    }),
+    symbol: {
+      type: 'polygon-3d',
+      symbolLayers: [
+        {
+          type: 'fill',
+          material: { color: [...color, 0.9] },
+          outline: { size: 0 }
+        }
+      ]
+    }
+  });
+  return graphic;
+  // const bottomVertices = [];
+  // const faces = [];
+
+  // for (let x = -180; x <= 180; x += 5) {
+  //   bottomVertices.push([x, 0, minHeight]);
+  // }
+  // const vertices = [...bottomVertices];
+  // const length = bottomVertices.length;
+  // for (let i = 0; i < length; i++) {
+  //   const vIdx1 = i;
+  //   const vIdx2 = (i + 1) % length;
+
+  //   const vIdx3 = length + i;
+  //   const vIdx4 = length + ((i + 1) % length);
+
+  //   const topVertex = [].concat.apply([], vertices[vIdx1]);
+  //   topVertex[2] = maxHeight;
+  //   vertices.push(topVertex);
+  //   if (i !== length - 1) {
+  //     faces.push(vIdx2, vIdx3, vIdx1, vIdx4, vIdx3, vIdx2);
+  //   }
+  // }
+  // const mesh = new Mesh({
+  //   vertexAttributes: {
+  //     position: vertices.flat()
+  //   },
+  //   components: [
+  //     {
+  //       faces: faces,
+  //       material: new MeshMaterialMetallicRoughness({
+  //         color: [...color]
+  //       })
+  //     }
+  //   ],
+  //   spatialReference: { wkid: 4326 }
+  // });
+
+  // const graphic = new Graphic({
+  //   geometry: mesh,
+  //   symbol: {
+  //     type: 'mesh-3d',
+  //     symbolLayers: [
+  //       {
+  //         type: 'fill'
+  //       }
+  //     ]
+  //   }
+  // });
+  return graphic;
 };
