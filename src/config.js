@@ -75,6 +75,7 @@ export const filterDefinition = {
   gps: {
     color: pink,
     lightColor: lightPink,
+    id: 'gps',
     expression: `LOWER(name) LIKE '%gps%'`
   },
   glonass: {
@@ -155,6 +156,12 @@ export const filterDefinition = {
     lightColor: lightPurple,
     expression: `purpose IN ('${purposeCategories.technologyDevelopment.join("','")}') `
   },
+  molniya: {
+    id: 'molniya',
+    color: [255, 255, 255, 0.7],
+    lightColor: [255, 255, 255, 0.7],
+    expression: `orbit_type = 'Molniya'`
+  },
   leo: {
     id: 'leo',
     color: orbitOrange,
@@ -176,7 +183,14 @@ export const filterDefinition = {
   heo: {
     id: 'heo',
     color: orbitYellow,
-    lightColor: [...orbitYellow, 0.7]
+    lightColor: [...orbitYellow, 0.7],
+    expression: `orbit_class = 'Elliptical'`
+  },
+  geostationary: {
+    id: 'geostationary',
+    color: orbitYellow,
+    lightColor: [...orbitYellow, 0.7],
+    expression: `orbit_class ='GEO' AND inclination < 0.04 AND inclination > 0.00`
   }
 };
 

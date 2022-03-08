@@ -297,7 +297,7 @@ export const Map = observer(() => {
     if (rangesVisible) {
       const leoOrbit = getOrbitRangeGraphic(160000, 2000000, orbitOrange);
       const meoOrbit = getOrbitRangeGraphic(2000000, 34000000, orbitYellow);
-      const geoOrbit = getOrbitRangeGraphic(35500000, 36500000, orbitGreen);
+      const geoOrbit = getOrbitRangeGraphic(35000000, 35500000, orbitGreen);
 
       view.graphics.addMany([leoOrbit, meoOrbit, geoOrbit]);
     } else {
@@ -309,6 +309,7 @@ export const Map = observer(() => {
   const generalLineRenderer = getGeneralLineRenderer();
   const usagePointRenderer = getUsagePointRenderer();
   const usageLineRenderer = getUsageLineRenderer();
+  const orbitLineRenderer = getGeneralLineRenderer(0.5);
 
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
@@ -343,10 +344,10 @@ export const Map = observer(() => {
         layers[0].opacity = 0;
         break;
       case 'orbits':
-        layers[0].renderer = generalLineRenderer;
+        layers[0].renderer = orbitLineRenderer;
         layers[1].renderer = generalPointRenderer;
-        layers[0].opacity = 0;
-        layers[1].opacity = 1;
+        fadeIn(layers[0]);
+        fadeIn(layers[1]);
         break;
     }
   }

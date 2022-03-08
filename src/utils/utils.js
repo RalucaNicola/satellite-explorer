@@ -118,10 +118,10 @@ export const getGeneralPointRenderer = () => {
   };
 };
 
-export const getGeneralLineRenderer = () => {
+export const getGeneralLineRenderer = (size = 0.1) => {
   return {
     type: 'simple',
-    symbol: getLineSymbol([255, 255, 255], 0.1)
+    symbol: getLineSymbol([255, 255, 255], size)
   };
 };
 
@@ -276,7 +276,7 @@ export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
       symbolLayers: [
         {
           type: 'fill',
-          material: { color: [...color, 0.9] },
+          material: { color: [...color, 0.7] },
           outline: { size: 0 }
         }
       ]
@@ -331,5 +331,5 @@ export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
   //     ]
   //   }
   // });
-  return graphic;
+  // return graphic;
 };
