@@ -9,6 +9,9 @@ export const Menu = () => {
   return (
     <>
       <div className={styles.menuContainer} style={{ display: active ? 'block' : 'none' }}>
+        <button className={styles.closeButton} onClick={toggleMenu}>
+          <img src='./assets/close.svg'></img>
+        </button>
         <ul className={styles.menuList}>
           <li>
             <Link to='./' onClick={toggleMenu}>

@@ -27,13 +27,13 @@ const App = observer(() => {
     <>
       <Routes>
         <Route path='/' element={<Home />}>
-          <Route path='*' element={<PageNotFound />} />
           <Route index element={<Stories />} />
           <Route path='satellite-usage' element={<SatelliteUsage />} />
           <Route path='satellite-number' element={<SatelliteNumber />} />
           <Route path='satellite-orbits' element={<SatelliteOrbits />} />
           <Route path='search' element={<Search />}></Route>
           <Route path=':noradID' element={<Satellite />} />
+          <Route path='*' element={<PageNotFound />} />
         </Route>
       </Routes>
       {!appStore.viewIsReady && <Loading></Loading>}
