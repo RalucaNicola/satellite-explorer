@@ -1,0 +1,30 @@
+{
+  "satellites": [
+    {
+      "norad": 25544,
+      "model": "./assets/iss/scene.gltf",
+      "info": "The International Space Station (ISS) is a modular space station (habitable artificial satellite) in low Earth orbit. It is a multinational collaborative project involving five participating space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada).The station serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields",
+      "links": [
+        {
+          "url": "https://blogs.nasa.gov/spacestation/",
+          "title": "Space Station crew blog"
+        },
+        {
+          "url": "https://www.nasa.gov/mission_pages/station/main/index.html",
+          "title": "NASA - ISS mission page"
+        }
+      ]
+    },
+    {
+      "norad": 49260,
+      "model": "./assets/Landsat9.glb",
+      "info": "Landsat 9 — a partnership between NASA and the U.S. Geological Survey — continues the Landsat program's critical role in monitoring, understanding and managing the land resources needed to sustain human life.",
+      "links": [
+        {
+          "title": "Landsat 9 mission page",
+          "url": "https://landsat.gsfc.nasa.gov/satellites/landsat-9/"
+        }
+      ]
+    }
+  ]
+}
