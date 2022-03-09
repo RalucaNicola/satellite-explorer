@@ -1,0 +1,11 @@
+Model Information:
+* title:	EOES satellite Landsat 8 clean topo
+* source:	https://sketchfab.com/3d-models/eoes-satellite-landsat-8-clean-topo-4cf892ee33b94978a3b70309bbc2a76f
+* author:	wireframe (https://sketchfab.com/elliottebbs)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "EOES satellite Landsat 8 clean topo" (https://sketchfab.com/3d-models/eoes-satellite-landsat-8-clean-topo-4cf892ee33b94978a3b70309bbc2a76f) by wireframe (https://sketchfab.com/elliottebbs) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

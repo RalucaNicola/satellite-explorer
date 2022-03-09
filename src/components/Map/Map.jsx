@@ -161,7 +161,6 @@ export const Map = observer(() => {
 
   function renderSatellite(satellite) {
     if (satellite) {
-      const featuredSatellite = featuredSatellites.filter((sat) => sat.id === satellite.norad)[0];
       const NOW = new Date();
       const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, NOW, 200);
       const orbitGraphic = new Graphic({
@@ -219,13 +218,13 @@ export const Map = observer(() => {
       view.graphics.addMany([orbitGraphic, apogeeGraphic, apogeeHelperGraphic, perigeeGraphic, perigeeHelperGraphic]);
       let symbol = null;
       const position = getSatelliteLocation(satellite.satrec, NOW, NOW);
-      if (featuredSatellite && featuredSatellite.model) {
+      if (satellite.featuredSatellite) {
         symbol = {
           type: 'point-3d',
           symbolLayers: [
             {
               type: 'object',
-              resource: { href: featuredSatellite.model },
+              resource: { href: satellite.featuredSatellite.model },
               material: { color: [255, 255, 255] },
               height: 100000
             }
