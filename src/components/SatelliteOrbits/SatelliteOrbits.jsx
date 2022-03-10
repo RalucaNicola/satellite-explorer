@@ -1,10 +1,11 @@
 import * as styles from './SatelliteOrbits.module.css';
-import { OrbitsChart } from '../OrbitsChart';
-import { useEffect, useState } from 'react';
-import appStore from '../../stores/AppStore';
-import { BackButton } from '../BackButton';
-import { FilterButton } from '../FilterButton';
+
+import { BackButton, FilterButton, OrbitsChart } from '../index';
+
 import { filterDefinition } from '../../config';
+import appStore from '../../stores/AppStore';
+
+import { useEffect, useState } from 'react';
 
 const leo = filterDefinition.leo.id;
 const meo = filterDefinition.meo.id;

@@ -1,8 +1,11 @@
 import * as styles from './Satellite.module.css';
-import appStore from '../../stores/AppStore';
-import { observer } from 'mobx-react';
-import { BackButton } from '../BackButton';
+
+import { BackButton } from '../index';
+
 import { formatOrbitClass } from '../../utils/utils';
+import appStore from '../../stores/AppStore';
+
+import { observer } from 'mobx-react';
 
 const ListItem = ({ field, value, children }) => {
   return (

@@ -1,8 +1,12 @@
-import { filterDefinition } from '../../config';
-import { scaleLinear } from 'd3-scale';
 import * as styles from './UsageChart.module.css';
+
+import { scaleLinear } from 'd3-scale';
+
+import { filterDefinition } from '../../config';
 import appStore from '../../stores/AppStore';
+
 import { observer } from 'mobx-react';
+
 let width = 350;
 const height = 15;
 const innerPaddingMobile = 20;

@@ -1,9 +1,10 @@
 import * as styles from './Search.module.css';
+
+import { BackButton, SatellitesResults } from '../index';
 import appStore from '../../stores/AppStore';
-import { BackButton } from '../BackButton';
+
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SatellitesResults } from '../SatellitesResults';
 
 export const Search = () => {
   const [searchResults, setSearchResults] = useState([]);

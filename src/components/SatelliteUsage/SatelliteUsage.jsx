@@ -1,11 +1,11 @@
 import * as styles from './SatelliteUsage.module.css';
+
 import { filterDefinition } from '../../config';
-import { FilterButton } from '../FilterButton';
-import { useEffect, useState } from 'react';
 import appStore from '../../stores/AppStore';
-import { UsageChart } from '../UsageChart';
-import { Accordion } from '../Accordion';
-import { BackButton } from '../BackButton';
+
+import { Accordion, UsageChart, BackButton, FilterButton } from '../index';
+
+import { useEffect, useState } from 'react';
 
 const navigation = filterDefinition.navigation.id;
 const communications = filterDefinition.communications.id;

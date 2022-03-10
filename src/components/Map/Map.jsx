@@ -1,16 +1,11 @@
 import * as styles from './Map.module.css';
-import { useEffect, useRef, useState } from 'react';
+
 import SceneView from '@arcgis/core/views/SceneView';
 import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
-import appStore from '../../stores/AppStore';
-
-import { observer } from 'mobx-react';
-import { reaction } from 'mobx';
 
 import { apogeeBlue, orbitOrange, orbitYellow, orbitGreen, perigeeYellow } from '../../config';
-
 import {
   getGeneralLineRenderer,
   getGeneralPointRenderer,
@@ -24,13 +19,11 @@ import {
   getOrbitRangeGraphic
 } from '../../utils/utils';
 
-const featuredSatellites = [
-  {
-    id: 25544,
-    model: './assets/iss/scene.gltf',
-    model2: './assets/iss2/source/ISS_stationary.glb'
-  }
-];
+import appStore from '../../stores/AppStore';
+
+import { useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react';
+import { reaction } from 'mobx';
 
 export const Map = observer(() => {
   const mapDiv = useRef(null);

@@ -1,6 +1,8 @@
+import * as styles from './Menu.module.css';
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as styles from './Menu.module.css';
+
 export const Menu = () => {
   const [active, setActive] = useState();
   const toggleMenu = () => {

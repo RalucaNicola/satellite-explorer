@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import { Map } from '../Map';
-import { Menu } from '../Menu';
+import { Map, Menu } from '../index';
+
 export const Home = () => {
   return (
     <>

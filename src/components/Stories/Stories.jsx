@@ -1,5 +1,5 @@
 import * as styles from './Stories.module.css';
-import { StoryCard } from '../StoryCard';
+import { StoryCard } from '../index';
 
 export function Stories() {
   return (
