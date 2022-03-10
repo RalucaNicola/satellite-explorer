@@ -29,7 +29,7 @@ export function SatelliteOrbits() {
   };
   return (
     <div className={styles.menu}>
-      <BackButton></BackButton>
+      <BackButton toState='general'></BackButton>
       <h2>What is the altitude of a satellite?</h2>
       <div className={styles.block}>
         Although the space beyond Earth's atmosphere is vast, human-man satellites are typically located in one of the
@@ -96,7 +96,7 @@ export function SatelliteOrbits() {
         </FilterButton>{' '}
         designed to provide communications and remote sensing coverage over high latitudes.
       </div>
-      <BackButton></BackButton>
+      <BackButton toState='general'></BackButton>
     </div>
   );
 }

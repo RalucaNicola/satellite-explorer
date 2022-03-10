@@ -283,53 +283,45 @@ export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
     }
   });
   return graphic;
-  // const bottomVertices = [];
-  // const faces = [];
+};
 
-  // for (let x = -180; x <= 180; x += 5) {
-  //   bottomVertices.push([x, 0, minHeight]);
-  // }
-  // const vertices = [...bottomVertices];
-  // const length = bottomVertices.length;
-  // for (let i = 0; i < length; i++) {
-  //   const vIdx1 = i;
-  //   const vIdx2 = (i + 1) % length;
+export const parseHash = () => {
+  const hashString = window.location.hash.substring(1);
+  return parsePairsFromString(hashString);
+};
 
-  //   const vIdx3 = length + i;
-  //   const vIdx4 = length + ((i + 1) % length);
+const parsePairsFromString = (inputStr = '') => {
+  const output = {};
 
-  //   const topVertex = [].concat.apply([], vertices[vIdx1]);
-  //   topVertex[2] = maxHeight;
-  //   vertices.push(topVertex);
-  //   if (i !== length - 1) {
-  //     faces.push(vIdx2, vIdx3, vIdx1, vIdx4, vIdx3, vIdx2);
-  //   }
-  // }
-  // const mesh = new Mesh({
-  //   vertexAttributes: {
-  //     position: vertices.flat()
-  //   },
-  //   components: [
-  //     {
-  //       faces: faces,
-  //       material: new MeshMaterialMetallicRoughness({
-  //         color: [...color]
-  //       })
-  //     }
-  //   ],
-  //   spatialReference: { wkid: 4326 }
-  // });
+  const pairs = inputStr.split('&');
 
-  // const graphic = new Graphic({
-  //   geometry: mesh,
-  //   symbol: {
-  //     type: 'mesh-3d',
-  //     symbolLayers: [
-  //       {
-  //         type: 'fill'
-  //       }
-  //     ]
-  //   }
-  // });
-  // return graphic;
+  for (const item of pairs) {
+    const pair = item.split('=');
+    const key = decodeURIComponent(pair[0]);
+    const value = decodeURIComponent(pair[1] || '');
+
+    if (key) {
+      output[key] = value;
+    }
+  }
+
+  return output;
+};
+
+export const updateHashParam = ({ key = '', value = '' } = {}) => {
+  if (key) {
+    const hashParams = parseHash();
+
+    hashParams[key] = value;
+
+    const queryParamsStr = Object.keys(hashParams)
+      .map((paramKey) => {
+        const val = hashParams[paramKey];
+        return val ? `${paramKey}=${val}` : '';
+      })
+      .filter((d) => d)
+      .join('&');
+
+    window.location.hash = queryParamsStr;
+  }
 };

@@ -33,5 +33,6 @@
   vertical-align: middle;
 }
 .newsLink {
-  display: inline-block;
+  display: block;
+  width: fit-content;
 }

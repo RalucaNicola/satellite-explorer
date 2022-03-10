@@ -1,5 +1,5 @@
 import * as styles from './PageNotFound.module.css';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 export function PageNotFound() {
   return (
@@ -10,7 +10,7 @@ export function PageNotFound() {
         <img src='./assets/astronaut-notfound.png' />
         <p>
           Hey there! You went way beyond our galaxy and we can't find what you're looking for. But we can take you back
-          to the <Link to='/'>home page</Link>.
+          to the <a href='/'>home page</a>.
         </p>
       </div>
     </div>

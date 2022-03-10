@@ -1,14 +1,18 @@
+import appStore from '../../stores/AppStore';
 import * as styles from './BackButton.module.css';
-import { useNavigate } from 'react-router-dom';
 
-export function BackButton({ navigateTo = -1 }) {
-  const navigate = useNavigate();
+export function BackButton({ toState, onClick }) {
   return (
     <button
       className={styles.backButton}
       onClick={() => {
-        navigate(navigateTo);
+        appStore.setActiveState(toState);
+        if (onClick) {
+          onClick();
+        }
       }}
-    ></button>
+    >
+      <img src='./assets/arrows-back.svg' className={styles.backImage}></img>
+    </button>
   );
 }

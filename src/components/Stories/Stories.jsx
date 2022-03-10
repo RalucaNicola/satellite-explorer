@@ -5,10 +5,10 @@ export function Stories() {
   return (
     <div className={styles.stories}>
       <ul className={styles.storiesList}>
-        <StoryCard link='satellite-usage' image='./assets/satellite-1.jpg'>
+        <StoryCard toState='usage' image='./assets/satellite-1.jpg'>
           Why do we need satellites?
         </StoryCard>
-        <StoryCard link='satellite-orbits' image='./assets/satellite-2.jpg'>
+        <StoryCard toState='orbits' image='./assets/satellite-2.jpg'>
           What is the altitude of a satellite?
         </StoryCard>
       </ul>

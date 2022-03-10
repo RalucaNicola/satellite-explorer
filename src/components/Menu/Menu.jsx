@@ -1,7 +1,7 @@
 import * as styles from './Menu.module.css';
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../index';
 
 export const Menu = () => {
   const [active, setActive] = useState();
@@ -16,12 +16,12 @@ export const Menu = () => {
         </button>
         <ul className={styles.menuList}>
           <li>
-            <Link to='./' onClick={toggleMenu}>
+            <Link toState='general' onClick={toggleMenu}>
               Home
             </Link>
           </li>
           <li>
-            <Link to='./search' onClick={toggleMenu}>
+            <Link toState='search' onClick={toggleMenu}>
               Search for satellites
             </Link>
           </li>

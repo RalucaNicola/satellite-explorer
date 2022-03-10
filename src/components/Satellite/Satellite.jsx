@@ -11,7 +11,7 @@ const ListItem = ({ field, value, children }) => {
   return (
     <>
       <p className={styles.itemTitle}>{field.toUpperCase()}</p>
-      <p className={styles.itemValue}>{value}</p>
+      {value ? <p className={styles.itemValue}>{value}</p> : ''}
       {children}
     </>
   );
@@ -27,9 +27,14 @@ export const Satellite = observer(() => {
 
   return (
     <div className={styles.menu}>
-      <BackButton navigateTo={appStore.inSearch ? -1 : '/'}></BackButton>
+      <BackButton
+        toState={appStore.inSearch ? 'search' : 'general'}
+        onClick={() => {
+          appStore.setSelectedSatellite(null);
+        }}
+      ></BackButton>
       {attr ? (
-        <>
+        <div>
           <h2>{attr.official_name}</h2>
           {featured ? <p>{featured.info}</p> : <></>}
           <ListItem field='Purpose' value={attr.purpose} />
@@ -79,10 +84,16 @@ export const Satellite = observer(() => {
           ) : (
             <></>
           )}
-        </>
+        </div>
       ) : (
         <p>Loading satellite information...</p>
       )}
+      <BackButton
+        toState={appStore.inSearch ? 'search' : 'general'}
+        onClick={() => {
+          appStore.setSelectedSatellite(null);
+        }}
+      ></BackButton>
     </div>
   );
 });

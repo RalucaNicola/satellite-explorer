@@ -3,6 +3,7 @@ export * from './Accordion/Accordion';
 export * from './BackButton/BackButton';
 export * from './FilterButton/FilterButton';
 export * from './StoryCard/StoryCard';
+export * from './Link/Link';
 
 /* charting components */
 export * from './UsageChart/UsageChart';
@@ -15,7 +16,6 @@ export * from './Menu/Menu';
 export * from './Stories/Stories';
 
 /* main pages */
-export * from './Home/Home';
 export * from './Loading/Loading';
 export * from './PageNotFound/PageNotFound';
 export * from './SatelliteUsage/SatelliteUsage';

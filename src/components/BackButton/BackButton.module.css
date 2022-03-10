@@ -1,15 +1,15 @@
 .backButton {
-  background: url('./assets/arrows-back.svg');
+  background: none;
   border: none;
   cursor: pointer;
   height: 25px;
   width: 25px;
   transition: transform 500ms;
+  margin: 20px 0;
 }
 
 .backImage {
-  max-height: 25px;
-  transition: transform 500ms;
+  height: 100%;
 }
 
 .backButton:hover {

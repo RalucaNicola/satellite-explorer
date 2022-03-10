@@ -4,12 +4,11 @@ import { BackButton, SatellitesResults } from '../index';
 import appStore from '../../stores/AppStore';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
-export const Search = () => {
-  const [searchResults, setSearchResults] = useState([]);
+export const Search = observer(() => {
+  const [searchResults, setSearchResults] = useState(null);
   const [featuredSatellites, setFeaturedSatellites] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   function getSuggestions(searchString) {
     let filteredData = [...appStore.data];
@@ -31,34 +30,39 @@ export const Search = () => {
 
   useEffect(() => {
     if (appStore.data) {
-      const searchString = searchParams.get('filter');
-      getSuggestions(searchString);
-      appStore.setSearchString(searchString);
-      if (featuredSatellites.length === 0) {
+      getSuggestions(appStore.searchString);
+
+      if (!appStore.searchString && featuredSatellites.length === 0) {
         setFeaturedSatellites(appStore.data.filter((satellite) => satellite.featuredSatellite));
       }
     }
-  }, [searchParams, appStore.data]);
+  }, [appStore.searchString, appStore.data]);
 
   function inputHandler(event) {
     const filter = event.target.value.toLowerCase();
     if (filter && filter.length > 2) {
-      setSearchParams({ filter });
+      appStore.setSearchString(filter);
     } else {
-      setSearchParams({});
+      appStore.setSearchString(null);
     }
   }
 
   return (
     <div className={styles.menu}>
-      <BackButton navigateTo={'/'}></BackButton>
+      <BackButton
+        toState='general'
+        onClick={() => {
+          appStore.setSearchString(null);
+          appStore.setInSearch(false);
+        }}
+      ></BackButton>
       <h2>Search satellites</h2>
       <input
         className={styles.searchInput}
         type='text'
         onChange={inputHandler}
         placeholder='Search by name or operator'
-        {...(searchParams.get('filter') ? { value: searchParams.get('filter') } : {})}
+        {...(appStore.searchString ? { value: appStore.searchString } : {})}
       ></input>
       {searchResults ? (
         searchResults.length ? (
@@ -72,7 +76,13 @@ export const Search = () => {
           {featuredSatellites ? <SatellitesResults satellites={featuredSatellites}></SatellitesResults> : 'Loading...'}
         </>
       )}
-      <BackButton navigateTo={'/'}></BackButton>
+      <BackButton
+        toState='general'
+        onClick={() => {
+          appStore.setSearchString(null);
+          appStore.setInSearch(false);
+        }}
+      ></BackButton>
     </div>
   );
-};
+});

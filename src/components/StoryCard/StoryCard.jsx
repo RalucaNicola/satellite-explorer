@@ -1,12 +1,14 @@
 import * as styles from './StoryCard.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from '../index';
 
-export function StoryCard({ link, image, children }) {
+export function StoryCard({ toState, image, children }) {
   return (
     <li>
-      <Link to={link} className={styles.storyLink}>
-        <img src={image} className={styles.listImage}></img>
-        <p className={styles.title}>{children}</p>
+      <Link toState={toState}>
+        <div className={styles.storyLink}>
+          <img src={image} className={styles.listImage}></img>
+          <p className={styles.title}>{children}</p>
+        </div>
       </Link>
     </li>
   );

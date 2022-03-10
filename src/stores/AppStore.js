@@ -2,10 +2,11 @@ import DataStore from './DataStore';
 import { makeAutoObservable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories, orbitTypes } from '../config';
-import { clamp } from '../utils/utils';
+import { clamp, updateHashParam } from '../utils/utils';
 class AppStore {
   data = null;
   viewIsReady = false;
+  activeState = null;
   location = null;
   mapFilter = null;
   visualizationType = null;
@@ -24,67 +25,37 @@ class AppStore {
     })();
   }
 
-  /* stop displaying loading screen */
-  setViewReady(value) {
-    this.viewIsReady = value;
-  }
-
   setData(data) {
     this.data = data;
   }
 
-  setLocation(location) {
-    this.location = location;
+  setViewReady(value) {
+    this.viewIsReady = value;
+  }
+
+  setActiveState(value) {
+    this.activeState = value;
     this.setMapPadding();
 
-    // the satellite selection path
-    const satelliteRegEx = new RegExp(/^\/[0-9]+$/g);
-    if (satelliteRegEx.test(location)) {
-      const id = location.match(/[0-9]+/g)[0];
-      const satellite = this.getSatelliteById(id);
-      this.setSelectedSatellite(satellite);
-      this.setVisualizationType('satellite');
-      this.setMapFilter(`norad = ${id}`);
-    } else {
-      this.setSelectedSatellite(null);
-    }
-
-    // the search path
-    const searchRegEx = new RegExp(/^\/search/g);
-    if (searchRegEx.test(location)) {
-      this.setVisualizationType('search');
-      this.setInSearch(true);
-      const searchString = this.searchString;
-      if (searchString) {
-        this.setMapFilter(
-          `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
-        );
-      } else {
-        this.setMapFilter(null);
-      }
-    }
-
-    // the satellite usage path
-    const usageRegEx = new RegExp(/^\/satellite-usage/g);
-    if (usageRegEx.test(location)) {
-      this.setVisualizationType('usage');
-      this.setInSearch(false);
+    if (value === 'general') {
+      this.setVisualizationType('general');
       this.setMapFilter(null);
     }
 
-    // the satellite usage path
-    const orbitsRegEx = new RegExp(/^\/satellite-orbits/g);
-    if (orbitsRegEx.test(location)) {
+    if (value === 'orbits') {
       this.setVisualizationType('orbits');
       this.setOrbitalRangesVisible(true);
       this.setMapFilter('1=2');
     } else {
       this.setOrbitalRangesVisible(false);
     }
-    if (location === '/') {
-      this.setVisualizationType('general');
-      this.setInSearch(false);
-      this.setMapFilter(null);
+
+    if (value === 'search') {
+      this.setVisualizationType('search');
+      this.setInSearch(true);
+    }
+    if (value === 'satellite') {
+      this.setVisualizationType('satellite');
     }
   }
 
@@ -94,6 +65,12 @@ class AppStore {
 
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
+    if (sat) {
+      this.setMapFilter(`norad = ${sat.norad}`);
+      updateHashParam({ key: 'norad', value: sat.norad });
+    } else {
+      updateHashParam({ key: 'norad', value: null });
+    }
   }
 
   setOrbitalRangesVisible(value) {
@@ -147,7 +124,7 @@ class AppStore {
   }
 
   setMapPadding() {
-    if (this.location === '/') {
+    if (this.activeState === 'general') {
       this.mapPadding = [0, 0, 0, 0];
     } else {
       const width = window.innerWidth;
@@ -162,6 +139,13 @@ class AppStore {
 
   setSearchString(searchString) {
     this.searchString = searchString;
+    if (searchString) {
+      this.setMapFilter(
+        `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
+      );
+    } else {
+      this.setMapFilter(null);
+    }
   }
 
   getSatelliteById(id) {
