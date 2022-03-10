@@ -4,8 +4,10 @@ import SceneView from '@arcgis/core/views/SceneView';
 import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
+import WebScene from '@arcgis/core/WebScene';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 
-import { apogeeBlue, orbitOrange, orbitYellow, orbitGreen, perigeeYellow } from '../../config';
+import { fields, apogeeBlue, orbitOrange, orbitYellow, orbitGreen, perigeeYellow } from '../../config';
 import {
   getGeneralLineRenderer,
   getGeneralPointRenderer,
@@ -25,6 +27,13 @@ import { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import { reaction } from 'mobx';
 
+const NOW = new Date();
+const generalPointRenderer = getGeneralPointRenderer();
+const generalLineRenderer = getGeneralLineRenderer();
+const usagePointRenderer = getUsagePointRenderer();
+const usageLineRenderer = getUsageLineRenderer();
+const orbitLineRenderer = getGeneralLineRenderer(0.5);
+
 export const Map = observer(() => {
   const mapDiv = useRef(null);
   const [view, setView] = useState(null);
@@ -34,9 +43,10 @@ export const Map = observer(() => {
   useEffect(() => {
     // initializing the view
     reaction(
-      () => appStore.map,
-      async (map) => {
-        if (mapDiv.current && map) {
+      () => appStore.data,
+      async (data) => {
+        if (mapDiv.current && data) {
+          const map = initializeMap(data);
           const view = new SceneView({
             container: mapDiv.current,
             map: map,
@@ -299,12 +309,6 @@ export const Map = observer(() => {
     }
   };
 
-  const generalPointRenderer = getGeneralPointRenderer();
-  const generalLineRenderer = getGeneralLineRenderer();
-  const usagePointRenderer = getUsagePointRenderer();
-  const usageLineRenderer = getUsageLineRenderer();
-  const orbitLineRenderer = getGeneralLineRenderer(0.5);
-
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
       case 'search':
@@ -344,6 +348,90 @@ export const Map = observer(() => {
         fadeIn(layers[1]);
         break;
     }
+  }
+
+  function initializeMap(data) {
+    const map = new WebScene({
+      portalItem: {
+        id: '5f37df175f424207a4689220675c741a'
+      }
+    });
+
+    const satelliteGraphics = [];
+    for (let index = 0; index < data.length; index++) {
+      const sat = data[index];
+      const { satrec, metadata } = sat;
+      const coordinate = getSatelliteLocation(satrec, NOW, NOW);
+      if (!coordinate) {
+        continue;
+      }
+      const geometry = new Point(coordinate);
+
+      const attributes = {
+        index,
+        ...metadata
+      };
+
+      satelliteGraphics.push(
+        new Graphic({
+          attributes,
+          geometry
+        })
+      );
+    }
+
+    const orbitGraphics = data.map((sat, index) => {
+      const { satrec, metadata } = sat;
+      const { period } = metadata;
+
+      const coordinates = getOrbit(satrec, period, NOW);
+
+      const attributes = {
+        index,
+        ...metadata
+      };
+
+      const orbit = new Graphic({
+        attributes,
+        geometry: new Polyline({
+          paths: [coordinates.map((coordinate) => [coordinate.x, coordinate.y, coordinate.z])]
+        })
+      });
+      return orbit;
+    });
+
+    const objectIdField = 'index';
+    const layerFields = [
+      { name: 'index', type: 'oid' },
+      ...fields.map((field) => {
+        return { name: field.name, type: field.type };
+      })
+    ];
+    map.addMany([
+      new FeatureLayer({
+        id: 'satellite',
+        fields: layerFields,
+        geometryType: 'point',
+        source: satelliteGraphics,
+        objectIdField,
+        spatialReference: {
+          wkid: 4326
+        },
+        labelsVisible: true,
+        screenSizePerspectiveEnabled: false
+      }),
+      new FeatureLayer({
+        id: 'orbit',
+        fields: layerFields,
+        geometryType: 'polyline',
+        objectIdField,
+        source: orbitGraphics,
+        spatialReference: {
+          wkid: 4326
+        }
+      })
+    ]);
+    return map;
   }
 
   return (

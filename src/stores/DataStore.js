@@ -18,13 +18,6 @@ export default class DataStore {
       const metadataText = await metadataResponse.text();
       const result = Papa.parse(metadataText, { delimiter: ',' });
       const metadata = result.data;
-
-      /**
-       * Featured satellites - manually collected data
-       */
-
-      const featuredSatellitesResponse = await fetch('./data/featured_satellites.json');
-      const featuredSatellites = await featuredSatellitesResponse.json();
       for (let i = 1; i < metadata.length; i++) {
         const item = metadata[i];
         const norad = Number(item[27]);
@@ -33,6 +26,13 @@ export default class DataStore {
           metadataCollection[norad][field.name] = convertToType(item[field.metadataIndex], field.type);
         });
       }
+
+      /**
+       * Featured satellites - manually collected data
+       */
+      const featuredSatellitesResponse = await fetch('./data/featured_satellites.json');
+      const featuredSatellites = await featuredSatellitesResponse.json();
+
       /**
        * Active satellites TLE files
        * TLE format information: https://en.wikipedia.org/wiki/Two-line_element_set

@@ -1,47 +1,38 @@
-import MapStore from './MapStore';
 import DataStore from './DataStore';
 import { makeAutoObservable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories, orbitTypes } from '../config';
 import { clamp } from '../utils/utils';
 class AppStore {
-  map = null;
   data = null;
-  isLoading = true;
   viewIsReady = false;
   location = null;
   mapFilter = null;
   visualizationType = null;
+  orbitalRangesVisible = false;
   mapPadding = [0, 0, 0, 0];
   searchString = null;
   selectedSatellite = null;
   inSearch = false;
-  orbitalRangesVisible = false;
 
-  constructor(dataStore, mapStore) {
+  constructor(dataStore) {
     makeAutoObservable(this);
     (async () => {
       const data = await dataStore.fetchData();
       this.setData(data);
-      const map = await mapStore.initializeMap(this.data);
-      this.setMap(map);
-      this.setIsLoading(false);
       window.addEventListener('resize', this.setMapPadding.bind(this));
     })();
   }
 
-  setIsLoading(value) {
-    this.isLoading = value;
-  }
+  /* stop displaying loading screen */
   setViewReady(value) {
     this.viewIsReady = value;
   }
-  setMap(map) {
-    this.map = map;
-  }
+
   setData(data) {
     this.data = data;
   }
+
   setLocation(location) {
     this.location = location;
     this.setMapPadding();
@@ -100,18 +91,23 @@ class AppStore {
   setInSearch(value) {
     this.inSearch = value;
   }
+
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
   }
+
   setOrbitalRangesVisible(value) {
     this.orbitalRangesVisible = value;
   }
+
   setMapFilter(filter) {
     this.mapFilter = filter;
   }
+
   setVisualizationType(type) {
     this.visualizationType = type;
   }
+
   getCountsByPurpose() {
     if (this.data) {
       const meta = this.data.map((d) => d.metadata);
@@ -131,6 +127,7 @@ class AppStore {
       return countsByPurpose;
     }
   }
+
   getCountsByOrbit() {
     if (this.data) {
       const meta = this.data.map((d) => d.metadata);
@@ -148,6 +145,7 @@ class AppStore {
       return countsByOrbit;
     }
   }
+
   setMapPadding() {
     if (this.location === '/') {
       this.mapPadding = [0, 0, 0, 0];
@@ -161,6 +159,7 @@ class AppStore {
       }
     }
   }
+
   setSearchString(searchString) {
     this.searchString = searchString;
   }
@@ -173,8 +172,7 @@ class AppStore {
   }
 }
 
-const mapStore = new MapStore();
 const dataStore = new DataStore();
-const appStore = new AppStore(dataStore, mapStore);
+const appStore = new AppStore(dataStore);
 
 export default appStore;
