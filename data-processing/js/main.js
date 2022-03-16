@@ -5,7 +5,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
 (async function () {
   const metadataResponse = await fetch('../public/data/sat_metadata_012022.csv');
   const metadata = await metadataResponse.text();
-
+  const mu = 398600.5;
   const infoCollection = {};
   const result = Papa.parse(metadata, { delimiter: ',' });
   for (let i = 1; i < result.data.length; i++) {
@@ -24,9 +24,9 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       orbit_type: items[10],
       perigee: items[12],
       apogee: items[13],
-      eccentricity: items[14],
-      inclination: items[15],
-      period: items[16],
+      //eccentricity: items[14],
+      //inclination: items[15],
+      //period: items[16],
       launch_mass: items[17],
       dry_mass: items[18],
       power: items[19],
@@ -62,11 +62,19 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
     if (uniqueSatelliteIDs.indexOf(norad) === -1) {
       uniqueSatelliteIDs.push(norad);
       if (infoCollection.hasOwnProperty(norad)) {
-        satellites.push({
+        const sat = {
           norad,
           satrec,
-          metadata: infoCollection[norad]
-        });
+          metadata: {
+            inclination: (satrec.inclo * 180) / Math.PI,
+            period: (2 * Math.PI) / satrec.no,
+            eccentricity: (satrec.ecco * 180) / Math.PI,
+            perigee_argument: (satrec.argpo * 180) / Math.PI,
+            node: (satrec.nodeo * 180) / Math.PI,
+            ...infoCollection[norad]
+          }
+        };
+        satellites.push(sat);
       }
     }
   }
@@ -111,21 +119,53 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
         .catch(console.error);
     })
     .catch(console.error);
+  let unique = 0;
 
+  function areSimilar(value1, value2) {
+    if (Math.abs(value1 - value2) > 5) {
+      return false;
+    }
+    return true;
+  }
   function addSatellites(start) {
     const orbitGraphics = [];
+    const uniqueOrbits = [];
     for (let index = start; index < start + 1000; index++) {
       if (index >= satellites.length) {
         break;
       }
       const sat = satellites[index];
       const { satrec, metadata } = sat;
-      const { period } = metadata;
+      const { period, inclination, perigee_argument, node } = metadata;
+
+      let display = 1;
+
+      for (let i = 0; i < uniqueOrbits.length; i++) {
+        const params = uniqueOrbits[i];
+        if (
+          areSimilar(params.inclination, inclination) &&
+          areSimilar(params.perigee_argument, perigee_argument) &&
+          areSimilar(params.node, node)
+        ) {
+          display = 0;
+          break;
+        }
+      }
+      if (display === 1) {
+        unique++;
+        uniqueOrbits.push({
+          period,
+          inclination,
+          perigee_argument,
+          node
+        });
+      }
 
       const coordinates = getOrbit(satrec, period, NOW);
 
       const attributes = {
         index,
+        display,
         ...metadata
       };
       const orbit = new Graphic({
@@ -136,22 +176,28 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       });
       orbitGraphics.push(orbit);
     }
+
+    // start = start + 1000;
+    // console.log('Added features: ', orbitGraphics, unique);
+    // if (satellites.length - start > 0) {
+    //   addSatellites(start);
+    // }
     satelliteLayer
       .applyEdits({
         addFeatures: orbitGraphics
       })
       .then((result) => {
         start = start + 1000;
-        console.log('Added features: ', result);
+        console.log('Added features: ', result, unique);
         if (satellites.length - start > 0) {
           addSatellites(start);
         }
       })
       .catch(console.error);
   }
-
+  // addSatellites(0);
   function getOrbit(satrec, period, start) {
-    const SEGMENTS = 50;
+    const SEGMENTS = period > 1000 ? 200 : period > 400 ? 100 : 50;
     const milliseconds = (period * 60000) / SEGMENTS;
 
     const vertices = [];
