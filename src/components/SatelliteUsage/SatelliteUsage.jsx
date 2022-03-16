@@ -32,6 +32,7 @@ export const SatelliteUsage = () => {
   useEffect(() => {
     if (appStore.data) {
       setCountsByPurpose(appStore.getCountsByPurpose());
+      handleFilter({ filter: navigation, constellation: false });
     }
   }, [appStore.data]);
 

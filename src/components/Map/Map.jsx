@@ -30,9 +30,18 @@ import { reaction } from 'mobx';
 const NOW = new Date();
 const generalPointRenderer = getGeneralPointRenderer();
 const generalLineRenderer = getGeneralLineRenderer();
-const usagePointRenderer = getUsagePointRenderer();
 const usageLineRenderer = getUsageLineRenderer();
 const orbitLineRenderer = getGeneralLineRenderer(0.5);
+
+const goToPosition = {
+  position: {
+    x: 0,
+    y: 20,
+    z: 2e8
+  },
+  heading: 0,
+  tilt: 0
+};
 
 export const Map = observer(() => {
   const mapDiv = useRef(null);
@@ -46,7 +55,7 @@ export const Map = observer(() => {
       () => appStore.data,
       async (data) => {
         if (mapDiv.current && data) {
-          const map = initializeMap(data);
+          const map = await initializeMap(data);
           const view = new SceneView({
             container: mapDiv.current,
             map: map,
@@ -58,15 +67,6 @@ export const Map = observer(() => {
                 type: 'sun',
                 directShadowsEnabled: false
               }
-            },
-            camera: {
-              position: {
-                x: 0,
-                y: 20,
-                z: 3e8
-              },
-              heading: 0,
-              tilt: 0
             },
             popup: {
               defaultPopupTemplateEnabled: true
@@ -85,7 +85,7 @@ export const Map = observer(() => {
           view.ui.empty('top-left');
           view.ui.add(['navigation-toggle', 'compass', 'zoom'], 'top-right');
           // get access to layers/layerViews on the component level
-          const orbitFL = map.allLayers.find((layer) => layer.id === 'orbit');
+          const orbitFL = map.allLayers.find((layer) => layer.title === 'orbits');
           const satelliteFL = map.allLayers.find((layer) => layer.id === 'satellite');
           setLayers([orbitFL, satelliteFL]);
           setVisualization(appStore.visualizationType, [orbitFL, satelliteFL]);
@@ -125,7 +125,7 @@ export const Map = observer(() => {
 
   useEffect(() => {
     if (view) {
-      view.goTo({ zoom: 3 }, { speedFactor: 0.1 });
+      view.goTo(goToPosition, { speedFactor: 0.3 });
       if (appStore.mapPadding) {
         setMapPadding(appStore.mapPadding);
       }
@@ -312,40 +312,38 @@ export const Map = observer(() => {
   function setVisualization(visualizationType, layers) {
     switch (visualizationType) {
       case 'search':
-        layers[0].opacity = 0;
+        layers[0].visible = false;
+        layers[1].visible = true;
         layers[1].renderer = generalPointRenderer;
-        layers[0].renderer = generalLineRenderer;
         fadeIn(layers[1]);
         break;
       case 'usage':
-        layers[1].renderer = usagePointRenderer;
-        layers[0].opacity = 0;
+        layers[1].visible = false;
+        layers[0].visible = true;
         layers[0].renderer = usageLineRenderer;
-        fadeIn(layers[1]);
+        fadeIn(layers[0]);
         break;
       case 'usage-filtered':
-        fadeIn(layers[1]);
         fadeIn(layers[0]);
         break;
       case 'general':
+        layers[0].visible = true;
         layers[0].renderer = generalLineRenderer;
-        layers[1].renderer = generalPointRenderer;
-        layers[1].opacity = 0;
+        layers[1].visible = false;
         fadeIn(layers[0]);
         break;
       case 'usage-constellation':
         fadeIn(layers[0]);
-        fadeIn(layers[1]);
         break;
       case 'satellite':
-        layers[1].opacity = 0;
-        layers[0].opacity = 0;
+        layers[1].visible = false;
+        layers[0].visible = false;
         break;
       case 'orbits':
+        layers[0].visible = true;
+        layers[1].visible = false;
         layers[0].renderer = orbitLineRenderer;
-        layers[1].renderer = generalPointRenderer;
         fadeIn(layers[0]);
-        fadeIn(layers[1]);
         break;
     }
   }
@@ -353,7 +351,7 @@ export const Map = observer(() => {
   function initializeMap(data) {
     const map = new WebScene({
       portalItem: {
-        id: '5f37df175f424207a4689220675c741a'
+        id: '53411b46fdbe4161b356030eae9905e0'
       }
     });
 
@@ -361,7 +359,7 @@ export const Map = observer(() => {
     for (let index = 0; index < data.length; index++) {
       const sat = data[index];
       const { satrec, metadata } = sat;
-      const coordinate = getSatelliteLocation(satrec, NOW, NOW);
+      const coordinate = getSatelliteLocation(satrec, NOW);
       if (!coordinate) {
         continue;
       }
@@ -379,26 +377,6 @@ export const Map = observer(() => {
         })
       );
     }
-
-    const orbitGraphics = data.map((sat, index) => {
-      const { satrec, metadata } = sat;
-      const { period } = metadata;
-
-      const coordinates = getOrbit(satrec, period, NOW);
-
-      const attributes = {
-        index,
-        ...metadata
-      };
-
-      const orbit = new Graphic({
-        attributes,
-        geometry: new Polyline({
-          paths: [coordinates.map((coordinate) => [coordinate.x, coordinate.y, coordinate.z])]
-        })
-      });
-      return orbit;
-    });
 
     const objectIdField = 'index';
     const layerFields = [
@@ -418,20 +396,11 @@ export const Map = observer(() => {
           wkid: 4326
         },
         labelsVisible: true,
-        screenSizePerspectiveEnabled: false
-      }),
-      new FeatureLayer({
-        id: 'orbit',
-        fields: layerFields,
-        geometryType: 'polyline',
-        objectIdField,
-        source: orbitGraphics,
-        spatialReference: {
-          wkid: 4326
-        }
+        screenSizePerspectiveEnabled: false,
+        visible: false
       })
     ]);
-    return map;
+    return map.loadAll().then(() => map);
   }
 
   return (
