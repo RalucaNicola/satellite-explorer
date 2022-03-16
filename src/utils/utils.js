@@ -2,9 +2,7 @@ import { usageRendererConfig, purposeCategories, gray } from '../config';
 import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js';
 
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
-import Mesh from '@arcgis/core/geometry/Mesh';
 import Graphic from '@arcgis/core/Graphic';
-import MeshMaterialMetallicRoughness from '@arcgis/core/geometry/support/MeshMaterialMetallicRoughness';
 import { Polygon } from '@arcgis/core/geometry';
 const checkForNaN = (value) => {
   if (isNaN(value)) {
@@ -65,13 +63,6 @@ export const getPointSymbol = ({
         resource: { primitive: 'circle' },
         material: { color: [...color, 1] },
         size: size
-      },
-      {
-        type: 'icon',
-        resource: { primitive: 'circle' },
-        material: { color: [0, 0, 0, 0] },
-        outline: { color: [...outlineColor, outlineOpacity], size: outlineSize },
-        size: size * outlineSizeFactor
       }
     ]
   };
@@ -206,7 +197,7 @@ export function fadeIn(layer) {
   fading(layer);
 }
 
-export function getOrbit(satrec, period, start, segments = 100) {
+export function getOrbit(satrec, period, start, segments = 60) {
   const milliseconds = (period * 60000) / segments;
 
   const vertices = [];
@@ -228,7 +219,9 @@ export function getSatelliteLocation(satrec, date, start) {
   if (!position || Number.isNaN(position.x) || Number.isNaN(position.y) || Number.isNaN(position.z)) {
     return null;
   }
-
+  if (!start) {
+    start = date;
+  }
   const gmst = gstime(start);
   const geographic = eciToGeodetic(position, gmst);
   const { longitude, latitude, height } = geographic;
