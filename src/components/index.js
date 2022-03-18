@@ -8,6 +8,9 @@ export * from './Link/Link';
 /* charting components */
 export * from './UsageChart/UsageChart';
 export * from './OrbitsChart/OrbitsChart';
+export * from './CountriesChart/CountriesChart';
+export * from './BarChart/BarChart';
+export * from './BarChartComponent/BarChartComponent';
 
 /* larger components */
 export * from './SatellitesResults/SatellitesResults';
@@ -20,5 +23,6 @@ export * from './Loading/Loading';
 export * from './PageNotFound/PageNotFound';
 export * from './SatelliteUsage/SatelliteUsage';
 export * from './SatelliteOrbits/SatelliteOrbits';
+export * from './SatelliteOwners/SatelliteOwners';
 export * from './Search/Search';
 export * from './Satellite/Satellite';

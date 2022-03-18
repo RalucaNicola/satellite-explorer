@@ -57,6 +57,10 @@ class AppStore {
     if (value === 'satellite') {
       this.setVisualizationType('satellite');
     }
+
+    if (value === 'owners') {
+      this.setVisualizationType('owners');
+    }
   }
 
   setInSearch(value) {
@@ -120,6 +124,41 @@ class AppStore {
         }
       }
       return countsByOrbit;
+    }
+  }
+
+  getCountsByCountry() {
+    if (this.data) {
+      const meta = this.data.map((d) => d.metadata);
+      const countsByCountry = {
+        total: meta.slice().length
+      };
+      const countriesMap = Array.from(
+        group(meta, (d) => d.country_operator),
+        ([key, value]) => ({ key, value: value.length })
+      );
+      countsByCountry.list = countriesMap.slice().sort((a, b) => {
+        return b.value - a.value;
+      });
+      return countsByCountry;
+    }
+  }
+
+  getCountsByOperator() {
+    if (this.data) {
+      const meta = this.data.map((d) => d.metadata);
+      const countsByOperator = {
+        total: meta.slice().length
+      };
+      const operatorsMap = Array.from(
+        group(meta, (d) => d.operator),
+        ([key, value]) => ({ key, value: value.length })
+      );
+      countsByOperator.list = operatorsMap.slice().sort((a, b) => {
+        return b.value - a.value;
+      });
+      console.log(countsByOperator);
+      return countsByOperator;
     }
   }
 

@@ -12,7 +12,7 @@ import {
   getGeneralLineRenderer,
   getGeneralPointRenderer,
   getUsageLineRenderer,
-  getUsagePointRenderer,
+  getCountryLineRenderer,
   getPointSymbol,
   getStippledLineSymbol,
   fadeIn,
@@ -31,7 +31,8 @@ const NOW = new Date();
 const generalPointRenderer = getGeneralPointRenderer();
 const generalLineRenderer = getGeneralLineRenderer();
 const usageLineRenderer = getUsageLineRenderer();
-const orbitLineRenderer = getGeneralLineRenderer(0.5);
+const orbitLineRenderer = getGeneralLineRenderer();
+const countriesLineRenderer = getCountryLineRenderer();
 
 const goToPosition = {
   position: {
@@ -343,6 +344,12 @@ export const Map = observer(() => {
         layers[0].visible = true;
         layers[1].visible = false;
         layers[0].renderer = orbitLineRenderer;
+        fadeIn(layers[0]);
+        break;
+      case 'owners':
+        layers[0].visible = true;
+        layers[1].visible = false;
+        layers[0].renderer = countriesLineRenderer;
         fadeIn(layers[0]);
         break;
     }
