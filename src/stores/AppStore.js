@@ -37,7 +37,7 @@ class AppStore {
     this.activeState = value;
     this.setMapPadding();
 
-    if (value === 'general') {
+    if (value === 'general' || value === 'about') {
       this.setVisualizationType('general');
       this.setMapFilter(null);
     }
@@ -163,7 +163,7 @@ class AppStore {
   }
 
   setMapPadding() {
-    if (this.activeState === 'general') {
+    if (this.activeState === 'general' || this.activeState === 'about') {
       this.mapPadding = [0, 0, 0, 0];
     } else {
       const width = window.innerWidth;

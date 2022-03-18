@@ -7,7 +7,8 @@ import {
   SatelliteOrbits,
   SatelliteOwners,
   Search,
-  Satellite
+  Satellite,
+  About
 } from './components';
 import { parseHash } from './utils/utils';
 import appStore from './stores/AppStore';
@@ -37,6 +38,7 @@ const App = observer(() => {
       {appStore.activeState === 'search' && <Search />}
       {appStore.activeState === 'satellite' && <Satellite />}
       {appStore.activeState === 'owners' && <SatelliteOwners />}
+      {appStore.activeState === 'about' && <About />}
       <Menu></Menu>
       {!appStore.viewIsReady && <Loading></Loading>}
     </>

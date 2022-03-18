@@ -20,6 +20,7 @@ export * from './Stories/Stories';
 
 /* main pages */
 export * from './Loading/Loading';
+export * from './About/About';
 export * from './PageNotFound/PageNotFound';
 export * from './SatelliteUsage/SatelliteUsage';
 export * from './SatelliteOrbits/SatelliteOrbits';
