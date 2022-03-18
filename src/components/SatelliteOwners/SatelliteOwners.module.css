@@ -1,0 +1,17 @@
+.menu {
+  composes: rightPanel from '../../main.css';
+}
+
+.block {
+  margin: 40px 0;
+}
+
+.shortInfo {
+  font-size: 0.9rem;
+  line-height: 1.3rem;
+  margin: 0 0 20px 0;
+}
+
+.shortInfo > p {
+  margin: 0 0 10px 0;
+}

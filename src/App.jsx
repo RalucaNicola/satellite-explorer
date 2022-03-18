@@ -1,4 +1,14 @@
-import { Map, Loading, Menu, Stories, SatelliteUsage, SatelliteOrbits, Search, Satellite } from './components';
+import {
+  Map,
+  Loading,
+  Menu,
+  Stories,
+  SatelliteUsage,
+  SatelliteOrbits,
+  SatelliteOwners,
+  Search,
+  Satellite
+} from './components';
 import { parseHash } from './utils/utils';
 import appStore from './stores/AppStore';
 import { observer } from 'mobx-react';
@@ -26,6 +36,7 @@ const App = observer(() => {
       {appStore.activeState === 'orbits' && <SatelliteOrbits />}
       {appStore.activeState === 'search' && <Search />}
       {appStore.activeState === 'satellite' && <Satellite />}
+      {appStore.activeState === 'owners' && <SatelliteOwners />}
       <Menu></Menu>
       {!appStore.viewIsReady && <Loading></Loading>}
     </>

@@ -1,4 +1,4 @@
-import { usageRendererConfig, purposeCategories, gray } from '../config';
+import { usageRendererConfig, purposeCategories, gray, countriesRendererConfig } from '../config';
 import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js';
 
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
@@ -137,7 +137,7 @@ export const getUsagePointRenderer = () => {
   };
 };
 
-export const getUsageLineRenderer = () => {
+export const getUsageLineRenderer = (size = 0.4) => {
   return {
     type: 'unique-value',
     valueExpression: usageRendererConfig.expression,
@@ -145,7 +145,21 @@ export const getUsageLineRenderer = () => {
     uniqueValueInfos: usageRendererConfig.uniqueValueInfos.map((info) => {
       return {
         value: info.value,
-        symbol: getLineSymbol(info.color, 0.8)
+        symbol: getLineSymbol(info.color, size)
+      };
+    })
+  };
+};
+
+export const getCountryLineRenderer = (size = 0.4) => {
+  return {
+    type: 'unique-value',
+    field: countriesRendererConfig.field,
+    defaultSymbol: getLineSymbol([255, 255, 255, 0], size),
+    uniqueValueInfos: countriesRendererConfig.uniqueValueInfos.map((info) => {
+      return {
+        value: info.value,
+        symbol: getLineSymbol(info.color, size)
       };
     })
   };

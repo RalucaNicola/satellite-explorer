@@ -38,6 +38,8 @@ export const lightOrange = [255, 215, 181];
 export const gray = [200, 200, 200];
 export const purple = [137, 109, 232];
 export const lightPurple = [217, 207, 250];
+export const red = [235, 64, 52];
+export const lightRed = [240, 170, 165];
 export const orbitOrange = [255, 147, 0];
 export const orbitYellow = [255, 206, 0];
 export const orbitGreen = [111, 170, 0];
@@ -191,6 +193,22 @@ export const filterDefinition = {
     color: orbitYellow,
     lightColor: [...orbitYellow, 0.7],
     expression: `orbit_class ='GEO' AND inclination < 0.04 AND inclination > 0.00`
+  },
+  spacex: {
+    id: 'spacex',
+    expression: `operator='SpaceX'`
+  },
+  onewebsatellites: {
+    id: 'onewebsatellites',
+    expression: `operator='OneWeb Satellites'`
+  },
+  planetlabs: {
+    id: 'planetlabs',
+    expression: `operator='Planet Labs, Inc.'`
+  },
+  nofilter: {
+    id: 'nofilter',
+    expression: null
   }
 };
 
@@ -238,6 +256,32 @@ export const usageRendererConfig = {
       value: 'technologyDevelopment',
       color: purple,
       lightColor: lightPurple
+    }
+  ]
+};
+// hard coded values, to check with getCountsByCountry if the ranking is still the same
+export const countriesRendererConfig = {
+  field: 'country_operator',
+  uniqueValueInfos: [
+    {
+      value: 'USA',
+      color: blue
+    },
+    {
+      value: 'China',
+      color: orange
+    },
+    {
+      value: 'United Kingdom',
+      color: green
+    },
+    {
+      value: 'Russia',
+      color: red
+    },
+    {
+      value: 'Japan',
+      color: purple
     }
   ]
 };
