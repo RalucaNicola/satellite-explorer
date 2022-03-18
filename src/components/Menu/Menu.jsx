@@ -25,6 +25,11 @@ export const Menu = () => {
               Search for satellites
             </Link>
           </li>
+          <li>
+            <Link toState='about' onClick={toggleMenu}>
+              About
+            </Link>
+          </li>
         </ul>
       </div>
       <button onClick={toggleMenu} className={styles.menuButton}>
