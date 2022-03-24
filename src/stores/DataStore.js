@@ -2,9 +2,9 @@ import { twoline2satrec } from 'satellite.js';
 import Papa from 'papaparse';
 import { fields } from '../config';
 import { convertToType } from '../utils/utils';
-import metadataText from '../../public/data/sat_metadata_012022.csv?raw';
-import tleData from '../../public/data/norad-tle.txt?raw';
-import * as featuredSatellitesModule from '../../public/data/featured_satellites.json';
+import metadataText from '/data/sat_metadata_012022.csv?raw';
+import tleData from '/data/norad-tle.txt?raw';
+import * as featuredSatellitesModule from '/data/featured_satellites.json?raw';
 
 /**
  * Metadata for active satellites
@@ -28,7 +28,7 @@ for (let i = 1; i < metadata.length; i++) {
 /**
  * Featured satellites - manually collected data
  */
-const featuredSatellites = featuredSatellitesModule.default;
+const featuredSatellites = JSON.parse(featuredSatellitesModule.default);
 
 /**
  * Active satellites TLE files

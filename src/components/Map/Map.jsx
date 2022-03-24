@@ -52,7 +52,6 @@ export const Map = observer(() => {
 
   useEffect(async () => {
     // initializing the view
-
     if (mapDiv.current && appStore.data) {
       const map = await initializeMap(appStore.data);
       const view = new SceneView({

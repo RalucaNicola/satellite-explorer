@@ -3,7 +3,7 @@ import { makeAutoObservable, observable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories, orbitTypes } from '../config';
 import { clamp, updateHashParam } from '../utils/utils';
-console.log(satellites);
+
 class AppStore {
   data = satellites;
   viewIsReady = false;
