@@ -6,6 +6,8 @@ import { Point, Polyline } from '@arcgis/core/geometry';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import WebScene from '@arcgis/core/WebScene';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import Home from '@arcgis/core/widgets/Home';
+import Viewpoint from '@arcgis/core/Viewpoint';
 
 import { fields, apogeeBlue, orbitOrange, orbitYellow, orbitGreen, perigeeYellow } from '../../config';
 import {
@@ -34,7 +36,7 @@ const usageLineRenderer = getUsageLineRenderer();
 const orbitLineRenderer = getGeneralLineRenderer();
 const countriesLineRenderer = getCountryLineRenderer();
 
-const goToPosition = {
+const initialCamera = {
   position: {
     x: 0,
     y: 20,
@@ -82,6 +84,13 @@ export const Map = observer(() => {
       });
       view.ui.empty('top-left');
       view.ui.add(['navigation-toggle', 'compass', 'zoom'], 'top-right');
+      let homeWidget = new Home({
+        view: view,
+        viewpoint: new Viewpoint({
+          camera: initialCamera
+        })
+      });
+      view.ui.add(homeWidget, 'top-right');
       // get access to layers/layerViews on the component level
       const orbitFL = map.allLayers.find((layer) => layer.title === 'orbits');
       const satelliteFL = map.allLayers.find((layer) => layer.id === 'satellite');
@@ -121,7 +130,7 @@ export const Map = observer(() => {
 
   useEffect(() => {
     if (view) {
-      view.goTo(goToPosition, { speedFactor: 0.3 });
+      view.goTo(initialCamera, { speedFactor: 0.3 });
       if (appStore.mapPadding) {
         setMapPadding(appStore.mapPadding);
       }
