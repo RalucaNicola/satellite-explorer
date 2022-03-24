@@ -50,57 +50,52 @@ export const Map = observer(() => {
   const [layers, setLayers] = useState(null);
   const [layerViews, setLayerViews] = useState(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     // initializing the view
-    reaction(
-      () => appStore.data,
-      async (data) => {
-        if (mapDiv.current && data) {
-          const map = await initializeMap(data);
-          const view = new SceneView({
-            container: mapDiv.current,
-            map: map,
-            qualityProfile: 'high',
-            environment: {
-              starsEnabled: true,
-              atmosphereEnabled: true,
-              lighting: {
-                type: 'sun',
-                directShadowsEnabled: false
-              }
-            },
-            popup: {
-              defaultPopupTemplateEnabled: true
-            },
-            constraints: {
-              altitude: {
-                max: 1e9
-              },
-              clipDistance: {
-                mode: 'manual',
-                near: 1e5,
-                far: 1e9 + 5e10
-              }
-            }
-          });
-          view.ui.empty('top-left');
-          view.ui.add(['navigation-toggle', 'compass', 'zoom'], 'top-right');
-          // get access to layers/layerViews on the component level
-          const orbitFL = map.allLayers.find((layer) => layer.title === 'orbits');
-          const satelliteFL = map.allLayers.find((layer) => layer.id === 'satellite');
-          setLayers([orbitFL, satelliteFL]);
-          setVisualization(appStore.visualizationType, [orbitFL, satelliteFL]);
-          const orbitLV = await view.whenLayerView(orbitFL);
-          const satelliteLV = await view.whenLayerView(satelliteFL);
-          setLayerViews([orbitLV, satelliteLV]);
-
-          whenFalseOnce(view, 'updating', () => {
-            appStore.setViewReady(true);
-            setView(view);
-          });
+    if (mapDiv.current && appStore.data) {
+      const map = await initializeMap(appStore.data);
+      const view = new SceneView({
+        container: mapDiv.current,
+        map: map,
+        qualityProfile: 'high',
+        environment: {
+          starsEnabled: true,
+          atmosphereEnabled: true,
+          lighting: {
+            type: 'sun',
+            directShadowsEnabled: false
+          }
+        },
+        popup: {
+          defaultPopupTemplateEnabled: true
+        },
+        constraints: {
+          altitude: {
+            max: 1e9
+          },
+          clipDistance: {
+            mode: 'manual',
+            near: 1e5,
+            far: 1e9 + 5e10
+          }
         }
-      }
-    );
+      });
+      view.ui.empty('top-left');
+      view.ui.add(['navigation-toggle', 'compass', 'zoom'], 'top-right');
+      // get access to layers/layerViews on the component level
+      const orbitFL = map.allLayers.find((layer) => layer.title === 'orbits');
+      const satelliteFL = map.allLayers.find((layer) => layer.id === 'satellite');
+      setLayers([orbitFL, satelliteFL]);
+      setVisualization(appStore.visualizationType, [orbitFL, satelliteFL]);
+      const orbitLV = await view.whenLayerView(orbitFL);
+      const satelliteLV = await view.whenLayerView(satelliteFL);
+      setLayerViews([orbitLV, satelliteLV]);
+
+      whenFalseOnce(view, 'updating', () => {
+        appStore.setViewReady(true);
+        setView(view);
+      });
+    }
   }, []);
 
   useEffect(() => {

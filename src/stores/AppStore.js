@@ -1,10 +1,11 @@
-import DataStore from './DataStore';
-import { makeAutoObservable } from 'mobx';
+import satellites from './DataStore';
+import { makeAutoObservable, observable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories, orbitTypes } from '../config';
 import { clamp, updateHashParam } from '../utils/utils';
+
 class AppStore {
-  data = null;
+  data = satellites;
   viewIsReady = false;
   activeState = null;
   location = null;
@@ -16,13 +17,11 @@ class AppStore {
   selectedSatellite = null;
   inSearch = false;
 
-  constructor(dataStore) {
-    makeAutoObservable(this);
-    (async () => {
-      const data = await dataStore.fetchData();
-      this.setData(data);
-      window.addEventListener('resize', this.setMapPadding.bind(this));
-    })();
+  constructor() {
+    makeAutoObservable(this, {
+      data: observable.ref
+    });
+    window.addEventListener('resize', this.setMapPadding.bind(this));
   }
 
   setData(data) {
@@ -195,7 +194,6 @@ class AppStore {
   }
 }
 
-const dataStore = new DataStore();
-const appStore = new AppStore(dataStore);
+const appStore = new AppStore();
 
 export default appStore;
