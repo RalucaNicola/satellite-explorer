@@ -3,6 +3,7 @@ import * as styles from './Search.module.css';
 import { BackButton, SatellitesResults } from '../index';
 import appStore from '../../stores/AppStore';
 import dataStore from '../../stores/DataStore';
+import mapStore from '../../stores/MapStore';
 
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
@@ -63,18 +64,37 @@ export const Search = observer(() => {
         placeholder='Search by name or operator'
         {...(appStore.searchString ? { value: appStore.searchString } : {})}
       ></input>
-      {searchResults ? (
-        searchResults.length ? (
-          <SatellitesResults satellites={searchResults}></SatellitesResults>
+      <div className={styles.results}>
+        {searchResults ? (
+          searchResults.length ? (
+            <SatellitesResults satellites={searchResults}></SatellitesResults>
+          ) : (
+            <p>No results found</p>
+          )
         ) : (
-          <p>No results found</p>
-        )
-      ) : (
-        <>
-          <p>Featured satellites</p>
-          {featuredSatellites ? <SatellitesResults satellites={featuredSatellites}></SatellitesResults> : 'Loading...'}
-        </>
-      )}
+          <>
+            <p>Featured satellites</p>
+            {featuredSatellites ? (
+              <SatellitesResults satellites={featuredSatellites}></SatellitesResults>
+            ) : (
+              'Loading...'
+            )}
+          </>
+        )}
+      </div>
+      <div className={styles.updatesContainer}>
+        <div>
+          Satellite positions generated at{' '}
+          {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(mapStore.positionTime)}
+        </div>
+        <button
+          onClick={() => {
+            mapStore.updateCurrentSatellites(dataStore.data);
+          }}
+        >
+          Update satellite positions
+        </button>
+      </div>
       <BackButton
         toState='general'
         onClick={() => {

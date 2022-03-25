@@ -113,8 +113,8 @@ export const getGeneralPointRenderer = () => {
   return {
     type: 'simple',
     symbol: getPointSymbol({
-      color: [255, 255, 255],
-      size: 3,
+      color: [235, 204, 52],
+      size: 2,
       outlineSize: 1,
       outlineOpacity: 0.4,
       outlineColor: [255, 255, 255]
@@ -125,7 +125,7 @@ export const getGeneralPointRenderer = () => {
 export const getGeneralLineRenderer = (size = 0.1) => {
   return {
     type: 'simple',
-    symbol: getLineSymbol([255, 255, 255], size)
+    symbol: getLineSymbol([235, 204, 52], size)
   };
 };
 
