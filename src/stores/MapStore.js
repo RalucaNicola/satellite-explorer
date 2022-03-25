@@ -98,8 +98,8 @@ class MapStore {
       spatialReference: {
         wkid: 4326
       },
-      labelsVisible: true,
-      screenSizePerspectiveEnabled: false,
+      labelsVisible: false,
+      screenSizePerspectiveEnabled: true,
       visible: false
     });
     this.setCurrentSatellites(layer, data);

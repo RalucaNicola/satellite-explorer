@@ -1,7 +1,7 @@
 import * as styles from './SatelliteUsage.module.css';
 
 import { filterDefinition } from '../../config';
-import appStore from '../../stores/AppStore';
+import dataStore from '../../stores/DataStore';
 import mapStore from '../../stores/MapStore';
 
 import { Accordion, UsageChart, BackButton, FilterButton } from '../index';
@@ -23,11 +23,9 @@ export const SatelliteUsage = () => {
     mapStore.setMapFilter(filterExpression);
   };
   useEffect(() => {
-    if (appStore.data) {
-      setCountsByPurpose(appStore.getCountsByPurpose());
-      handleFilter({ filter: navigation });
-    }
-  }, [appStore.data]);
+    setCountsByPurpose(dataStore.getCountsByPurpose());
+    handleFilter({ filter: navigation });
+  }, []);
 
   return (
     <div className={styles.menu}>

@@ -4,6 +4,7 @@ import { propagate, gstime, eciToGeodetic, radiansToDegrees } from 'satellite.js
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import Graphic from '@arcgis/core/Graphic';
 import { Polygon } from '@arcgis/core/geometry';
+
 const checkForNaN = (value) => {
   if (isNaN(value)) {
     return null;
@@ -45,6 +46,18 @@ export const clamp = (min, percentage, max, total) => {
     return max;
   }
   return value;
+};
+
+export const getChartWidth = (appPadding) => {
+  const innerPaddingMobile = 20;
+  const innerPaddingDesktop = 47;
+  let width = 350;
+  if (appPadding[1] > 0) {
+    width = appPadding[1] - innerPaddingDesktop * 2;
+  } else {
+    width = window.innerWidth - innerPaddingMobile * 2;
+  }
+  return width;
 };
 
 export const getPointSymbol = ({

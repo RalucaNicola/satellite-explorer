@@ -1,17 +1,15 @@
 import * as styles from './Map.module.css';
 
 import SceneView from '@arcgis/core/views/SceneView';
-
-import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
-
 import Home from '@arcgis/core/widgets/Home';
 import Viewpoint from '@arcgis/core/Viewpoint';
+import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 
 import appStore from '../../stores/AppStore';
+import mapStore from '../../stores/MapStore';
 
 import { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
-import mapStore from '../../stores/MapStore';
 
 const initialCamera = {
   position: {
