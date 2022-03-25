@@ -2,6 +2,7 @@ import * as styles from './Search.module.css';
 
 import { BackButton, SatellitesResults } from '../index';
 import appStore from '../../stores/AppStore';
+import dataStore from '../../stores/DataStore';
 
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
@@ -11,10 +12,10 @@ export const Search = observer(() => {
   const [featuredSatellites, setFeaturedSatellites] = useState([]);
 
   function getSuggestions(searchString) {
-    let filteredData = [...appStore.data];
+    let filteredData = [...dataStore.data];
     if (searchString) {
       const searchRegExp = new RegExp(searchString, 'i');
-      filteredData = appStore.data.filter((satellite) => {
+      filteredData = dataStore.data.filter((satellite) => {
         return (
           satellite.metadata.name.search(searchRegExp) >= 0 ||
           satellite.metadata.official_name.search(searchRegExp) >= 0 ||
@@ -29,14 +30,12 @@ export const Search = observer(() => {
   }
 
   useEffect(() => {
-    if (appStore.data) {
-      getSuggestions(appStore.searchString);
+    getSuggestions(appStore.searchString);
 
-      if (!appStore.searchString && featuredSatellites.length === 0) {
-        setFeaturedSatellites(appStore.data.filter((satellite) => satellite.featuredSatellite));
-      }
+    if (!appStore.searchString && featuredSatellites.length === 0) {
+      setFeaturedSatellites(dataStore.data.filter((satellite) => satellite.featuredSatellite));
     }
-  }, [appStore.searchString, appStore.data]);
+  }, [appStore.searchString]);
 
   function inputHandler(event) {
     const filter = event.target.value.toLowerCase();

@@ -1,7 +1,7 @@
 import * as styles from './FilterButton.module.css';
 import { useEffect, useState } from 'react';
 
-export function FilterButton({ active, filter, constellation, clickHandler, children }) {
+export function FilterButton({ active, filter, clickHandler, children }) {
   const [activeState, setActiveState] = useState(active);
   useEffect(() => {
     setActiveState(active);
@@ -10,7 +10,7 @@ export function FilterButton({ active, filter, constellation, clickHandler, chil
     <button
       className={`${styles.filterButton} ${styles[filter]} ${activeState ? styles.active : ''}`}
       onClick={() => {
-        clickHandler({ filter, constellation });
+        clickHandler({ filter });
       }}
     >
       {children}

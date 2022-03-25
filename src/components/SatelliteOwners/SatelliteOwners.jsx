@@ -1,6 +1,7 @@
 import * as styles from './SatelliteOwners.module.css';
 
-import appStore from '../../stores/AppStore';
+import dataStore from '../../stores/AppStore';
+import mapStore from '../../stores/MapStore';
 
 import { BackButton, FilterButton, CountriesChart, BarChart } from '../index';
 
@@ -20,14 +21,12 @@ export const SatelliteOwners = () => {
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;
-    appStore.setMapFilter(filterExpression);
+    mapStore.setMapFilter(filterExpression);
   };
   useEffect(() => {
-    if (appStore.data) {
-      setCountsByCountry(appStore.getCountsByCountry());
-      setCountsByOperator(appStore.getCountsByOperator());
-    }
-  }, [appStore.data]);
+    setCountsByCountry(dataStore.getCountsByCountry());
+    setCountsByOperator(dataStore.getCountsByOperator());
+  }, []);
   return (
     <div className={styles.menu}>
       <BackButton toState='general'></BackButton>

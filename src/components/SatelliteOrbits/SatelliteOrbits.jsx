@@ -3,7 +3,8 @@ import * as styles from './SatelliteOrbits.module.css';
 import { BackButton, FilterButton, OrbitsChart } from '../index';
 
 import { filterDefinition } from '../../config';
-import appStore from '../../stores/AppStore';
+import dataStore from '../../stores/DataStore';
+import mapStore from '../../stores/MapStore';
 
 import { useEffect, useState } from 'react';
 
@@ -18,14 +19,12 @@ export function SatelliteOrbits() {
   const [countsByOrbit, setCountsByOrbit] = useState(null);
   const [activeFilter, setActiveFilter] = useState(false);
   useEffect(() => {
-    if (appStore.data) {
-      setCountsByOrbit(appStore.getCountsByOrbit());
-    }
-  }, [appStore.data]);
+    setCountsByOrbit(dataStore.getCountsByOrbit());
+  }, []);
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;
-    appStore.setMapFilter(filterExpression);
+    mapStore.setMapFilter(filterExpression);
   };
   return (
     <div className={styles.menu}>

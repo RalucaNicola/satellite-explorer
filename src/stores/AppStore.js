@@ -1,64 +1,68 @@
-import satellites from './DataStore';
-import { makeAutoObservable, observable } from 'mobx';
-import { group } from 'd3-array';
-import { purposeCategories, orbitTypes } from '../config';
+import { action, makeObservable, observable } from 'mobx';
 import { clamp, updateHashParam } from '../utils/utils';
+import mapStore from './MapStore';
+import dataStore from './DataStore';
 
 class AppStore {
-  data = satellites;
-  viewIsReady = false;
+  isLoading = true;
   activeState = null;
-  location = null;
-  mapFilter = null;
-  visualizationType = null;
-  orbitalRangesVisible = false;
-  mapPadding = [0, 0, 0, 0];
+  appPadding = [0, 0, 0, 0];
   searchString = null;
   selectedSatellite = null;
   inSearch = false;
 
   constructor() {
-    makeAutoObservable(this, {
-      data: observable.ref
+    makeObservable(this, {
+      selectedSatellite: observable.ref,
+      setSelectedSatellite: action,
+      isLoading: observable,
+      setIsLoading: action,
+      activeState: observable,
+      setActiveState: action,
+      appPadding: observable,
+      setAppPadding: action,
+      searchString: observable,
+      setSearchString: action,
+      inSearch: false
     });
-    window.addEventListener('resize', this.setMapPadding.bind(this));
+    mapStore.initializeMap(dataStore.data);
+    window.addEventListener('resize', this.setAppPadding.bind(this));
   }
 
-  setData(data) {
-    this.data = data;
-  }
-
-  setViewReady(value) {
-    this.viewIsReady = value;
+  setIsLoading(value) {
+    this.isLoading = value;
   }
 
   setActiveState(value) {
     this.activeState = value;
-    this.setMapPadding();
+    this.setAppPadding();
 
     if (value === 'general' || value === 'about') {
-      this.setVisualizationType('general');
-      this.setMapFilter(null);
+      mapStore.setVisualizationType('general');
+      mapStore.setMapFilter(null);
     }
 
     if (value === 'orbits') {
-      this.setVisualizationType('orbits');
-      this.setOrbitalRangesVisible(true);
-      this.setMapFilter('1=2');
+      mapStore.setVisualizationType('orbits');
+      mapStore.drawOrbitRanges(true);
+      mapStore.setMapFilter('1=2');
     } else {
-      this.setOrbitalRangesVisible(false);
+      mapStore.drawOrbitRanges(false);
     }
 
     if (value === 'search') {
-      this.setVisualizationType('search');
+      mapStore.setVisualizationType('search');
       this.setInSearch(true);
     }
     if (value === 'satellite') {
-      this.setVisualizationType('satellite');
+      mapStore.setVisualizationType('satellite');
+    }
+    if (value === 'usage') {
+      mapStore.setVisualizationType('usage');
     }
 
     if (value === 'owners') {
-      this.setVisualizationType('owners');
+      mapStore.setVisualizationType('owners');
     }
   }
 
@@ -68,129 +72,38 @@ class AppStore {
 
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
+    mapStore.setSelectedSatellite(sat);
     if (sat) {
-      this.setMapFilter(`norad = ${sat.norad}`);
       updateHashParam({ key: 'norad', value: sat.norad });
     } else {
       updateHashParam({ key: 'norad', value: null });
     }
   }
 
-  setOrbitalRangesVisible(value) {
-    this.orbitalRangesVisible = value;
-  }
-
-  setMapFilter(filter) {
-    this.mapFilter = filter;
-  }
-
-  setVisualizationType(type) {
-    this.visualizationType = type;
-  }
-
-  getCountsByPurpose() {
-    if (this.data) {
-      const meta = this.data.map((d) => d.metadata);
-      const countsByPurpose = {};
-      countsByPurpose.total = meta.slice().length;
-      const purposeMap = group(meta, (d) => d.purpose);
-      for (let key in purposeCategories) {
-        const categories = purposeCategories[key];
-        categories.forEach((category) => {
-          if (countsByPurpose.hasOwnProperty(key)) {
-            countsByPurpose[key] += purposeMap.get(category).length;
-          } else {
-            countsByPurpose[key] = purposeMap.get(category).length;
-          }
-        });
-      }
-      return countsByPurpose;
-    }
-  }
-
-  getCountsByOrbit() {
-    if (this.data) {
-      const meta = this.data.map((d) => d.metadata);
-      const countsByOrbit = {};
-      countsByOrbit.total = meta.slice().length;
-      const orbitsMap = group(meta, (d) => d.orbit_class);
-      for (let key in orbitTypes) {
-        const type = orbitTypes[key];
-        if (countsByOrbit.hasOwnProperty(key)) {
-          countsByOrbit[key] += orbitsMap.get(type).length;
-        } else {
-          countsByOrbit[key] = orbitsMap.get(type).length;
-        }
-      }
-      return countsByOrbit;
-    }
-  }
-
-  getCountsByCountry() {
-    if (this.data) {
-      const meta = this.data.map((d) => d.metadata);
-      const countsByCountry = {
-        total: meta.slice().length
-      };
-      const countriesMap = Array.from(
-        group(meta, (d) => d.country_operator),
-        ([key, value]) => ({ key, value: value.length })
-      );
-      countsByCountry.list = countriesMap.slice().sort((a, b) => {
-        return b.value - a.value;
-      });
-      return countsByCountry;
-    }
-  }
-
-  getCountsByOperator() {
-    if (this.data) {
-      const meta = this.data.map((d) => d.metadata);
-      const countsByOperator = {
-        total: meta.slice().length
-      };
-      const operatorsMap = Array.from(
-        group(meta, (d) => d.operator),
-        ([key, value]) => ({ key, value: value.length })
-      );
-      countsByOperator.list = operatorsMap.slice().sort((a, b) => {
-        return b.value - a.value;
-      });
-      console.log(countsByOperator);
-      return countsByOperator;
-    }
-  }
-
-  setMapPadding() {
+  setAppPadding() {
     if (this.activeState === 'general' || this.activeState === 'about') {
-      this.mapPadding = [0, 0, 0, 0];
+      this.appPadding = [0, 0, 0, 0];
     } else {
       const width = window.innerWidth;
       const height = window.innerHeight;
       if (width < 550) {
-        this.mapPadding = [0, 0, clamp(250, 30, 400, height), 0];
+        this.appPadding = [0, 0, clamp(250, 30, 400, height), 0];
       } else {
-        this.mapPadding = [0, clamp(350, 40, 600, width), 0, 0];
+        this.appPadding = [0, clamp(350, 40, 600, width), 0, 0];
       }
     }
+    mapStore.setMapPadding(this.appPadding);
   }
 
   setSearchString(searchString) {
     this.searchString = searchString;
     if (searchString) {
-      this.setMapFilter(
+      mapStore.setMapFilter(
         `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
       );
     } else {
-      this.setMapFilter(null);
+      mapStore.setMapFilter(null);
     }
-  }
-
-  getSatelliteById(id) {
-    if (appStore.data) {
-      return appStore.data.filter((satellite) => satellite.norad === parseInt(id))[0];
-    }
-    return null;
   }
 }
 

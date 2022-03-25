@@ -1,62 +1,79 @@
-import { twoline2satrec } from 'satellite.js';
-import Papa from 'papaparse';
-import { fields } from '../config';
-import { convertToType } from '../utils/utils';
-import metadataText from '/data/sat_metadata_012022.csv?raw';
-import tleData from '/data/norad-tle.txt?raw';
-import * as featuredSatellitesModule from '/data/featured_satellites.json?raw';
+import satellites from '../services/satellites';
+import { group } from 'd3-array';
+import { purposeCategories, orbitTypes } from '../config';
 
-/**
- * Metadata for active satellites
- * Union of Concerned Scientists Satellite Database
- * 4550 satellites
- * https://www.ucsusa.org/resources/satellite-database
- */
-const satellites = [];
-const metadataCollection = {};
-const result = Papa.parse(metadataText, { delimiter: ',' });
-const metadata = result.data;
-for (let i = 1; i < metadata.length; i++) {
-  const item = metadata[i];
-  const norad = Number(item[27]);
-  metadataCollection[norad] = {};
-  fields.forEach((field) => {
-    metadataCollection[norad][field.name] = convertToType(item[field.metadataIndex], field.type);
-  });
-}
+class DataStore {
+  data = satellites;
 
-/**
- * Featured satellites - manually collected data
- */
-const featuredSatellites = JSON.parse(featuredSatellitesModule.default);
-
-/**
- * Active satellites TLE files
- * TLE format information: https://en.wikipedia.org/wiki/Two-line_element_set
- * Latest data on active satellites: https://celestrak.com/NORAD/elements/active.txt
- */
-const tleLines = tleData.split('\n');
-const count = (tleLines.length - (tleLines.length % 3)) / 3;
-for (let i = 0; i < count; i++) {
-  const line1 = tleLines[i * 3 + 0];
-  const line2 = tleLines[i * 3 + 1];
-  const line3 = tleLines[i * 3 + 2];
-  if (!line1 || !line2 || !line3) {
-    continue;
+  getCountsByPurpose() {
+    const meta = this.data.map((d) => d.metadata);
+    const countsByPurpose = {};
+    countsByPurpose.total = meta.slice().length;
+    const purposeMap = group(meta, (d) => d.purpose);
+    for (let key in purposeCategories) {
+      const categories = purposeCategories[key];
+      categories.forEach((category) => {
+        if (countsByPurpose.hasOwnProperty(key)) {
+          countsByPurpose[key] += purposeMap.get(category).length;
+        } else {
+          countsByPurpose[key] = purposeMap.get(category).length;
+        }
+      });
+    }
+    return countsByPurpose;
   }
 
-  const satrec = twoline2satrec(line2, line3);
-  if (!satrec) {
-    continue;
+  getCountsByOrbit() {
+    const meta = this.data.map((d) => d.metadata);
+    const countsByOrbit = {};
+    countsByOrbit.total = meta.slice().length;
+    const orbitsMap = group(meta, (d) => d.orbit_class);
+    for (let key in orbitTypes) {
+      const type = orbitTypes[key];
+      if (countsByOrbit.hasOwnProperty(key)) {
+        countsByOrbit[key] += orbitsMap.get(type).length;
+      } else {
+        countsByOrbit[key] = orbitsMap.get(type).length;
+      }
+    }
+    return countsByOrbit;
   }
-  const norad = Number(satrec.satnum);
-  if (metadataCollection.hasOwnProperty(norad)) {
-    satellites.push({
-      norad,
-      satrec,
-      metadata: metadataCollection[norad],
-      featuredSatellite: featuredSatellites[norad]
+
+  getCountsByCountry() {
+    const meta = this.data.map((d) => d.metadata);
+    const countsByCountry = {
+      total: meta.slice().length
+    };
+    const countriesMap = Array.from(
+      group(meta, (d) => d.country_operator),
+      ([key, value]) => ({ key, value: value.length })
+    );
+    countsByCountry.list = countriesMap.slice().sort((a, b) => {
+      return b.value - a.value;
     });
+    return countsByCountry;
+  }
+
+  getCountsByOperator() {
+    const meta = this.data.map((d) => d.metadata);
+    const countsByOperator = {
+      total: meta.slice().length
+    };
+    const operatorsMap = Array.from(
+      group(meta, (d) => d.operator),
+      ([key, value]) => ({ key, value: value.length })
+    );
+    countsByOperator.list = operatorsMap.slice().sort((a, b) => {
+      return b.value - a.value;
+    });
+    return countsByOperator;
+  }
+
+  getSatelliteById(id) {
+    return this.data.filter((satellite) => satellite.norad === parseInt(id))[0];
   }
 }
-export default satellites;
+
+const dataStore = new DataStore();
+
+export default dataStore;
