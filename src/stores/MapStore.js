@@ -26,29 +26,35 @@ const countriesLineRenderer = getCountryLineRenderer();
 class MapStore {
   map = null;
   view = null;
-  layers = null;
+  satellitesLayer = null;
+  orbitsLayer = null;
   layerViews = null;
   visualizationType = null;
   mapFilter = null;
   selectedSatellite = null;
   mapPadding = null;
+  positionTime = null;
 
   constructor() {
     makeObservable(this, {
       map: observable.ref,
       setMap: action,
       view: false,
-      layers: false,
+      satellitesLayer: false,
+      orbitsLayer: false,
       layerViews: false,
       visualizationType: false,
       mapFilter: false,
       selectedSatellite: false,
-      mapPadding: false
+      mapPadding: false,
+      positionTime: observable.ref,
+      setPositionTime: action
     });
   }
 
-  setCurrentSatellites(layer, data) {
+  getSatellitesLayer(data) {
     const NOW = new Date();
+    this.setPositionTime(NOW);
     const satelliteGraphics = [];
     for (let index = 0; index < data.length; index++) {
       const sat = data[index];
@@ -71,9 +77,51 @@ class MapStore {
         })
       );
     }
+    const objectIdField = 'index';
+    const layerFields = [
+      { name: 'index', type: 'oid' },
+      ...fields.map((field) => {
+        return { name: field.name, type: field.type };
+      })
+    ];
+    return new FeatureLayer({
+      id: 'satellite',
+      fields: layerFields,
+      geometryType: 'point',
+      source: satelliteGraphics,
+      objectIdField,
+      spatialReference: {
+        wkid: 4326
+      },
+      labelsVisible: false,
+      screenSizePerspectiveEnabled: true,
+      renderer: generalPointRenderer,
+      visible: false
+    });
+  }
 
-    layer.source = satelliteGraphics;
-    layer.refresh();
+  updateCurrentSatellites(data) {
+    const NOW = new Date();
+    this.setPositionTime(NOW);
+    const updateFeatures = [];
+    for (let index = 0; index < data.length; index++) {
+      const sat = data[index];
+      const { satrec } = sat;
+      const coordinate = getSatelliteLocation(satrec, NOW);
+      if (!coordinate) {
+        continue;
+      }
+      const geometry = new Point(coordinate);
+      updateFeatures.push({
+        attributes: { index },
+        geometry
+      });
+    }
+    this.satellitesLayer.applyEdits({ updateFeatures }).catch(console.error);
+  }
+
+  setPositionTime(value) {
+    this.positionTime = value;
   }
 
   initializeMap(data) {
@@ -82,33 +130,11 @@ class MapStore {
         id: '53411b46fdbe4161b356030eae9905e0'
       }
     });
-
-    const objectIdField = 'index';
-    const layerFields = [
-      { name: 'index', type: 'oid' },
-      ...fields.map((field) => {
-        return { name: field.name, type: field.type };
-      })
-    ];
-    const layer = new FeatureLayer({
-      id: 'satellite',
-      fields: layerFields,
-      geometryType: 'point',
-      objectIdField,
-      spatialReference: {
-        wkid: 4326
-      },
-      labelsVisible: false,
-      screenSizePerspectiveEnabled: true,
-      visible: false
-    });
-    this.setCurrentSatellites(layer, data);
-    map.add(layer);
+    this.satellitesLayer = this.getSatellitesLayer(data);
+    map.add(this.satellitesLayer);
     map.loadAll().then(() => {
+      this.orbitsLayer = map.allLayers.find((layer) => layer.title === 'orbits');
       this.setMap(map);
-      const orbitLayer = map.allLayers.find((layer) => layer.title === 'orbits');
-      const satelliteLayer = map.allLayers.find((layer) => layer.id === 'satellite');
-      this.layers = [orbitLayer, satelliteLayer];
       this.styleLayers(this.visualizationType);
     });
   }
@@ -130,8 +156,8 @@ class MapStore {
 
   setLayerViews(view) {
     (async () => {
-      const orbitLV = await view.whenLayerView(this.layers[0]);
-      const satelliteLV = await view.whenLayerView(this.layers[1]);
+      const orbitLV = await view.whenLayerView(this.orbitsLayer);
+      const satelliteLV = await view.whenLayerView(this.satellitesLayer);
       this.layerViews = [orbitLV, satelliteLV];
       this.filterLayerViews(this.mapFilter);
     })();
@@ -155,48 +181,45 @@ class MapStore {
 
   setVisualizationType(type) {
     this.visualizationType = type;
-    if (this.layers) {
+    if (this.orbitsLayer && this.satellitesLayer) {
       this.styleLayers(type);
     }
   }
 
   styleLayers(type) {
-    // layers[0] - orbits
-    // layers[1] - satellites
     switch (type) {
       case 'search':
-        this.layers[0].visible = false;
-        this.layers[1].visible = true;
-        this.layers[1].renderer = generalPointRenderer;
-        fadeIn(this.layers[1]);
+        this.orbitsLayer.visible = false;
+        this.satellitesLayer.visible = true;
+        fadeIn(this.satellitesLayer);
         break;
       case 'usage':
-        this.layers[0].visible = true;
-        this.layers[0].renderer = usageLineRenderer;
-        this.layers[1].visible = false;
-        fadeIn(this.layers[0]);
+        this.orbitsLayer.visible = true;
+        this.orbitsLayer.renderer = usageLineRenderer;
+        this.satellitesLayer.visible = false;
+        fadeIn(this.orbitsLayer);
         break;
       case 'general':
-        this.layers[0].visible = true;
-        this.layers[0].renderer = generalLineRenderer;
-        this.layers[1].visible = false;
-        fadeIn(this.layers[0]);
+        this.orbitsLayer.visible = true;
+        this.orbitsLayer.renderer = generalLineRenderer;
+        this.satellitesLayer.visible = false;
+        fadeIn(this.orbitsLayer);
         break;
       case 'satellite':
-        this.layers[1].visible = false;
-        this.layers[0].visible = false;
+        this.satellitesLayer.visible = false;
+        this.orbitsLayer.visible = false;
         break;
       case 'orbits':
-        this.layers[0].visible = true;
-        this.layers[0].renderer = orbitLineRenderer;
-        this.layers[1].visible = false;
-        fadeIn(this.layers[0]);
+        this.orbitsLayer.visible = true;
+        this.orbitsLayer.renderer = orbitLineRenderer;
+        this.satellitesLayer.visible = false;
+        fadeIn(this.orbitsLayer);
         break;
       case 'owners':
-        this.layers[0].visible = true;
-        this.layers[1].visible = false;
-        this.layers[0].renderer = countriesLineRenderer;
-        fadeIn(this.layers[0]);
+        this.orbitsLayer.visible = true;
+        this.satellitesLayer.visible = false;
+        this.orbitsLayer.renderer = countriesLineRenderer;
+        fadeIn(this.orbitsLayer);
         break;
     }
   }
