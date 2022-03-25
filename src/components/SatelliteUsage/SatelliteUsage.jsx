@@ -2,6 +2,7 @@ import * as styles from './SatelliteUsage.module.css';
 
 import { filterDefinition } from '../../config';
 import appStore from '../../stores/AppStore';
+import mapStore from '../../stores/MapStore';
 
 import { Accordion, UsageChart, BackButton, FilterButton } from '../index';
 
@@ -15,36 +16,18 @@ const technologyDevelopment = filterDefinition.technologyDevelopment.id;
 
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
-  const [isConstellation, setIsConstellation] = useState(false);
-  const [isFiltered, setIsFiltered] = useState(false);
   const [countsByPurpose, setCountsByPurpose] = useState(null);
-  const handleFilter = ({ filter, constellation }) => {
+  const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
-    if (filter) {
-      setIsFiltered(true);
-    }
     const filterExpression = filterDefinition[filter].expression;
-    appStore.setMapFilter(filterExpression);
-    if (constellation !== isConstellation) {
-      setIsConstellation(constellation);
-    }
+    mapStore.setMapFilter(filterExpression);
   };
   useEffect(() => {
     if (appStore.data) {
       setCountsByPurpose(appStore.getCountsByPurpose());
-      handleFilter({ filter: navigation, constellation: false });
+      handleFilter({ filter: navigation });
     }
   }, [appStore.data]);
-
-  useEffect(() => {
-    if (isConstellation) {
-      appStore.setVisualizationType('usage-constellation');
-    } else if (isFiltered) {
-      appStore.setVisualizationType('usage-filtered');
-    } else {
-      appStore.setVisualizationType('usage');
-    }
-  }, [isConstellation, isFiltered]);
 
   return (
     <div className={styles.menu}>
@@ -57,12 +40,7 @@ export const SatelliteUsage = () => {
       </div>
       <div className={styles.block}>
         <p>
-          <FilterButton
-            filter={navigation}
-            active={activeFilter === navigation}
-            clickHandler={handleFilter}
-            constellation={false}
-          >
+          <FilterButton filter={navigation} active={activeFilter === navigation} clickHandler={handleFilter}>
             Localization
           </FilterButton>{' '}
           via satellite navigation systems is widely used in almost all industries: transportation, emergency response,
@@ -72,41 +50,26 @@ export const SatelliteUsage = () => {
         {countsByPurpose ? <UsageChart category={navigation} data={countsByPurpose}></UsageChart> : ''}
         <Accordion title='Global navigation satellite systems'>
           <p>
-            <FilterButton filter='gps' active={activeFilter === 'gps'} clickHandler={handleFilter} constellation={true}>
+            <FilterButton filter='gps' active={activeFilter === 'gps'} clickHandler={handleFilter}>
               GPS
             </FilterButton>{' '}
             - the United States' Global Positioning System, originally Navstar GPS, was launched in 1973, by the U.S.
             Department of Defence.
           </p>
           <p>
-            <FilterButton
-              filter='glonass'
-              active={activeFilter === 'glonass'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='glonass' active={activeFilter === 'glonass'} clickHandler={handleFilter}>
               GLONASS
             </FilterButton>{' '}
             - the Russian space based satellite navigation system. Its development began in 1976.
           </p>
           <p>
-            <FilterButton
-              filter='beidou'
-              active={activeFilter === 'beidou'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='beidou' active={activeFilter === 'beidou'} clickHandler={handleFilter}>
               BeiDou
             </FilterButton>{' '}
             - the Chinese global navigation system. The first system was launched in 2000.
           </p>
           <p>
-            <FilterButton
-              filter='galileo'
-              active={activeFilter === 'galileo'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='galileo' active={activeFilter === 'galileo'} clickHandler={handleFilter}>
               Galileo
             </FilterButton>{' '}
             - created by the European Union through the Europen Space Agency. It went live in 2016.
@@ -115,12 +78,7 @@ export const SatelliteUsage = () => {
       </div>
       <div className={styles.block}>
         <p>
-          <FilterButton
-            filter={communications}
-            active={activeFilter === communications}
-            clickHandler={handleFilter}
-            constellation={false}
-          >
+          <FilterButton filter={communications} active={activeFilter === communications} clickHandler={handleFilter}>
             Communications
           </FilterButton>{' '}
           satellites are used for television, radio and internet broadcasting. This sector increased lately with more
@@ -129,46 +87,26 @@ export const SatelliteUsage = () => {
         {countsByPurpose ? <UsageChart category={communications} data={countsByPurpose}></UsageChart> : ''}
         <Accordion title='Biggest communications satellite systems'>
           <p>
-            <FilterButton
-              filter='starlink'
-              active={activeFilter === 'starlink'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='starlink' active={activeFilter === 'starlink'} clickHandler={handleFilter}>
               Starlink
             </FilterButton>{' '}
             a satellite internet constellation operated by SpaceX providing satellite Internet access coverage to most
             of the Earth.
           </p>
           <p>
-            <FilterButton
-              filter='oneweb'
-              active={activeFilter === 'oneweb'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='oneweb' active={activeFilter === 'oneweb'} clickHandler={handleFilter}>
               OneWeb
             </FilterButton>{' '}
             a communications company whose focus is to deliver broadband satellite Internet services worldwide.
           </p>
           <p>
-            <FilterButton
-              filter='iridium'
-              active={activeFilter === 'iridium'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='iridium' active={activeFilter === 'iridium'} clickHandler={handleFilter}>
               Iridium
             </FilterButton>{' '}
             an operational constellation of 66 active satellites used to provide global satellite phone service.
           </p>
           <p>
-            <FilterButton
-              filter='globalstar'
-              active={activeFilter === 'globalstar'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='globalstar' active={activeFilter === 'globalstar'} clickHandler={handleFilter}>
               GlobalStar
             </FilterButton>{' '}
             a satellite phone and low-speed data communications.
@@ -181,7 +119,6 @@ export const SatelliteUsage = () => {
             filter={earthObservation}
             active={activeFilter === earthObservation}
             clickHandler={handleFilter}
-            constellation={false}
           >
             Earth Observation
           </FilterButton>{' '}
@@ -191,23 +128,13 @@ export const SatelliteUsage = () => {
         {countsByPurpose ? <UsageChart category={earthObservation} data={countsByPurpose}></UsageChart> : ''}
         <Accordion title='Earth observation satellite systems'>
           <p>
-            <FilterButton
-              filter='landsat'
-              active={activeFilter === 'landsat'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='landsat' active={activeFilter === 'landsat'} clickHandler={handleFilter}>
               Landsat programme
             </FilterButton>{' '}
             a joint NASA / USGS program launched on 23 July 1972.
           </p>
           <p>
-            <FilterButton
-              filter='doves'
-              active={activeFilter === 'doves'}
-              clickHandler={handleFilter}
-              constellation={true}
-            >
+            <FilterButton filter='doves' active={activeFilter === 'doves'} clickHandler={handleFilter}>
               Doves satellites
             </FilterButton>{' '}
             operated by Planet Labs PBC, the Doves satellites weigh only 5.8 kg each and provides 3-meter multispectral
@@ -222,7 +149,6 @@ export const SatelliteUsage = () => {
             filter={spaceObservation}
             active={activeFilter === spaceObservation}
             clickHandler={handleFilter}
-            constellation={false}
           >
             Space Observation
           </FilterButton>{' '}
@@ -237,7 +163,6 @@ export const SatelliteUsage = () => {
             filter={technologyDevelopment}
             active={activeFilter === technologyDevelopment}
             clickHandler={handleFilter}
-            constellation={false}
           >
             Technology development
           </FilterButton>{' '}

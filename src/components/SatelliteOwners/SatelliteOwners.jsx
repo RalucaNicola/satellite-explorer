@@ -6,6 +6,7 @@ import { BackButton, FilterButton, CountriesChart, BarChart } from '../index';
 
 import { useEffect, useState } from 'react';
 import { filterDefinition } from '../../config';
+import mapStore from '../../stores/MapStore';
 
 const spacex = filterDefinition.spacex.id;
 const onewebsatellites = filterDefinition.onewebsatellites.id;
@@ -20,7 +21,7 @@ export const SatelliteOwners = () => {
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;
-    appStore.setMapFilter(filterExpression);
+    mapStore.setMapFilter(filterExpression);
   };
   useEffect(() => {
     if (appStore.data) {

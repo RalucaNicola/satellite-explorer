@@ -1,17 +1,14 @@
-import satellites from './DataStore';
+import satellites from '../services/satellites';
 import { makeAutoObservable, observable } from 'mobx';
 import { group } from 'd3-array';
 import { purposeCategories, orbitTypes } from '../config';
 import { clamp, updateHashParam } from '../utils/utils';
+import mapStore from './MapStore';
 
 class AppStore {
   data = satellites;
-  viewIsReady = false;
+  isLoading = true;
   activeState = null;
-  location = null;
-  mapFilter = null;
-  visualizationType = null;
-  orbitalRangesVisible = false;
   mapPadding = [0, 0, 0, 0];
   searchString = null;
   selectedSatellite = null;
@@ -19,17 +16,15 @@ class AppStore {
 
   constructor() {
     makeAutoObservable(this, {
-      data: observable.ref
+      data: observable.ref,
+      selectedSatellite: observable.ref
     });
+    mapStore.initializeMap(this.data);
     window.addEventListener('resize', this.setMapPadding.bind(this));
   }
 
-  setData(data) {
-    this.data = data;
-  }
-
-  setViewReady(value) {
-    this.viewIsReady = value;
+  setIsLoading(value) {
+    this.isLoading = value;
   }
 
   setActiveState(value) {
@@ -37,28 +32,31 @@ class AppStore {
     this.setMapPadding();
 
     if (value === 'general' || value === 'about') {
-      this.setVisualizationType('general');
-      this.setMapFilter(null);
+      mapStore.setVisualizationType('general');
+      mapStore.setMapFilter(null);
     }
 
     if (value === 'orbits') {
-      this.setVisualizationType('orbits');
-      this.setOrbitalRangesVisible(true);
-      this.setMapFilter('1=2');
+      mapStore.setVisualizationType('orbits');
+      mapStore.drawOrbitRanges(true);
+      mapStore.setMapFilter('1=2');
     } else {
-      this.setOrbitalRangesVisible(false);
+      mapStore.drawOrbitRanges(false);
     }
 
     if (value === 'search') {
-      this.setVisualizationType('search');
+      mapStore.setVisualizationType('search');
       this.setInSearch(true);
     }
     if (value === 'satellite') {
-      this.setVisualizationType('satellite');
+      mapStore.setVisualizationType('satellite');
+    }
+    if (value === 'usage') {
+      mapStore.setVisualizationType('usage');
     }
 
     if (value === 'owners') {
-      this.setVisualizationType('owners');
+      mapStore.setVisualizationType('owners');
     }
   }
 
@@ -68,24 +66,12 @@ class AppStore {
 
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
+    mapStore.setSelectedSatellite(sat);
     if (sat) {
-      this.setMapFilter(`norad = ${sat.norad}`);
       updateHashParam({ key: 'norad', value: sat.norad });
     } else {
       updateHashParam({ key: 'norad', value: null });
     }
-  }
-
-  setOrbitalRangesVisible(value) {
-    this.orbitalRangesVisible = value;
-  }
-
-  setMapFilter(filter) {
-    this.mapFilter = filter;
-  }
-
-  setVisualizationType(type) {
-    this.visualizationType = type;
   }
 
   getCountsByPurpose() {
@@ -156,7 +142,6 @@ class AppStore {
       countsByOperator.list = operatorsMap.slice().sort((a, b) => {
         return b.value - a.value;
       });
-      console.log(countsByOperator);
       return countsByOperator;
     }
   }
@@ -173,16 +158,17 @@ class AppStore {
         this.mapPadding = [0, clamp(350, 40, 600, width), 0, 0];
       }
     }
+    mapStore.setMapPadding(this.mapPadding);
   }
 
   setSearchString(searchString) {
     this.searchString = searchString;
     if (searchString) {
-      this.setMapFilter(
+      mapStore.setMapFilter(
         `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
       );
     } else {
-      this.setMapFilter(null);
+      mapStore.setMapFilter(null);
     }
   }
 

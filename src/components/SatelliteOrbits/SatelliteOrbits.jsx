@@ -4,6 +4,7 @@ import { BackButton, FilterButton, OrbitsChart } from '../index';
 
 import { filterDefinition } from '../../config';
 import appStore from '../../stores/AppStore';
+import mapStore from '../../stores/MapStore';
 
 import { useEffect, useState } from 'react';
 
@@ -25,7 +26,7 @@ export function SatelliteOrbits() {
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;
-    appStore.setMapFilter(filterExpression);
+    mapStore.setMapFilter(filterExpression);
   };
   return (
     <div className={styles.menu}>

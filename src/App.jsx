@@ -42,7 +42,7 @@ const App = observer(() => {
       {appStore.activeState === 'owners' && <SatelliteOwners />}
       {appStore.activeState === 'about' && <About />}
       <Menu></Menu>
-      {!appStore.viewIsReady && <Loading></Loading>}
+      {appStore.isLoading && <Loading></Loading>}
     </>
   );
 });
