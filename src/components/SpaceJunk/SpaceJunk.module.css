@@ -1,0 +1,11 @@
+.menu {
+  composes: rightPanel from '../../main.css';
+}
+
+.block {
+  margin: 40px 0;
+}
+
+.large {
+  font-size: 1.5rem;
+}
