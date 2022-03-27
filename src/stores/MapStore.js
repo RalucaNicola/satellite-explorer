@@ -24,6 +24,16 @@ const usageLineRenderer = getUsageLineRenderer();
 const orbitLineRenderer = getGeneralLineRenderer();
 const countriesLineRenderer = getCountryLineRenderer();
 
+const initialCamera = {
+  position: {
+    x: 0,
+    y: 20,
+    z: 2e8
+  },
+  heading: 0,
+  tilt: 0
+};
+
 class MapStore {
   map = null;
   view = null;
@@ -37,6 +47,9 @@ class MapStore {
   positionTime = null;
   timeInterval = null;
   currentTime = null;
+  apogeePosition = null;
+  perigeePosition = null;
+  satellitePosition = null;
 
   constructor() {
     makeObservable(this, {
@@ -54,7 +67,10 @@ class MapStore {
       setPositionTime: action,
       timeInterval: false,
       currentTime: observable.ref,
-      setCurrentTime: action
+      setCurrentTime: action,
+      apogeePosition: false,
+      perigeePosition: false,
+      satellitePosition: false
     });
   }
 
@@ -283,17 +299,17 @@ class MapStore {
       () => {
         if (this.selectedSatellite) {
           this.setApogeeAndPerigee(orbitCoordinates);
-          const location = getSatelliteLocation(satellite.satrec, new Date());
+          this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime);
           const satelliteGraphics = this.getSatelliteGraphics({
             featuredSatellite: satellite.featuredSatellite,
             color: [156, 255, 242],
-            location
+            location: this.satellitePosition
           });
           this.view.graphics.addMany(satelliteGraphics);
           this.view.goTo(satelliteGraphics);
-          this.timeInterval = window.setInterval(() => {
-            this.updateSatellitePosition(satellite, satelliteGraphics);
-          }, 2000);
+          // this.timeInterval = window.setInterval(() => {
+          //   this.updateSatellitePosition(satellite, satelliteGraphics);
+          // }, 2000);
         }
       },
       () => {
@@ -312,19 +328,6 @@ class MapStore {
               resource: { href: featuredSatellite.model },
               material: { color: [255, 255, 255] },
               height: 100000
-            },
-            {
-              type: 'icon',
-              resource: { primitive: 'circle' },
-              material: { color: [...color, 1] },
-              size: 10
-            },
-            {
-              type: 'icon',
-              resource: { primitive: 'circle' },
-              material: { color: [0, 0, 0, 0] },
-              outline: { color: [...color, 0.6], size: 2 },
-              size: 20
             }
           ]
         }
@@ -354,14 +357,15 @@ class MapStore {
 
   updateSatellitePosition(satellite, satelliteGraphics) {
     this.setCurrentTime();
-    const location = getSatelliteLocation(satellite.satrec, this.currentTime);
-    satelliteGraphics[0].geometry = new Point(location);
+    this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime);
+    satelliteGraphics[0].geometry = new Point(this.satellitePosition);
     satelliteGraphics[1].geometry = new Polyline({
       paths: [
-        [location.x, location.y, location.z],
-        [location.x, location.y, 0]
+        [this.satellitePosition.x, this.satellitePosition.y, this.satellitePosition.z],
+        [this.satellitePosition.x, this.satellitePosition.y, 0]
       ]
     });
+    this.view.goTo({ center: new Point(this.satellitePosition), tilt: 40 }, { duration: 2000 });
   }
 
   animateSatelliteOrbit(coords) {
@@ -411,74 +415,43 @@ class MapStore {
       return coord1.z - coord2.z;
     });
 
-    const apogeePosition = orbitCoordinatesByHeight[orbitCoordinatesByHeight.length - 1];
+    this.apogeePosition = orbitCoordinatesByHeight[orbitCoordinatesByHeight.length - 1];
     const apogeeGraphics = this.getSatelliteGraphics({
       color: apogeeBlue,
-      location: apogeePosition
+      location: this.apogeePosition
     });
     this.view.graphics.addMany(apogeeGraphics);
 
-    const perigeePosition = orbitCoordinatesByHeight[0];
+    this.perigeePosition = orbitCoordinatesByHeight[0];
     const perigeeGraphics = this.getSatelliteGraphics({
       color: perigeeYellow,
-      location: perigeePosition
+      location: this.perigeePosition
     });
     this.view.graphics.addMany(perigeeGraphics);
   }
 
-  // renderSatellite(satellite) {
-  //   if (satellite) {
-  //     const NOW = new Date();
-  //     const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, NOW, 200);
-  //     const orbitGraphic = new Graphic({
-  //       symbol: getStippledLineSymbol([255, 255, 255, 1], 1.5),
-  //       geometry: new Polyline({
-  //         paths: [orbitCoordinates.map((coordinate) => [coordinate.x, coordinate.y, coordinate.z])]
-  //       })
-  //     });
-
-  //     let symbol = null;
-  //     const position = getSatelliteLocation(satellite.satrec, NOW, NOW);
-  //     if (satellite.featuredSatellite) {
-  //       symbol = {
-  //         type: 'point-3d',
-  //         symbolLayers: [
-  //           {
-  //             type: 'object',
-  //             resource: { href: satellite.featuredSatellite.model },
-  //             material: { color: [255, 255, 255] },
-  //             height: 100000
-  //           }
-  //         ]
-  //       };
-  //       const satelliteGraphic = new Graphic({
-  //         symbol,
-  //         geometry: new Point(position)
-  //       });
-  //       this.view.graphics.add(satelliteGraphic);
-  //       this.view.goTo(satelliteGraphic);
-  //     } else {
-  //       symbol = getPointSymbol({
-  //         color: [156, 255, 242],
-  //         size: 10,
-  //         outlineSize: 2,
-  //         outlineOpacity: 0.6,
-  //         outlineColor: [156, 255, 242]
-  //       });
-  //       const satelliteGraphic = new Graphic({
-  //         symbol,
-  //         geometry: new Point(position)
-  //       });
-
-  //       this.view.goTo(orbitGraphic);
-  //       this.animateSatelliteLine(orbitCoordinates).then(() => {
-  //         this.view.graphics.add(satelliteGraphic);
-  //       });
-  //     }
-  //   } else {
-  //     this.view.graphics.removeAll();
-  //   }
-  // }
+  gotoPosition(type) {
+    switch (type) {
+      case 'home':
+        this.view.goTo(initialCamera, { speedFactor: 0.3 });
+        break;
+      case 'satellite':
+        if (this.satellitePosition) {
+          this.view.goTo(new Point(this.satellitePosition));
+        }
+        break;
+      case 'apogee':
+        if (this.apogeePosition) {
+          this.view.goTo(new Point(this.apogeePosition));
+        }
+        break;
+      case 'perigee':
+        if (this.perigeePosition) {
+          this.view.goTo(new Point(this.perigeePosition));
+        }
+        break;
+    }
+  }
 }
 
 const mapStore = new MapStore();

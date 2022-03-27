@@ -36,7 +36,7 @@ export const Map = observer(() => {
           starsEnabled: true,
           atmosphereEnabled: true,
           lighting: {
-            type: 'sun',
+            type: 'virtual',
             directShadowsEnabled: false
           }
         },
@@ -64,9 +64,6 @@ export const Map = observer(() => {
       whenFalseOnce(view, 'updating', () => {
         mapStore.setView(view);
         appStore.setIsLoading(false);
-        if (appStore.activeState !== 'satellite') {
-          view.goTo(initialCamera, { speedFactor: 0.3 });
-        }
       });
     }
   }, [mapStore.map]);

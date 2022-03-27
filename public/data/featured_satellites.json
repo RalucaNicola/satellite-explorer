@@ -2,7 +2,7 @@
   "25544": {
     "norad": 25544,
     "model": "./assets/iss/scene.gltf",
-    "info": "The International Space Station (ISS) is a modular space station (habitable artificial satellite) in low Earth orbit. It is a multinational collaborative project involving five participating space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada).The station serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields",
+    "info": "The International Space Station (ISS) is a habitable artificial satellite in low Earth orbit. It is a multinational collaborative project involving five participating space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada).The station serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields.",
     "links": [
       {
         "url": "https://blogs.nasa.gov/spacestation/",

@@ -36,3 +36,18 @@
   display: block;
   width: fit-content;
 }
+
+.gotoButton {
+  background: none;
+  border-radius: 5px;
+  border: 1px solid white;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  vertical-align: top;
+  margin: 0 10px;
+}
+
+.gotoButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

@@ -1,6 +1,6 @@
 import * as styles from './SatelliteOwners.module.css';
 
-import dataStore from '../../stores/AppStore';
+import dataStore from '../../stores/DataStore';
 import mapStore from '../../stores/MapStore';
 
 import { BackButton, FilterButton, CountriesChart, BarChart } from '../index';
