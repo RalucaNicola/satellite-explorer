@@ -50,11 +50,14 @@ for (let i = 0; i < count; i++) {
     continue;
   }
   const norad = Number(satrec.satnum);
+  const inclination = (satrec.inclo * 180) / Math.PI;
+  const period = (2 * Math.PI) / satrec.no;
+  const eccentricity = (satrec.ecco * 180) / Math.PI;
   if (metadataCollection.hasOwnProperty(norad)) {
     satellites.push({
       norad,
       satrec,
-      metadata: metadataCollection[norad],
+      metadata: { ...metadataCollection[norad], inclination, period, eccentricity },
       featuredSatellite: featuredSatellites[norad]
     });
   }

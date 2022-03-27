@@ -224,12 +224,12 @@ export function fadeIn(layer) {
   fading(layer);
 }
 
-export function getOrbit(satrec, period, start, segments = 60) {
+export function getOrbit(satrec, period, start, segments = 100) {
   const milliseconds = (period * 60000) / segments;
 
   const vertices = [];
   for (let i = 0; i <= segments; i++) {
-    const date = new Date(start.getTime() - i * milliseconds);
+    const date = new Date(start.getTime() + i * milliseconds);
     const satelliteLocation = getSatelliteLocation(satrec, date, start);
     if (!satelliteLocation) {
       continue;
