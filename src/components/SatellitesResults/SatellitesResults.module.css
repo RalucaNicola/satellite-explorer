@@ -3,7 +3,7 @@
 }
 
 .listResults {
-  max-height: 80%;
+  max-height: 90%;
   overflow: auto;
   list-style-type: none;
   padding-left: 0;

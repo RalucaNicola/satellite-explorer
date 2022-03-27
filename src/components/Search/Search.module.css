@@ -21,3 +21,19 @@
 .updatesContainer {
   font-size: 0.9rem;
 }
+
+@media (min-width: 550px) {
+  .menu {
+    display: flex;
+    flex-direction: column;
+  }
+  .header,
+  .footer {
+    flex: 0 0 auto;
+  }
+
+  .results {
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+}

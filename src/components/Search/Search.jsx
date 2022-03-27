@@ -23,7 +23,7 @@ export const Search = observer(() => {
           satellite.metadata.operator.search(searchRegExp) >= 0
         );
       });
-      const limitedFilteredData = filteredData.slice(0, 100);
+      const limitedFilteredData = filteredData.slice(0, 30);
       setSearchResults(limitedFilteredData);
     } else {
       setSearchResults(null);
@@ -49,21 +49,23 @@ export const Search = observer(() => {
 
   return (
     <div className={styles.menu}>
-      <BackButton
-        toState='general'
-        onClick={() => {
-          appStore.setSearchString(null);
-          appStore.setInSearch(false);
-        }}
-      ></BackButton>
-      <h2>Search satellites</h2>
-      <input
-        className={styles.searchInput}
-        type='text'
-        onChange={inputHandler}
-        placeholder='Search by name or operator'
-        {...(appStore.searchString ? { value: appStore.searchString } : {})}
-      ></input>
+      <div className={styles.header}>
+        <BackButton
+          toState='general'
+          onClick={() => {
+            appStore.setSearchString(null);
+            appStore.setInSearch(false);
+          }}
+        ></BackButton>
+        <h2>Search satellites</h2>
+        <input
+          className={styles.searchInput}
+          type='text'
+          onChange={inputHandler}
+          placeholder='Search by name or operator'
+          {...(appStore.searchString ? { value: appStore.searchString } : {})}
+        ></input>
+      </div>
       <div className={styles.results}>
         {searchResults ? (
           searchResults.length ? (
@@ -82,26 +84,26 @@ export const Search = observer(() => {
           </>
         )}
       </div>
-      <div className={styles.updatesContainer}>
-        <div>
+      <div className={styles.footer}>
+        <div className={styles.updatesContainer}>
           Satellite positions generated at{' '}
-          {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(mapStore.positionTime)}
+          {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(mapStore.positionTime)}.{' '}
+          <a
+            onClick={() => {
+              mapStore.updateCurrentSatellites(dataStore.data);
+            }}
+          >
+            Update satellite positions
+          </a>
         </div>
-        <button
+        <BackButton
+          toState='general'
           onClick={() => {
-            mapStore.updateCurrentSatellites(dataStore.data);
+            appStore.setSearchString(null);
+            appStore.setInSearch(false);
           }}
-        >
-          Update satellite positions
-        </button>
+        ></BackButton>
       </div>
-      <BackButton
-        toState='general'
-        onClick={() => {
-          appStore.setSearchString(null);
-          appStore.setInSearch(false);
-        }}
-      ></BackButton>
     </div>
   );
 });
