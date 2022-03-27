@@ -4,7 +4,7 @@ import { BackButton } from '../index';
 
 import { formatOrbitClass } from '../../utils/utils';
 import appStore from '../../stores/AppStore';
-
+import mapStore from '../../stores/MapStore';
 import { observer } from 'mobx-react';
 
 const ListItem = ({ field, value, children }) => {
@@ -44,14 +44,11 @@ export const Satellite = observer(() => {
           <ListItem field='Launch location' value={attr.launch_site} />
           <ListItem field='Launch vehicle' value={attr.launch_vehicle} />
           <ListItem field='Orbital parameters' value={formatOrbitClass(attr.orbit_class)}>
-            {featured ? (
-              <></>
-            ) : (
-              <div>
-                <img src='./assets/current_location.png' className={styles.legendImage}></img>
-                Current satellite location.
-              </div>
-            )}
+            <div>
+              <img src='./assets/current_location.png' className={styles.legendImage}></img>
+              Current satellite location on{' '}
+              {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(mapStore.currentTime)}
+            </div>
             <div>
               <img src='./assets/perigee.png' className={styles.legendImage}></img>
               <span>Perigee</span> - the satellite is {attr.perigee} km away from the Earth surface at its closest point
@@ -69,7 +66,7 @@ export const Satellite = observer(() => {
                 <span className={styles.inclinationText}>{attr.inclination} degrees</span> from the Ecuator.
               </div>
             </div>
-            <p>The satellite completes the rotation around the earth in {attr.period} minutes.</p>
+            <p>The satellite completes the rotation around the earth in {attr.period.toFixed(2)} minutes.</p>
           </ListItem>
           {featured ? (
             <ListItem field='Links'>

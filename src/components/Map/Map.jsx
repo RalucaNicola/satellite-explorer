@@ -40,9 +40,6 @@ export const Map = observer(() => {
             directShadowsEnabled: false
           }
         },
-        popup: {
-          defaultPopupTemplateEnabled: true
-        },
         constraints: {
           altitude: {
             max: 1e9
@@ -67,7 +64,9 @@ export const Map = observer(() => {
       whenFalseOnce(view, 'updating', () => {
         mapStore.setView(view);
         appStore.setIsLoading(false);
-        view.goTo(initialCamera, { speedFactor: 0.3 });
+        if (appStore.activeState !== 'satellite') {
+          view.goTo(initialCamera, { speedFactor: 0.3 });
+        }
       });
     }
   }, [mapStore.map]);

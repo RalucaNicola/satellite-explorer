@@ -60,7 +60,21 @@ export const getChartWidth = (appPadding) => {
   return width;
 };
 
-export const getPointSymbol = ({
+export const getPointSymbol = ({ color = gray, size = 4 }) => {
+  return {
+    type: 'point-3d',
+    symbolLayers: [
+      {
+        type: 'icon',
+        resource: { primitive: 'circle' },
+        material: { color: [...color, 1] },
+        size: size
+      }
+    ]
+  };
+};
+
+export const getSatellitePointSymbol = ({
   color = gray,
   size = 4,
   outlineSize = 1,
@@ -76,6 +90,13 @@ export const getPointSymbol = ({
         resource: { primitive: 'circle' },
         material: { color: [...color, 1] },
         size: size
+      },
+      {
+        type: 'icon',
+        resource: { primitive: 'circle' },
+        material: { color: [0, 0, 0, 0] },
+        outline: { color: [...outlineColor, outlineOpacity], size: outlineSize },
+        size: size * outlineSizeFactor
       }
     ]
   };

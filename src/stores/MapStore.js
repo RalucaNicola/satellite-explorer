@@ -12,8 +12,9 @@ import {
   getSatelliteLocation,
   fadeIn,
   getOrbitRangeGraphic,
-  getPointSymbol,
+  getSatellitePointSymbol,
   getStippledLineSymbol,
+  getLineSymbol,
   getOrbit
 } from '../utils/utils';
 
@@ -34,6 +35,8 @@ class MapStore {
   selectedSatellite = null;
   mapPadding = null;
   positionTime = null;
+  timeInterval = null;
+  currentTime = null;
 
   constructor() {
     makeObservable(this, {
@@ -48,7 +51,10 @@ class MapStore {
       selectedSatellite: false,
       mapPadding: false,
       positionTime: observable.ref,
-      setPositionTime: action
+      setPositionTime: action,
+      timeInterval: false,
+      currentTime: observable.ref,
+      setCurrentTime: action
     });
   }
 
@@ -154,6 +160,10 @@ class MapStore {
     }
   }
 
+  setCurrentTime() {
+    this.currentTime = new Date();
+  }
+
   setLayerViews(view) {
     (async () => {
       const orbitLV = await view.whenLayerView(this.orbitsLayer);
@@ -257,150 +267,218 @@ class MapStore {
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
     if (this.view) {
-      this.renderSatellite(sat);
+      if (sat) {
+        this.renderSatellite(sat);
+      } else {
+        clearInterval(this.timeInterval);
+        this.view.graphics.removeAll();
+      }
     }
   }
 
   renderSatellite(satellite) {
-    if (satellite) {
-      const NOW = new Date();
-      const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, NOW, 200);
-      const orbitGraphic = new Graphic({
-        symbol: getStippledLineSymbol([255, 255, 255, 1], 1.5),
-        geometry: new Polyline({
-          paths: [orbitCoordinates.map((coordinate) => [coordinate.x, coordinate.y, coordinate.z])]
-        })
-      });
-      const orbitCoordinatesByHeight = [...orbitCoordinates];
-      orbitCoordinatesByHeight.sort((coord1, coord2) => {
-        return coord1.z - coord2.z;
-      });
+    this.setCurrentTime();
+    const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, this.currentTime, 150);
+    this.animateSatelliteOrbit(orbitCoordinates).then(
+      () => {
+        if (this.selectedSatellite) {
+          this.setApogeeAndPerigee(orbitCoordinates);
+          const location = getSatelliteLocation(satellite.satrec, new Date());
+          const satelliteGraphics = this.getSatelliteGraphics({
+            featuredSatellite: satellite.featuredSatellite,
+            color: [156, 255, 242],
+            location
+          });
+          this.view.graphics.addMany(satelliteGraphics);
+          this.view.goTo(satelliteGraphics);
+          this.timeInterval = window.setInterval(() => {
+            this.updateSatellitePosition(satellite, satelliteGraphics);
+          }, 2000);
+        }
+      },
+      () => {
+        this.view.graphics.removeAll();
+      }
+    );
+  }
 
-      const apogeePosition = orbitCoordinatesByHeight[orbitCoordinatesByHeight.length - 1];
-      const apogeeGraphic = new Graphic({
-        symbol: getPointSymbol({
-          color: apogeeBlue,
-          size: 10,
-          outlineSize: 2,
-          outlineOpacity: 0.6,
-          outlineColor: apogeeBlue
-        }),
-        geometry: new Point(apogeePosition)
-      });
-      const apogeeHelperGraphic = new Graphic({
-        symbol: getStippledLineSymbol(apogeeBlue, 1.5),
-        geometry: new Polyline({
-          paths: [
-            [apogeePosition.x, apogeePosition.y, apogeePosition.z],
-            [apogeePosition.x, apogeePosition.y, 0]
-          ]
-        })
-      });
-      const perigeePosition = orbitCoordinatesByHeight[0];
-      const perigeeGraphic = new Graphic({
-        symbol: getPointSymbol({
-          color: perigeeYellow,
-          size: 10,
-          outlineSize: 2,
-          outlineOpacity: 0.6,
-          outlineColor: perigeeYellow
-        }),
-        geometry: new Point(perigeePosition)
-      });
-      const perigeeHelperGraphic = new Graphic({
-        symbol: getStippledLineSymbol(perigeeYellow, 1.5),
-        geometry: new Polyline({
-          paths: [
-            [perigeePosition.x, perigeePosition.y, perigeePosition.z],
-            [perigeePosition.x, perigeePosition.y, 0]
-          ]
-        })
-      });
-
-      this.view.graphics.addMany([
-        orbitGraphic,
-        apogeeGraphic,
-        apogeeHelperGraphic,
-        perigeeGraphic,
-        perigeeHelperGraphic
-      ]);
-      let symbol = null;
-      const position = getSatelliteLocation(satellite.satrec, NOW, NOW);
-      if (satellite.featuredSatellite) {
-        symbol = {
+  getSatelliteGraphics({ featuredSatellite, color, location }) {
+    const symbol = featuredSatellite
+      ? {
           type: 'point-3d',
           symbolLayers: [
             {
               type: 'object',
-              resource: { href: satellite.featuredSatellite.model },
+              resource: { href: featuredSatellite.model },
               material: { color: [255, 255, 255] },
               height: 100000
+            },
+            {
+              type: 'icon',
+              resource: { primitive: 'circle' },
+              material: { color: [...color, 1] },
+              size: 10
+            },
+            {
+              type: 'icon',
+              resource: { primitive: 'circle' },
+              material: { color: [0, 0, 0, 0] },
+              outline: { color: [...color, 0.6], size: 2 },
+              size: 20
             }
           ]
-        };
-        const satelliteGraphic = new Graphic({
-          symbol,
-          geometry: new Point(position)
-        });
-        this.view.graphics.add(satelliteGraphic);
-        this.view.goTo(satelliteGraphic);
-      } else {
-        symbol = getPointSymbol({
-          color: [156, 255, 242],
+        }
+      : getSatellitePointSymbol({
+          color: color,
           size: 10,
           outlineSize: 2,
           outlineOpacity: 0.6,
-          outlineColor: [156, 255, 242]
+          outlineColor: color
         });
-        const satelliteGraphic = new Graphic({
-          symbol,
-          geometry: new Point(position)
-        });
-
-        this.view.goTo(orbitGraphic);
-        this.animateSatelliteLine(orbitCoordinates).then(() => {
-          this.view.graphics.add(satelliteGraphic);
-        });
-      }
-    } else {
-      this.view.graphics.removeAll();
-    }
+    return [
+      new Graphic({
+        geometry: new Point(location),
+        symbol
+      }),
+      new Graphic({
+        symbol: getLineSymbol(color, 1.5),
+        geometry: new Polyline({
+          paths: [
+            [location.x, location.y, location.z],
+            [location.x, location.y, 0]
+          ]
+        })
+      })
+    ];
   }
 
-  animateSatelliteLine(coords) {
+  updateSatellitePosition(satellite, satelliteGraphics) {
+    this.setCurrentTime();
+    const location = getSatelliteLocation(satellite.satrec, this.currentTime);
+    satelliteGraphics[0].geometry = new Point(location);
+    satelliteGraphics[1].geometry = new Polyline({
+      paths: [
+        [location.x, location.y, location.z],
+        [location.x, location.y, 0]
+      ]
+    });
+  }
+
+  animateSatelliteOrbit(coords) {
+    const zoomToGraphic = new Graphic({
+      geometry: new Polyline({
+        paths: [coords.map((coord) => [coord.x, coord.y, coord.z])]
+      })
+    });
+    this.view.goTo(zoomToGraphic);
+    const orbitGraphic = new Graphic({
+      geometry: new Polyline({
+        paths: [
+          [coords[0].x, coords[0].y, coords[0].z],
+          [coords[1].x, coords[1].y, coords[1].z]
+        ]
+      }),
+      symbol: getStippledLineSymbol([255, 255, 255, 0.7], 1.5),
+      id: 'orbitGraphic'
+    });
+    this.view.graphics.add(orbitGraphic);
+
     return new Promise((resolve, reject) => {
       const addLineSegment = (i) => {
-        if (i >= 0) {
+        if (i < coords.length) {
           let polyline = new Polyline({
-            paths: [
-              [coords[i].x, coords[i].y, coords[i].z],
-              [coords[i + 1].x, coords[i + 1].y, coords[i + 1].z]
-            ]
+            paths: [...orbitGraphic.geometry.paths[0], [coords[i].x, coords[i].y, coords[i].z]]
           });
-          const opacity = Math.min(1 - i / coords.length, 0.8);
-          const lineSymbol = {
-            type: 'simple-line',
-            color: [156, 255, 242, opacity],
-            width: 10,
-            cap: 'butt'
-          };
-
-          const lineGraphic = new Graphic({
-            geometry: polyline,
-            symbol: lineSymbol
-          });
-
-          this.view.graphics.add(lineGraphic);
-          window.requestAnimationFrame(() => {
-            addLineSegment(i - 1);
-          });
+          orbitGraphic.geometry = polyline;
+          if (this.selectedSatellite) {
+            window.requestAnimationFrame(() => {
+              addLineSegment(i + 1);
+            });
+          } else {
+            reject();
+          }
         } else {
           resolve();
         }
       };
-      addLineSegment(coords.length - 2);
+      addLineSegment(2);
     });
   }
+
+  setApogeeAndPerigee(orbitCoordinates) {
+    const orbitCoordinatesByHeight = [...orbitCoordinates];
+    orbitCoordinatesByHeight.sort((coord1, coord2) => {
+      return coord1.z - coord2.z;
+    });
+
+    const apogeePosition = orbitCoordinatesByHeight[orbitCoordinatesByHeight.length - 1];
+    const apogeeGraphics = this.getSatelliteGraphics({
+      color: apogeeBlue,
+      location: apogeePosition
+    });
+    this.view.graphics.addMany(apogeeGraphics);
+
+    const perigeePosition = orbitCoordinatesByHeight[0];
+    const perigeeGraphics = this.getSatelliteGraphics({
+      color: perigeeYellow,
+      location: perigeePosition
+    });
+    this.view.graphics.addMany(perigeeGraphics);
+  }
+
+  // renderSatellite(satellite) {
+  //   if (satellite) {
+  //     const NOW = new Date();
+  //     const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, NOW, 200);
+  //     const orbitGraphic = new Graphic({
+  //       symbol: getStippledLineSymbol([255, 255, 255, 1], 1.5),
+  //       geometry: new Polyline({
+  //         paths: [orbitCoordinates.map((coordinate) => [coordinate.x, coordinate.y, coordinate.z])]
+  //       })
+  //     });
+
+  //     let symbol = null;
+  //     const position = getSatelliteLocation(satellite.satrec, NOW, NOW);
+  //     if (satellite.featuredSatellite) {
+  //       symbol = {
+  //         type: 'point-3d',
+  //         symbolLayers: [
+  //           {
+  //             type: 'object',
+  //             resource: { href: satellite.featuredSatellite.model },
+  //             material: { color: [255, 255, 255] },
+  //             height: 100000
+  //           }
+  //         ]
+  //       };
+  //       const satelliteGraphic = new Graphic({
+  //         symbol,
+  //         geometry: new Point(position)
+  //       });
+  //       this.view.graphics.add(satelliteGraphic);
+  //       this.view.goTo(satelliteGraphic);
+  //     } else {
+  //       symbol = getPointSymbol({
+  //         color: [156, 255, 242],
+  //         size: 10,
+  //         outlineSize: 2,
+  //         outlineOpacity: 0.6,
+  //         outlineColor: [156, 255, 242]
+  //       });
+  //       const satelliteGraphic = new Graphic({
+  //         symbol,
+  //         geometry: new Point(position)
+  //       });
+
+  //       this.view.goTo(orbitGraphic);
+  //       this.animateSatelliteLine(orbitCoordinates).then(() => {
+  //         this.view.graphics.add(satelliteGraphic);
+  //       });
+  //     }
+  //   } else {
+  //     this.view.graphics.removeAll();
+  //   }
+  // }
 }
 
 const mapStore = new MapStore();

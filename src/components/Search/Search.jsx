@@ -86,7 +86,7 @@ export const Search = observer(() => {
       </div>
       <div className={styles.footer}>
         <div className={styles.updatesContainer}>
-          Satellite positions generated at{' '}
+          Satellite positions generated on{' '}
           {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(mapStore.positionTime)}.{' '}
           <a
             onClick={() => {
