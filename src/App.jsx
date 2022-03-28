@@ -6,7 +6,7 @@ import {
   SatelliteUsage,
   SatelliteOrbits,
   SatelliteOwners,
-  SpaceJunk,
+  Debris,
   Search,
   Satellite,
   About
@@ -35,7 +35,7 @@ const App = observer(() => {
       {appStore.activeState === 'general' && <Stories />}
       {appStore.activeState === 'usage' && <SatelliteUsage />}
       {appStore.activeState === 'orbits' && <SatelliteOrbits />}
-      {appStore.activeState === 'spacejunk' && <SpaceJunk />}
+      {appStore.activeState === 'debris' && <Debris />}
       {appStore.activeState === 'search' && <Search />}
       {appStore.activeState === 'satellite' && <Satellite />}
       {appStore.activeState === 'owners' && <SatelliteOwners />}

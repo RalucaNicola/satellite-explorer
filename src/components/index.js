@@ -25,6 +25,6 @@ export * from './PageNotFound/PageNotFound';
 export * from './SatelliteUsage/SatelliteUsage';
 export * from './SatelliteOrbits/SatelliteOrbits';
 export * from './SatelliteOwners/SatelliteOwners';
-export * from './SpaceJunk/SpaceJunk';
+export * from './Debris/Debris';
 export * from './Search/Search';
 export * from './Satellite/Satellite';

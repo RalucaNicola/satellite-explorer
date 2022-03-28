@@ -14,8 +14,8 @@ export function Stories() {
         <StoryCard toState='owners' image='./assets/satellite-1.jpg'>
           Who owns all the satellites?
         </StoryCard>
-        <StoryCard toState='spacejunk' image='./assets/satellite-7.jpg'>
-          A space junk crisis?
+        <StoryCard toState='debris' image='./assets/satellite-7.jpg'>
+          A space debris crisis?
         </StoryCard>
       </ul>
     </div>

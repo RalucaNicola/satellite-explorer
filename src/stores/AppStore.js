@@ -44,14 +44,12 @@ class AppStore {
     if (value === 'general' || value === 'about') {
       mapStore.setVisualizationType('general');
       mapStore.setMapFilter(null);
-      mapStore.gotoPosition('home');
     }
 
     if (value === 'orbits') {
       mapStore.setVisualizationType('orbits');
       mapStore.drawOrbitRanges(true);
       mapStore.setMapFilter('1=2');
-      mapStore.gotoPosition('home');
     } else {
       mapStore.drawOrbitRanges(false);
     }
@@ -59,17 +57,19 @@ class AppStore {
     if (value === 'search') {
       mapStore.setVisualizationType('search');
       this.setInSearch(true);
-      mapStore.gotoPosition('home');
     }
 
     if (value === 'usage') {
       mapStore.setVisualizationType('usage');
-      mapStore.gotoPosition('home');
     }
 
     if (value === 'owners') {
       mapStore.setVisualizationType('owners');
-      mapStore.gotoPosition('home');
+    }
+    if (value === 'debris') {
+      mapStore.setVisualizationType('debris');
+    } else {
+      mapStore.filterSpaceDebris('all');
     }
   }
 

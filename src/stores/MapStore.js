@@ -2,7 +2,16 @@ import WebScene from '@arcgis/core/WebScene';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
-import { fields, orbitOrange, orbitYellow, orbitGreen, apogeeBlue, perigeeYellow } from '../config';
+import LabelClass from '@arcgis/core/layers/support/LabelClass';
+import {
+  fields,
+  orbitOrange,
+  orbitYellow,
+  orbitGreen,
+  apogeeBlue,
+  perigeeYellow,
+  debrisLabelingConfig
+} from '../config';
 import { action, makeObservable, observable } from 'mobx';
 import {
   getGeneralLineRenderer,
@@ -50,6 +59,8 @@ class MapStore {
   apogeePosition = null;
   perigeePosition = null;
   satellitePosition = null;
+  debrisLayer = null;
+  debrisLV = null;
 
   constructor() {
     makeObservable(this, {
@@ -70,7 +81,9 @@ class MapStore {
       setCurrentTime: action,
       apogeePosition: false,
       perigeePosition: false,
-      satellitePosition: false
+      satellitePosition: false,
+      debrisLayer: false,
+      debrisLV: false
     });
   }
 
@@ -155,7 +168,41 @@ class MapStore {
     this.satellitesLayer = this.getSatellitesLayer(data);
     map.add(this.satellitesLayer);
     map.loadAll().then(() => {
-      this.orbitsLayer = map.allLayers.find((layer) => layer.title === 'orbits');
+      map.allLayers.forEach((layer) => {
+        if (layer.title === 'orbits') {
+          this.orbitsLayer = layer;
+        }
+        if (layer.title === 'debris') {
+          this.debrisLayer = layer;
+          this.debrisLayer.screenSizePerspectiveEnabled = false;
+          this.debrisLayer.labelingInfo = debrisLabelingConfig.map((deb) => {
+            return new LabelClass({
+              where: `name = '${deb.name}'`,
+              labelExpressionInfo: { expression: '$feature.name' },
+              labelPlacement: 'center-right',
+              symbol: {
+                type: 'label-3d',
+                symbolLayers: [
+                  {
+                    type: 'text',
+                    material: {
+                      color: [255, 255, 255]
+                    },
+                    background: {
+                      color: deb.color
+                    },
+                    font: {
+                      size: 11,
+                      family: 'sans-serif'
+                    }
+                  }
+                ]
+              }
+            });
+          });
+          this.debrisLayer.labelsVisible = true;
+        }
+      });
       this.setMap(map);
       this.styleLayers(this.visualizationType);
     });
@@ -184,6 +231,7 @@ class MapStore {
     (async () => {
       const orbitLV = await view.whenLayerView(this.orbitsLayer);
       const satelliteLV = await view.whenLayerView(this.satellitesLayer);
+      this.debrisLV = await view.whenLayerView(this.debrisLayer);
       this.layerViews = [orbitLV, satelliteLV];
       this.filterLayerViews(this.mapFilter);
     })();
@@ -212,41 +260,72 @@ class MapStore {
     }
   }
 
+  filterSpaceDebris(filterType) {
+    if (this.debrisLV) {
+      switch (filterType) {
+        case 'cosmos':
+          this.debrisLV.filter = {
+            where: `name IN ('COSMOS 2251 DEB', 'COSMOS 2251', 'IRIDIUM 33 DEB', 'IRIDIUM 33')`
+          };
+          break;
+        case 'chinese-antitest':
+          this.debrisLV.filter = { where: `name='FENGYUN 1C' OR name='FENGYUN 1C DEB'` };
+          break;
+        case 'russian-antitest':
+          this.debrisLV.filter = { where: `name='COSMOS 1408' OR name='COSMOS 1408 DEB'` };
+          break;
+        default:
+          this.debrisLV.filter = { where: '1=1' };
+          break;
+      }
+    }
+  }
+
   styleLayers(type) {
     switch (type) {
       case 'search':
         this.orbitsLayer.visible = false;
+        this.debrisLayer.visible = false;
         this.satellitesLayer.visible = true;
         fadeIn(this.satellitesLayer);
         break;
       case 'usage':
+        this.satellitesLayer.visible = false;
+        this.debrisLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = usageLineRenderer;
-        this.satellitesLayer.visible = false;
         fadeIn(this.orbitsLayer);
         break;
       case 'general':
+        this.satellitesLayer.visible = false;
+        this.debrisLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = generalLineRenderer;
-        this.satellitesLayer.visible = false;
         fadeIn(this.orbitsLayer);
         break;
       case 'satellite':
+        this.debrisLayer.visible = false;
         this.satellitesLayer.visible = false;
         this.orbitsLayer.visible = false;
         break;
       case 'orbits':
+        this.debrisLayer.visible = false;
+        this.satellitesLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = orbitLineRenderer;
-        this.satellitesLayer.visible = false;
         fadeIn(this.orbitsLayer);
         break;
       case 'owners':
-        this.orbitsLayer.visible = true;
         this.satellitesLayer.visible = false;
+        this.debrisLayer.visible = false;
+        this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = countriesLineRenderer;
         fadeIn(this.orbitsLayer);
         break;
+      case 'debris':
+        this.satellitesLayer.visible = false;
+        this.orbitsLayer.visible = false;
+        this.debrisLayer.visible = true;
     }
   }
 
@@ -431,25 +510,27 @@ class MapStore {
   }
 
   gotoPosition(type) {
-    switch (type) {
-      case 'home':
-        this.view.goTo(initialCamera, { speedFactor: 0.3 });
-        break;
-      case 'satellite':
-        if (this.satellitePosition) {
-          this.view.goTo(new Point(this.satellitePosition));
-        }
-        break;
-      case 'apogee':
-        if (this.apogeePosition) {
-          this.view.goTo(new Point(this.apogeePosition));
-        }
-        break;
-      case 'perigee':
-        if (this.perigeePosition) {
-          this.view.goTo(new Point(this.perigeePosition));
-        }
-        break;
+    if (this.view) {
+      switch (type) {
+        case 'home':
+          this.view.goTo(initialCamera, { speedFactor: 0.3 });
+          break;
+        case 'satellite':
+          if (this.satellitePosition) {
+            this.view.goTo(new Point(this.satellitePosition));
+          }
+          break;
+        case 'apogee':
+          if (this.apogeePosition) {
+            this.view.goTo(new Point(this.apogeePosition));
+          }
+          break;
+        case 'perigee':
+          if (this.perigeePosition) {
+            this.view.goTo(new Point(this.perigeePosition));
+          }
+          break;
+      }
     }
   }
 }

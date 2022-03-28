@@ -1,0 +1,67 @@
+.menu {
+  composes: rightPanel from '../../main.css';
+}
+
+.block {
+  margin: 40px 0;
+}
+
+.large {
+  font-size: 1.5rem;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+}
+
+.collisionTitle {
+  margin-left: -1rem;
+}
+
+.collisionContent {
+  border-left: 1px solid white;
+  padding-left: 1rem;
+}
+
+.collisionLegend:before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.blue {
+  color: #43abeb;
+}
+
+.blue:before {
+  background-color: #43abeb;
+}
+
+.green {
+  color: #a7c636;
+}
+
+.green:before {
+  background-color: #a7c636;
+}
+
+.yellow {
+  color: #ffd159;
+}
+.yellow:before {
+  background-color: #ffd159;
+}
+
+.orange {
+  color: #ff8200;
+}
+
+.orange:before {
+  background-color: #ff8200;
+}
