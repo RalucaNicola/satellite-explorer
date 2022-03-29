@@ -102,7 +102,7 @@ export const Satellite = observer(() => {
               <img src='./assets/inclination.png' className={styles.inclinationImage}></img>
               <div>
                 The satellite's orbit is inclined to{' '}
-                <span className={styles.inclinationText}>{attr.inclination} degrees</span> from the Ecuator.
+                <span className={styles.inclinationText}>{attr.inclination.toFixed(2)} degrees</span> from the Ecuator.
               </div>
             </div>
             <p>The satellite completes the rotation around the earth in {attr.period.toFixed(2)} minutes.</p>
