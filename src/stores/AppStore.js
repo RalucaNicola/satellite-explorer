@@ -107,7 +107,7 @@ class AppStore {
         `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
       );
     } else {
-      mapStore.setMapFilter(null);
+      mapStore.setMapFilter(null, false);
     }
   }
 }

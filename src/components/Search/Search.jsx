@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 
 export const Search = observer(() => {
+  const [searchString, setSearchString] = useState('');
   const [searchResults, setSearchResults] = useState(null);
   const [featuredSatellites, setFeaturedSatellites] = useState([]);
 
@@ -40,6 +41,7 @@ export const Search = observer(() => {
 
   function inputHandler(event) {
     const filter = event.target.value.toLowerCase();
+    setSearchString(filter);
     if (filter && filter.length > 2) {
       appStore.setSearchString(filter);
     } else {
@@ -62,7 +64,7 @@ export const Search = observer(() => {
           type='text'
           onChange={inputHandler}
           placeholder='Search by name or operator'
-          {...(appStore.searchString ? { value: appStore.searchString } : {})}
+          value={appStore.searchString ? appStore.searchString : searchString}
         ></input>
       </div>
       <div className={styles.results}>

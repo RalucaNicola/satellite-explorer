@@ -332,17 +332,17 @@ class MapStore {
     }
   }
 
-  setMapFilter(mapFilter) {
+  setMapFilter(mapFilter, effect = true) {
     this.mapFilter = mapFilter;
     if (this.layerViews) {
-      this.filterLayerViews(mapFilter);
+      this.filterLayerViews(mapFilter, effect);
     }
   }
 
-  filterLayerViews(filterExpression) {
+  filterLayerViews(filterExpression, effect) {
     this.layerViews.forEach((lyrView) => {
       lyrView.filter = { where: filterExpression };
-      if (lyrView.layer.opacity === 1) {
+      if (effect && lyrView.layer.opacity === 1) {
         fadeIn(lyrView.layer);
       }
     });
