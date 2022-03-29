@@ -49,7 +49,7 @@ a {
 }
 
 a:hover {
-  color: orange;
+  color: var(--primary);
 }
 
 .rightPanel {

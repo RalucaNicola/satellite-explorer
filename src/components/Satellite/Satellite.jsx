@@ -46,7 +46,22 @@ export const Satellite = observer(() => {
             >
               Go to current location
             </button>{' '}
-            {featured ? <button className={styles.gotoButton}>Follow satellite</button> : <></>}
+            {featured ? (
+              <div>
+                Follow satellite
+                <label className={styles.switchContainer}>
+                  <input
+                    type='checkbox'
+                    onChange={(event) => {
+                      satelliteStore.followSatellite = event.target.checked;
+                    }}
+                  />
+                  <span className={styles.roundSlider}></span>
+                </label>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           {featured ? (
             <div className={styles.itemValue}>

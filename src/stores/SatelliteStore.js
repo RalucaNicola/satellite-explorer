@@ -19,11 +19,14 @@ class SatelliteStore {
   satellitePosition = null;
   apogeePosition = null;
   perigeePosition = null;
+  followSatellite = false;
 
   constructor() {
     makeObservable(this, {
       currentTime: observable.ref,
-      setCurrentTime: action
+      setCurrentTime: action,
+      selectedSatellite: observable.ref,
+      setSelectedSatellite: action
     });
   }
 
@@ -62,22 +65,33 @@ class SatelliteStore {
           });
           this.view.graphics.addMany(satelliteGraphics);
           if (satellite.featuredSatellite) {
-            const cameraPosition = getSatelliteLocation(satellite.satrec, new Date(this.currentTime.getTime() - 50000));
-            this.view.goTo(
-              { position: new Point(cameraPosition), center: new Point(this.satellitePosition), tilt: 30 },
-              { duration: 1000, easing: 'linear' }
-            );
+            this.followCamera({ animate: true });
           } else {
             this.view.goTo(new Point(this.satellitePosition));
           }
           this.timeInterval = window.setInterval(() => {
             this.updateSatellitePosition(satellite, satelliteGraphics);
-          }, 1000);
+            if (this.followSatellite) {
+              this.followCamera({ animate: false });
+            }
+          }, 200);
         }
       },
       () => {
         this.view.graphics.removeAll();
       }
+    );
+  }
+
+  followCamera({ animate }) {
+    const cameraPosition = getSatelliteLocation(
+      this.selectedSatellite.satrec,
+      new Date(this.currentTime.getTime() - 50000),
+      this.startTime
+    );
+    this.view.goTo(
+      { position: new Point(cameraPosition), center: new Point(this.satellitePosition), tilt: 30 },
+      { duration: 200, animate }
     );
   }
 
