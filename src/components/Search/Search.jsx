@@ -66,6 +66,18 @@ export const Search = observer(() => {
           placeholder='Search by name or operator'
           value={appStore.searchString ? appStore.searchString : searchString}
         ></input>
+        {searchString ? (
+          <button
+            className={styles.clearButton}
+            onClick={() => {
+              inputHandler({ target: { value: '' } });
+            }}
+          >
+            <img src='./assets/close.svg' />
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
       <div className={styles.results}>
         {searchResults ? (

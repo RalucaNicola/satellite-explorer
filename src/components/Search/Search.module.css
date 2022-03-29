@@ -22,6 +22,17 @@
   font-size: 0.9rem;
 }
 
+.clearButton {
+  background: none;
+  border: none;
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+  position: absolute;
+  margin-top: 5px;
+  margin-left: -30px;
+}
+
 @media (min-width: 550px) {
   .menu {
     display: flex;
