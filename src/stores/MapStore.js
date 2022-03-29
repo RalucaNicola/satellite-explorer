@@ -56,6 +56,7 @@ class MapStore {
   positionTime = null;
   timeInterval = null;
   currentTime = null;
+  startTime = null;
   apogeePosition = null;
   perigeePosition = null;
   satellitePosition = null;
@@ -79,6 +80,7 @@ class MapStore {
       timeInterval: false,
       currentTime: observable.ref,
       setCurrentTime: action,
+      startTime: false,
       apogeePosition: false,
       perigeePosition: false,
       satellitePosition: false,
@@ -373,22 +375,31 @@ class MapStore {
 
   renderSatellite(satellite) {
     this.setCurrentTime();
-    const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, this.currentTime, 150);
+    this.startTime = new Date();
+    const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, this.startTime, 150);
     this.animateSatelliteOrbit(orbitCoordinates).then(
       () => {
         if (this.selectedSatellite) {
           this.setApogeeAndPerigee(orbitCoordinates);
-          this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime);
+          this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime, this.startTime);
           const satelliteGraphics = this.getSatelliteGraphics({
             featuredSatellite: satellite.featuredSatellite,
             color: [156, 255, 242],
             location: this.satellitePosition
           });
           this.view.graphics.addMany(satelliteGraphics);
-          this.view.goTo(satelliteGraphics);
-          // this.timeInterval = window.setInterval(() => {
-          //   this.updateSatellitePosition(satellite, satelliteGraphics);
-          // }, 2000);
+          if (satellite.featuredSatellite) {
+            const cameraPosition = getSatelliteLocation(satellite.satrec, new Date(this.currentTime.getTime() - 50000));
+            this.view.goTo(
+              { position: new Point(cameraPosition), center: new Point(this.satellitePosition), tilt: 30 },
+              { duration: 1000, easing: 'linear' }
+            );
+          } else {
+            this.view.goTo(new Point(this.satellitePosition));
+          }
+          this.timeInterval = window.setInterval(() => {
+            this.updateSatellitePosition(satellite, satelliteGraphics);
+          }, 1000);
         }
       },
       () => {
@@ -436,7 +447,7 @@ class MapStore {
 
   updateSatellitePosition(satellite, satelliteGraphics) {
     this.setCurrentTime();
-    this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime);
+    this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime, this.startTime);
     satelliteGraphics[0].geometry = new Point(this.satellitePosition);
     satelliteGraphics[1].geometry = new Polyline({
       paths: [
@@ -444,7 +455,6 @@ class MapStore {
         [this.satellitePosition.x, this.satellitePosition.y, 0]
       ]
     });
-    this.view.goTo({ center: new Point(this.satellitePosition), tilt: 40 }, { duration: 2000 });
   }
 
   animateSatelliteOrbit(coords) {
