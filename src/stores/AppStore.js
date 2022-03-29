@@ -37,7 +37,6 @@ class AppStore {
     this.previousState = this.activeState;
     this.activeState = value;
     this.setAppPadding();
-    console.log(this.previousState, this.activeState);
 
     if (value === 'satellite') {
       mapStore.setVisualizationType('satellite');

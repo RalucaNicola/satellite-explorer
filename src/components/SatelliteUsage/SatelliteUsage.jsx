@@ -29,7 +29,7 @@ export const SatelliteUsage = () => {
 
   return (
     <div className={styles.menu}>
-      <BackButton></BackButton>
+      <BackButton toState='general'></BackButton>
       <h2>Why do we need satellites?</h2>
       <div className={styles.block}>
         Did you ever get your location on your phone or set the navigation system in the car to guide you to a
@@ -168,7 +168,7 @@ export const SatelliteUsage = () => {
         </p>
         {countsByPurpose ? <UsageChart category={technologyDevelopment} data={countsByPurpose}></UsageChart> : ''}
       </div>
-      <BackButton></BackButton>
+      <BackButton toState='general'></BackButton>
     </div>
   );
 };

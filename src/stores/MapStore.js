@@ -122,7 +122,7 @@ class MapStore {
       })
     ];
     return new FeatureLayer({
-      id: 'satellite',
+      title: 'satellites',
       fields: layerFields,
       geometryType: 'point',
       source: satelliteGraphics,
@@ -167,6 +167,7 @@ class MapStore {
         id: '53411b46fdbe4161b356030eae9905e0'
       }
     });
+
     this.satellitesLayer = this.getSatellitesLayer(data);
     map.add(this.satellitesLayer);
     map.loadAll().then(() => {

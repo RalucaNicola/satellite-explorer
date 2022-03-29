@@ -10,6 +10,7 @@ import mapStore from '../../stores/MapStore';
 
 import { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
+import dataStore from '../../stores/DataStore';
 
 const initialCamera = {
   position: {
@@ -60,6 +61,37 @@ export const Map = observer(() => {
         })
       });
       view.ui.add(homeWidget, 'top-right');
+
+      const popupTemplate = {
+        title: '{name}',
+        content:
+          'Satellite used for {purpose}.<br/> Launched from {launch_site} on {launch_date}.<br/> Operator: {operator}, {country_operator}.<br/> NORAD: {norad}.',
+        actions: [
+          {
+            title: 'Go to satellite',
+            id: 'go-to',
+            image: './assets/satellite-icon.png'
+          }
+        ]
+      };
+
+      view.map.allLayers.forEach((layer) => {
+        if (layer.title === 'orbits' || layer.title === 'satellites') {
+          layer.popupTemplate = popupTemplate;
+        }
+      });
+
+      view.popup.viewModel.includeDefaultActions = false;
+
+      view.popup.on('trigger-action', (event) => {
+        if (event.action.id === 'go-to') {
+          const norad = view.popup.viewModel.selectedFeature.attributes.norad;
+          const sat = dataStore.getSatelliteById(norad);
+          appStore.setActiveState('satellite');
+          appStore.setSelectedSatellite(sat);
+          view.popup.close();
+        }
+      });
 
       whenFalseOnce(view, 'updating', () => {
         mapStore.setView(view);
