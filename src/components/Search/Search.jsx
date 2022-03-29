@@ -54,7 +54,6 @@ export const Search = observer(() => {
           toState='general'
           onClick={() => {
             appStore.setSearchString(null);
-            appStore.setInSearch(false);
           }}
         ></BackButton>
         <h2>Search satellites</h2>
@@ -100,7 +99,6 @@ export const Search = observer(() => {
           toState='general'
           onClick={() => {
             appStore.setSearchString(null);
-            appStore.setInSearch(false);
           }}
         ></BackButton>
       </div>

@@ -6,10 +6,10 @@ import dataStore from './DataStore';
 class AppStore {
   isLoading = true;
   activeState = null;
+  previousState = null;
   appPadding = [0, 0, 0, 0];
   searchString = null;
   selectedSatellite = null;
-  inSearch = false;
 
   constructor() {
     makeObservable(this, {
@@ -23,7 +23,7 @@ class AppStore {
       setAppPadding: action,
       searchString: observable,
       setSearchString: action,
-      inSearch: false
+      previousState: false
     });
     mapStore.initializeMap(dataStore.data);
     window.addEventListener('resize', this.setAppPadding.bind(this));
@@ -34,11 +34,15 @@ class AppStore {
   }
 
   setActiveState(value) {
+    this.previousState = this.activeState;
     this.activeState = value;
     this.setAppPadding();
+    console.log(this.previousState, this.activeState);
 
     if (value === 'satellite') {
       mapStore.setVisualizationType('satellite');
+    } else {
+      this.setSelectedSatellite(null);
     }
 
     if (value === 'general' || value === 'about') {
@@ -56,7 +60,6 @@ class AppStore {
 
     if (value === 'search') {
       mapStore.setVisualizationType('search');
-      this.setInSearch(true);
     }
 
     if (value === 'usage') {
@@ -71,10 +74,6 @@ class AppStore {
     } else {
       mapStore.filterSpaceDebris('all');
     }
-  }
-
-  setInSearch(value) {
-    this.inSearch = value;
   }
 
   setSelectedSatellite(sat) {

@@ -27,12 +27,7 @@ export const Satellite = observer(() => {
 
   return (
     <div className={styles.menu}>
-      <BackButton
-        toState={appStore.inSearch ? 'search' : 'general'}
-        onClick={() => {
-          appStore.setSelectedSatellite(null);
-        }}
-      ></BackButton>
+      <BackButton></BackButton>
       {attr ? (
         <div>
           <h2>{attr.official_name}</h2>
@@ -51,7 +46,7 @@ export const Satellite = observer(() => {
             >
               Go to current location
             </button>{' '}
-            | {featured ? <button className={styles.gotoButton}>Follow satellite</button> : <></>}
+            {featured ? <button className={styles.gotoButton}>Follow satellite</button> : <></>}
           </div>
           {featured ? (
             <div className={styles.itemValue}>
@@ -116,12 +111,7 @@ export const Satellite = observer(() => {
       ) : (
         <p>Loading satellite information...</p>
       )}
-      <BackButton
-        toState={appStore.inSearch ? 'search' : 'general'}
-        onClick={() => {
-          appStore.setSelectedSatellite(null);
-        }}
-      ></BackButton>
+      <BackButton></BackButton>
     </div>
   );
 });

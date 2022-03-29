@@ -6,7 +6,14 @@ export function BackButton({ toState, onClick }) {
     <button
       className={styles.backButton}
       onClick={() => {
-        appStore.setActiveState(toState);
+        if (toState) {
+          appStore.setActiveState(toState);
+        } else if (appStore.previousState) {
+          appStore.setActiveState(appStore.previousState);
+        } else {
+          appStore.setActiveState('general');
+        }
+
         if (onClick) {
           onClick();
         }

@@ -29,7 +29,7 @@ export const SatelliteOwners = () => {
   }, []);
   return (
     <div className={styles.menu}>
-      <BackButton toState='general'></BackButton>
+      <BackButton></BackButton>
       <h2>Who owns all the satellites?</h2>
       <div className={styles.block}>
         There are {countsByCountry ? countsByCountry.total : ''} active satellites out there 75 different countries have
@@ -126,7 +126,7 @@ export const SatelliteOwners = () => {
         </FilterButton>
       </div>
 
-      <BackButton toState='general'></BackButton>
+      <BackButton></BackButton>
     </div>
   );
 };
