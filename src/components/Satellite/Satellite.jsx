@@ -3,9 +3,8 @@ import * as styles from './Satellite.module.css';
 import { BackButton } from '../index';
 
 import { formatOrbitClass } from '../../utils/utils';
-import appStore from '../../stores/AppStore';
-import mapStore from '../../stores/MapStore';
 import { observer } from 'mobx-react';
+import satelliteStore from '../../stores/SatelliteStore';
 
 const ListItem = ({ field, value, children }) => {
   return (
@@ -20,9 +19,9 @@ const ListItem = ({ field, value, children }) => {
 export const Satellite = observer(() => {
   let attr = null;
   let featured = null;
-  if (appStore.selectedSatellite) {
-    attr = appStore.selectedSatellite.metadata;
-    featured = appStore.selectedSatellite.featuredSatellite;
+  if (satelliteStore.selectedSatellite) {
+    attr = satelliteStore.selectedSatellite.metadata;
+    featured = satelliteStore.selectedSatellite.featuredSatellite;
   }
 
   return (
@@ -36,12 +35,13 @@ export const Satellite = observer(() => {
             <img src='./assets/current_location.png' className={styles.legendImage}></img>
             Current satellite location on{' '}
             {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(
-              mapStore.currentTime
-            )}.{' '}
+              satelliteStore.currentTime
+            )}
+            .{' '}
             <button
               className={styles.gotoButton}
               onClick={() => {
-                mapStore.gotoPosition('satellite');
+                satelliteStore.gotoPosition('satellite');
               }}
             >
               Go to current location
@@ -79,7 +79,7 @@ export const Satellite = observer(() => {
               <button
                 className={styles.gotoButton}
                 onClick={() => {
-                  mapStore.gotoPosition('perigee');
+                  satelliteStore.gotoPosition('perigee');
                 }}
               >
                 Go to perigee
@@ -92,7 +92,7 @@ export const Satellite = observer(() => {
               <button
                 className={styles.gotoButton}
                 onClick={() => {
-                  mapStore.gotoPosition('apogee');
+                  satelliteStore.gotoPosition('apogee');
                 }}
               >
                 Go to apogee

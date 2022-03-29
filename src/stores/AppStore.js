@@ -1,7 +1,8 @@
 import { action, makeObservable, observable } from 'mobx';
 import { clamp, updateHashParam } from '../utils/utils';
-import mapStore from './MapStore';
 import dataStore from './DataStore';
+import satelliteStore from './SatelliteStore';
+import mapStore from './MapStore';
 
 class AppStore {
   isLoading = true;
@@ -19,11 +20,11 @@ class AppStore {
       setIsLoading: action,
       activeState: observable,
       setActiveState: action,
+      previousState: false,
       appPadding: observable,
       setAppPadding: action,
       searchString: observable,
-      setSearchString: action,
-      previousState: false
+      setSearchString: action
     });
     mapStore.initializeMap(dataStore.data);
     window.addEventListener('resize', this.setAppPadding.bind(this));
@@ -77,7 +78,7 @@ class AppStore {
 
   setSelectedSatellite(sat) {
     this.selectedSatellite = sat;
-    mapStore.setSelectedSatellite(sat);
+    satelliteStore.setSelectedSatellite(sat);
     if (sat) {
       updateHashParam({ key: 'norad', value: sat.norad });
     } else {
