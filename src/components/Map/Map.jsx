@@ -98,6 +98,10 @@ export const Map = observer(() => {
         appStore.setIsLoading(false);
       });
     }
+
+    return () => {
+      view.destroy();
+    };
   }, [mapStore.map]);
 
   return (
