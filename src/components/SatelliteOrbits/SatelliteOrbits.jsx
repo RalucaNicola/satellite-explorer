@@ -32,6 +32,8 @@ export function SatelliteOrbits() {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;
     mapStore.setMapFilter(filterExpression);
+    mapStore.emphasizeOrbitRange(filter);
+    mapStore.goToPosition(filter);
   };
   return (
     <div className={styles.menu}>

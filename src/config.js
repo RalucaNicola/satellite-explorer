@@ -314,3 +314,9 @@ export const initialCamera = {
   heading: 0,
   tilt: 0
 };
+
+export const leoCamera = {
+  position: [12.55521244, 36.59510881, 27326078.59815],
+  heading: 1.5,
+  tilt: 0.11
+};

@@ -54,6 +54,7 @@ export const Map = observer(() => {
         })
       });
       view.ui.add(homeWidget, 'top-right');
+      window.view = view;
 
       const popupTemplate = {
         title: '{name}',

@@ -78,11 +78,9 @@ export const getGeneralPointRenderer = () => {
   return {
     type: 'simple',
     symbol: getPointSymbol({
-      color: [235, 204, 52],
-      size: 2,
-      outlineSize: 1,
-      outlineOpacity: 0.4,
-      outlineColor: [255, 255, 255]
+      color: [255, 255, 255],
+      size: 3,
+      outlineSize: 0
     })
   };
 };
@@ -90,7 +88,7 @@ export const getGeneralPointRenderer = () => {
 export const getGeneralLineRenderer = (size = 0.1) => {
   return {
     type: 'simple',
-    symbol: getLineSymbol([235, 204, 52], size)
+    symbol: getLineSymbol([255, 255, 255], size)
   };
 };
 
@@ -175,19 +173,56 @@ export const getUsageLabelingInfo = () => {
   return labelingInfo;
 };
 
+const fadeLayer = (layer) => {
+  const opacity = parseFloat((layer.opacity + 0.05).toFixed(2));
+  layer.opacity = opacity;
+  if (layer.opacity < 1) {
+    window.requestAnimationFrame(function () {
+      fadeLayer(layer);
+    });
+  }
+};
 export function fadeIn(layer) {
   layer.opacity = 0;
-  const fading = (layer) => {
-    const opacity = parseFloat((layer.opacity + 0.05).toFixed(2));
-    layer.opacity = opacity;
-    if (layer.opacity < 1) {
-      window.requestAnimationFrame(function () {
-        fading(layer);
-      });
-    }
-  };
-  fading(layer);
+  fadeLayer(layer);
 }
+
+export const fadeInSymbol = (graphic) => {
+  const color = graphic.symbol.symbolLayers.getItemAt(0).material.color;
+  color.a = parseFloat((color.a + 0.05).toFixed(2));
+  const symbol = {
+    type: 'polygon-3d',
+    symbolLayers: [
+      {
+        type: 'fill',
+        material: { color },
+        outline: { size: 0 }
+      }
+    ]
+  };
+  graphic.symbol = symbol;
+  if (color.a < 0.8) {
+    window.requestAnimationFrame(function () {
+      fadeInSymbol(graphic);
+    });
+  }
+};
+
+export const fadeOutSymbol = (graphic) => {
+  const color = graphic.symbol.symbolLayers.getItemAt(0).material.color;
+  color.a = 0.5;
+  const symbol = {
+    type: 'polygon-3d',
+    symbolLayers: [
+      {
+        type: 'fill',
+        material: { color },
+        outline: { size: 0 }
+      }
+    ]
+  };
+  graphic.symbol = symbol;
+};
 
 export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
   const rings = [];
@@ -210,7 +245,7 @@ export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
       symbolLayers: [
         {
           type: 'fill',
-          material: { color: [...color, 0.7] },
+          material: { color: [...color, 0.5] },
           outline: { size: 0 }
         }
       ]

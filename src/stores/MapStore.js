@@ -11,12 +11,14 @@ import {
   getUsageLineRenderer,
   getCountryLineRenderer,
   fadeIn,
-  getOrbitRangeGraphic
+  getOrbitRangeGraphic,
+  fadeInSymbol,
+  fadeOutSymbol
 } from '../utils/visualizationUtils';
 
 import { getSatelliteLocation } from '../utils/satPositionUtils';
 
-import { initialCamera } from '../config';
+import { initialCamera, leoCamera } from '../config';
 
 import satelliteStore from './SatelliteStore';
 import dataStore from './DataStore';
@@ -24,7 +26,7 @@ import dataStore from './DataStore';
 const generalPointRenderer = getGeneralPointRenderer();
 const generalLineRenderer = getGeneralLineRenderer();
 const usageLineRenderer = getUsageLineRenderer();
-const orbitLineRenderer = getGeneralLineRenderer();
+const orbitLineRenderer = getGeneralLineRenderer(0.3);
 const countriesLineRenderer = getCountryLineRenderer();
 
 class MapStore {
@@ -307,14 +309,38 @@ class MapStore {
   drawOrbitRanges(rangesVisible) {
     if (this.view) {
       if (rangesVisible) {
-        const leoOrbit = getOrbitRangeGraphic(160000, 2000000, orbitOrange);
-        const meoOrbit = getOrbitRangeGraphic(2000000, 34000000, orbitYellow);
-        const geoOrbit = getOrbitRangeGraphic(35000000, 35500000, orbitGreen);
-
-        this.view.graphics.addMany([leoOrbit, meoOrbit, geoOrbit]);
+        this.leoOrbit = getOrbitRangeGraphic(160000, 2000000, orbitOrange);
+        this.meoOrbit = getOrbitRangeGraphic(2000000, 34000000, orbitYellow);
+        this.geoOrbit = getOrbitRangeGraphic(35000000, 35500000, orbitGreen);
+        this.view.graphics.addMany([this.leoOrbit, this.meoOrbit, this.geoOrbit]);
       } else {
         this.view.graphics.removeAll();
       }
+    }
+  }
+
+  emphasizeOrbitRange(type) {
+    switch (type) {
+      case 'leo':
+        fadeInSymbol(this.leoOrbit);
+        fadeOutSymbol(this.meoOrbit);
+        fadeInSymbol(this.geoOrbit);
+        break;
+      case 'meo':
+        fadeOutSymbol(this.leoOrbit);
+        fadeInSymbol(this.meoOrbit);
+        fadeOutSymbol(this.geoOrbit);
+        break;
+      case 'geo':
+        fadeOutSymbol(this.leoOrbit);
+        fadeOutSymbol(this.meoOrbit);
+        fadeInSymbol(this.geoOrbit);
+        break;
+      default:
+        fadeOutSymbol(this.leoOrbit);
+        fadeOutSymbol(this.meoOrbit);
+        fadeOutSymbol(this.geoOrbit);
+        break;
     }
   }
 
@@ -324,10 +350,16 @@ class MapStore {
         this.view.goTo(initialCamera, { speedFactor: 0.25 });
         break;
       case 'search':
-        this.view.goTo(initialCamera, { speedFactor: 1 });
+        this.view.goTo(initialCamera, { speedFactor: 1.2 });
         break;
       case 'debris':
         this.view.goTo(this.view.map.initialViewProperties.viewpoint);
+        break;
+      case 'leo':
+        this.view.goTo(leoCamera, { speedFactor: 1.2 });
+        break;
+      default:
+        this.view.goTo(initialCamera);
         break;
     }
   }
