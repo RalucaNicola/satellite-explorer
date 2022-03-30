@@ -11,9 +11,10 @@ import {
   Satellite,
   About
 } from './components';
-import { parseHash } from './utils/utils';
+import { parseHash } from './utils/urlUtils';
 import appStore from './stores/AppStore';
 import dataStore from './stores/DataStore';
+import satelliteStore from './stores/SatelliteStore';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 
@@ -23,7 +24,7 @@ const App = observer(() => {
     if (hashParams.hasOwnProperty('norad')) {
       appStore.setActiveState('satellite');
       const satellite = dataStore.getSatelliteById(hashParams.norad);
-      appStore.setSelectedSatellite(satellite);
+      satelliteStore.setSelectedSatellite(satellite);
     } else {
       appStore.setActiveState('general');
     }
@@ -39,7 +40,7 @@ const App = observer(() => {
       {appStore.activeState === 'search' && <Search />}
       {appStore.activeState === 'satellite' && <Satellite />}
       {appStore.activeState === 'owners' && <SatelliteOwners />}
-      {appStore.activeState === 'about' && <About />}
+      {appStore.displayAbout && <About />}
       <Menu></Menu>
       {appStore.isLoading && <Loading></Loading>}
     </>

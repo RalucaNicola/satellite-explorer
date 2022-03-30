@@ -7,6 +7,7 @@ import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 
 import appStore from '../../stores/AppStore';
 import mapStore from '../../stores/MapStore';
+import satelliteStore from '../../stores/SatelliteStore';
 
 import { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
@@ -88,7 +89,7 @@ export const Map = observer(() => {
           const norad = view.popup.viewModel.selectedFeature.attributes.norad;
           const sat = dataStore.getSatelliteById(norad);
           appStore.setActiveState('satellite');
-          appStore.setSelectedSatellite(sat);
+          satelliteStore.setSelectedSatellite(sat);
           view.popup.close();
         }
       });

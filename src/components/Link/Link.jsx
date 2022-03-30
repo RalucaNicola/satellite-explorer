@@ -6,7 +6,9 @@ export function Link({ toState, onClick, children }) {
     <a
       className={styles.linkButton}
       onClick={() => {
-        appStore.setActiveState(toState);
+        if (toState) {
+          appStore.setActiveState(toState);
+        }
         if (onClick) {
           onClick();
         }

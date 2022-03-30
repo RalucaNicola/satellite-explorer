@@ -5,6 +5,8 @@ import { BackButton } from '../index';
 import { formatOrbitClass } from '../../utils/utils';
 import { observer } from 'mobx-react';
 import satelliteStore from '../../stores/SatelliteStore';
+import mapStore from '../../stores/MapStore';
+import { useEffect, useState } from 'react';
 
 const ListItem = ({ field, value, children }) => {
   return (
@@ -17,12 +19,18 @@ const ListItem = ({ field, value, children }) => {
 };
 
 export const Satellite = observer(() => {
-  let attr = null;
-  let featured = null;
-  if (satelliteStore.selectedSatellite) {
-    attr = satelliteStore.selectedSatellite.metadata;
-    featured = satelliteStore.selectedSatellite.featuredSatellite;
-  }
+  const [attr, setAttr] = useState(null);
+  const [featured, setFeatured] = useState(null);
+  useEffect(() => {
+    if (satelliteStore.selectedSatellite) {
+      setAttr(satelliteStore.selectedSatellite.metadata);
+      setFeatured(satelliteStore.selectedSatellite.featuredSatellite);
+      mapStore.setVisualizationType('satellite');
+    }
+    return () => {
+      satelliteStore.setSelectedSatellite(null);
+    };
+  }, []);
 
   return (
     <div className={styles.menu}>

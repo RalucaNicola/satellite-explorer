@@ -1,6 +1,6 @@
 import * as styles from './SatellitesResults.module.css';
 import { Link } from '../index';
-import appStore from '../../stores/AppStore';
+import satelliteStore from '../../stores/SatelliteStore';
 
 export const SatellitesResults = ({ satellites }) => {
   return (
@@ -14,7 +14,7 @@ export const SatellitesResults = ({ satellites }) => {
               toState={`satellite`}
               className={styles.satelliteLink}
               onClick={() => {
-                appStore.setSelectedSatellite(satellite);
+                satelliteStore.setSelectedSatellite(satellite);
               }}
             >
               <h5>{attr.official_name}</h5>

@@ -1,10 +1,17 @@
 import * as styles from './Debris.module.css';
 import { BackButton, FilterButton } from '../index';
 import mapStore from '../../stores/MapStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Debris = () => {
   const [activeFilter, setActiveFilter] = useState(null);
+
+  useEffect(() => {
+    mapStore.setVisualizationType('debris');
+    return () => {
+      mapStore.filterSpaceDebris('all');
+    };
+  }, []);
 
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);

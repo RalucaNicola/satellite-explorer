@@ -13,7 +13,7 @@ export const Search = observer(() => {
   const [searchResults, setSearchResults] = useState(null);
   const [featuredSatellites, setFeaturedSatellites] = useState([]);
 
-  function getSuggestions(searchString) {
+  const getSuggestions = (searchString) => {
     let filteredData = [...dataStore.data];
     if (searchString) {
       const searchRegExp = new RegExp(searchString, 'i');
@@ -29,23 +29,26 @@ export const Search = observer(() => {
     } else {
       setSearchResults(null);
     }
-  }
+  };
 
   useEffect(() => {
-    getSuggestions(appStore.searchString);
-
-    if (!appStore.searchString && featuredSatellites.length === 0) {
-      setFeaturedSatellites(dataStore.data.filter((satellite) => satellite.featuredSatellite));
+    mapStore.setVisualizationType('search');
+    if (appStore.searchString) {
+      setSearchString(appStore.searchString);
+      getSuggestions(appStore.searchString);
     }
-  }, [appStore.searchString]);
+    setFeaturedSatellites(dataStore.data.filter((satellite) => satellite.featuredSatellite));
+  }, []);
 
   function inputHandler(event) {
     const filter = event.target.value.toLowerCase();
     setSearchString(filter);
     if (filter && filter.length > 2) {
       appStore.setSearchString(filter);
+      getSuggestions(searchString);
     } else {
       appStore.setSearchString(null);
+      setSearchResults(null);
     }
   }
 

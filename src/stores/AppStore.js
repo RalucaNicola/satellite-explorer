@@ -1,32 +1,29 @@
 import { action, makeObservable, observable } from 'mobx';
-import { clamp, updateHashParam } from '../utils/utils';
-import dataStore from './DataStore';
-import satelliteStore from './SatelliteStore';
+import { clamp } from '../utils/utils';
 import mapStore from './MapStore';
 
 class AppStore {
   isLoading = true;
   activeState = null;
   previousState = null;
+  displayAbout = false;
   appPadding = [0, 0, 0, 0];
   searchString = null;
-  selectedSatellite = null;
 
   constructor() {
     makeObservable(this, {
-      selectedSatellite: observable.ref,
-      setSelectedSatellite: action,
       isLoading: observable,
       setIsLoading: action,
       activeState: observable,
       setActiveState: action,
       previousState: false,
-      appPadding: observable,
+      appPadding: observable.ref,
       setAppPadding: action,
       searchString: observable,
-      setSearchString: action
+      setSearchString: action,
+      displayAbout: observable,
+      setDisplayAbout: action
     });
-    mapStore.initializeMap(dataStore.data);
     window.addEventListener('resize', this.setAppPadding.bind(this));
   }
 
@@ -39,51 +36,14 @@ class AppStore {
     this.activeState = value;
     this.setAppPadding();
 
-    if (value === 'satellite') {
-      mapStore.setVisualizationType('satellite');
-    } else {
-      this.setSelectedSatellite(null);
-    }
-
-    if (value === 'general' || value === 'about') {
+    if (value === 'general') {
       mapStore.setVisualizationType('general');
       mapStore.setMapFilter(null);
     }
-
-    if (value === 'orbits') {
-      mapStore.setVisualizationType('orbits');
-      mapStore.drawOrbitRanges(true);
-      mapStore.setMapFilter('1=2');
-    } else {
-      mapStore.drawOrbitRanges(false);
-    }
-
-    if (value === 'search') {
-      mapStore.setVisualizationType('search');
-    }
-
-    if (value === 'usage') {
-      mapStore.setVisualizationType('usage');
-    }
-
-    if (value === 'owners') {
-      mapStore.setVisualizationType('owners');
-    }
-    if (value === 'debris') {
-      mapStore.setVisualizationType('debris');
-    } else {
-      mapStore.filterSpaceDebris('all');
-    }
   }
 
-  setSelectedSatellite(sat) {
-    this.selectedSatellite = sat;
-    satelliteStore.setSelectedSatellite(sat);
-    if (sat) {
-      updateHashParam({ key: 'norad', value: sat.norad });
-    } else {
-      updateHashParam({ key: 'norad', value: null });
-    }
+  setDisplayAbout(value) {
+    this.displayAbout = value;
   }
 
   setAppPadding() {

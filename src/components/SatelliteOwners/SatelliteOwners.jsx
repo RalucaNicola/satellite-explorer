@@ -26,6 +26,7 @@ export const SatelliteOwners = () => {
   useEffect(() => {
     setCountsByCountry(dataStore.getCountsByCountry());
     setCountsByOperator(dataStore.getCountsByOperator());
+    mapStore.setVisualizationType('owners');
   }, []);
   return (
     <div className={styles.menu}>

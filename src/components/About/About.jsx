@@ -2,13 +2,13 @@ import * as styles from './About.module.css';
 import appStore from '../../stores/AppStore';
 
 export function About() {
-  function toHome() {
-    appStore.setActiveState('general');
+  function close() {
+    appStore.setDisplayAbout(false);
   }
   return (
     <>
       <div className={styles.menuContainer}>
-        <button className={styles.closeButton} onClick={toHome}>
+        <button className={styles.closeButton} onClick={close}>
           <img src='./assets/close.svg'></img>
         </button>
         <div>

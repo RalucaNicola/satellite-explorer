@@ -10,12 +10,14 @@ import {
   getGeneralPointRenderer,
   getUsageLineRenderer,
   getCountryLineRenderer,
-  getSatelliteLocation,
   fadeIn,
   getOrbitRangeGraphic
-} from '../utils/utils';
+} from '../utils/visualizationUtils';
+
+import { getSatelliteLocation } from '../utils/satPositionUtils';
 
 import satelliteStore from './SatelliteStore';
+import dataStore from './DataStore';
 
 const generalPointRenderer = getGeneralPointRenderer();
 const generalLineRenderer = getGeneralLineRenderer();
@@ -43,6 +45,7 @@ class MapStore {
       currentTimeForSatellitePosition: observable.ref,
       setCurrentTimeForSatellitePosition: action
     });
+    this.initializeMap(dataStore.data);
   }
 
   getSatellitesLayer(data) {

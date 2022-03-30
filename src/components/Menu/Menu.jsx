@@ -2,6 +2,7 @@ import * as styles from './Menu.module.css';
 
 import { useState } from 'react';
 import { Link } from '../index';
+import appStore from '../../stores/AppStore';
 
 export const Menu = () => {
   const [active, setActive] = useState();
@@ -26,7 +27,12 @@ export const Menu = () => {
             </Link>
           </li>
           <li>
-            <Link toState='about' onClick={toggleMenu}>
+            <Link
+              onClick={() => {
+                toggleMenu();
+                appStore.setDisplayAbout(true);
+              }}
+            >
               About
             </Link>
           </li>

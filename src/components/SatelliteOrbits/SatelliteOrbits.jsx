@@ -19,7 +19,13 @@ export function SatelliteOrbits() {
   const [countsByOrbit, setCountsByOrbit] = useState(null);
   const [activeFilter, setActiveFilter] = useState(false);
   useEffect(() => {
+    mapStore.setVisualizationType('orbits');
+    mapStore.drawOrbitRanges(true);
+    mapStore.setMapFilter('1=2');
     setCountsByOrbit(dataStore.getCountsByOrbit());
+    return () => {
+      mapStore.drawOrbitRanges(false);
+    };
   }, []);
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);

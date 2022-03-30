@@ -2,14 +2,11 @@ import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
 import { apogeeBlue, perigeeYellow } from '../config';
 import { action, makeObservable, observable } from 'mobx';
-import {
-  getSatelliteLocation,
-  getSatellitePointSymbol,
-  getStippledLineSymbol,
-  getLineSymbol,
-  getOrbit
-} from '../utils/utils';
+import { getSatellitePointSymbol, getStippledLineSymbol, getLineSymbol } from '../utils/visualizationUtils';
 
+import { getSatelliteLocation, getOrbit } from '../utils/satPositionUtils';
+
+import { updateHashParam } from '../utils/urlUtils';
 class SatelliteStore {
   selectedSatellite = null;
   view = null;
@@ -33,7 +30,7 @@ class SatelliteStore {
   setView(view) {
     this.view = view;
     if (this.selectedSatellite) {
-      this.renderSatellite(this.selectedSatellite);
+      this.setSelectedSatellite(this.selectedSatellite);
     }
   }
 
@@ -42,9 +39,11 @@ class SatelliteStore {
     if (this.view) {
       if (sat) {
         this.renderSatellite(sat);
+        updateHashParam({ key: 'norad', value: sat.norad });
       } else {
         clearInterval(this.timeInterval);
         this.view.graphics.removeAll();
+        updateHashParam({ key: 'norad', value: null });
       }
     }
   }
