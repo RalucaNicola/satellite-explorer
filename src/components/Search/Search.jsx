@@ -33,6 +33,7 @@ export const Search = observer(() => {
 
   useEffect(() => {
     mapStore.setVisualizationType('search');
+    mapStore.goToPosition('search');
     if (appStore.searchString) {
       setSearchString(appStore.searchString);
       getSuggestions(appStore.searchString);

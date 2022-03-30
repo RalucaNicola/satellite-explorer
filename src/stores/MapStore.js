@@ -16,6 +16,8 @@ import {
 
 import { getSatelliteLocation } from '../utils/satPositionUtils';
 
+import { initialCamera } from '../config';
+
 import satelliteStore from './SatelliteStore';
 import dataStore from './DataStore';
 
@@ -177,6 +179,7 @@ class MapStore {
   setView(view) {
     this.view = view;
     satelliteStore.setView(view);
+    this.goToPosition('home');
     this.setLayerViews();
     if (this.mapPadding) {
       this.updateMapPadding(this.mapPadding);
@@ -312,6 +315,20 @@ class MapStore {
       } else {
         this.view.graphics.removeAll();
       }
+    }
+  }
+
+  goToPosition(position) {
+    switch (position) {
+      case 'home':
+        this.view.goTo(initialCamera, { speedFactor: 0.25 });
+        break;
+      case 'search':
+        this.view.goTo(initialCamera, { speedFactor: 1 });
+        break;
+      case 'debris':
+        this.view.goTo(this.view.map.initialViewProperties.viewpoint);
+        break;
     }
   }
 }

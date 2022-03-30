@@ -13,15 +13,7 @@ import { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
 import dataStore from '../../stores/DataStore';
 
-const initialCamera = {
-  position: {
-    x: 0,
-    y: 20,
-    z: 2e8
-  },
-  heading: 0,
-  tilt: 0
-};
+import { initialCamera } from '../../config';
 
 export const Map = observer(() => {
   const mapDiv = useRef(null);

@@ -304,3 +304,13 @@ export const debrisLabelingConfig = [
     color: '#ff8200'
   }
 ];
+
+export const initialCamera = {
+  position: {
+    x: 0,
+    y: 20,
+    z: 2e8
+  },
+  heading: 0,
+  tilt: 0
+};

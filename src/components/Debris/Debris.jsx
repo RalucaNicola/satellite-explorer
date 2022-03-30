@@ -8,6 +8,7 @@ export const Debris = () => {
 
   useEffect(() => {
     mapStore.setVisualizationType('debris');
+    mapStore.goToPosition('debris');
     return () => {
       mapStore.filterSpaceDebris('all');
     };

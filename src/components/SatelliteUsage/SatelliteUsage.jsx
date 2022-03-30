@@ -26,6 +26,7 @@ export const SatelliteUsage = () => {
     setCountsByPurpose(dataStore.getCountsByPurpose());
     handleFilter({ filter: navigation });
     mapStore.setVisualizationType('usage');
+    mapStore.goToPosition('home');
   }, []);
 
   return (

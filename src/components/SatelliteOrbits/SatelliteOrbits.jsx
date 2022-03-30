@@ -22,6 +22,7 @@ export function SatelliteOrbits() {
     mapStore.setVisualizationType('orbits');
     mapStore.drawOrbitRanges(true);
     mapStore.setMapFilter('1=2');
+    mapStore.goToPosition('home');
     setCountsByOrbit(dataStore.getCountsByOrbit());
     return () => {
       mapStore.drawOrbitRanges(false);
