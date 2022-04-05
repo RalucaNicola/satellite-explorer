@@ -1,5 +1,6 @@
 import WebScene from '@arcgis/core/WebScene';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import { Point } from '@arcgis/core/geometry';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
@@ -132,7 +133,10 @@ class MapStore {
     });
 
     this.satellitesLayer = this.getSatellitesLayer(data);
-    map.add(this.satellitesLayer);
+    this.orbitRangesLayer = new GraphicsLayer({
+      title: 'orbitRanges'
+    });
+    map.addMany([this.satellitesLayer, this.orbitRangesLayer]);
     map.loadAll().then(() => {
       map.allLayers.forEach((layer) => {
         if (layer.title === 'orbits') {
@@ -307,14 +311,14 @@ class MapStore {
   }
 
   drawOrbitRanges(rangesVisible) {
-    if (this.view) {
+    if (this.orbitRangesLayer) {
       if (rangesVisible) {
         this.leoOrbit = getOrbitRangeGraphic(160000, 2000000, orbitOrange);
         this.meoOrbit = getOrbitRangeGraphic(2000000, 34000000, orbitYellow);
         this.geoOrbit = getOrbitRangeGraphic(35000000, 35500000, orbitGreen);
-        this.view.graphics.addMany([this.leoOrbit, this.meoOrbit, this.geoOrbit]);
+        this.orbitRangesLayer.addMany([this.leoOrbit, this.meoOrbit, this.geoOrbit]);
       } else {
-        this.view.graphics.removeAll();
+        this.orbitRangesLayer.removeAll();
       }
     }
   }
