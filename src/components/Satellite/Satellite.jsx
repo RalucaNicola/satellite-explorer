@@ -29,6 +29,7 @@ export const Satellite = observer(() => {
     }
     return () => {
       satelliteStore.setSelectedSatellite(null);
+      satelliteStore.followSatellite = false;
     };
   }, []);
 
