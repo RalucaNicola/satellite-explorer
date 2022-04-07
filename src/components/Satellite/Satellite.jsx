@@ -21,7 +21,6 @@ const ListItem = ({ field, value, children }) => {
 export const Satellite = observer(() => {
   const [attr, setAttr] = useState(null);
   const [featured, setFeatured] = useState(null);
-  console.log('Satellite rendered');
   useEffect(() => {
     if (satelliteStore.selectedSatellite) {
       setAttr(satelliteStore.selectedSatellite.metadata);
