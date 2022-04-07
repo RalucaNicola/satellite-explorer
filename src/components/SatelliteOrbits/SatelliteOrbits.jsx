@@ -26,6 +26,7 @@ export function SatelliteOrbits() {
     setCountsByOrbit(dataStore.getCountsByOrbit());
     return () => {
       mapStore.drawOrbitRanges(false);
+      mapStore.setMapFilter(null);
     };
   }, []);
   const handleFilter = ({ filter }) => {

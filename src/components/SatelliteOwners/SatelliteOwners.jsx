@@ -28,6 +28,9 @@ export const SatelliteOwners = () => {
     setCountsByOperator(dataStore.getCountsByOperator());
     mapStore.setVisualizationType('owners');
     mapStore.goToPosition('home');
+    return () => {
+      mapStore.setMapFilter(null);
+    };
   }, []);
   return (
     <div className={styles.menu}>

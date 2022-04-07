@@ -27,6 +27,9 @@ export const SatelliteUsage = () => {
     handleFilter({ filter: navigation });
     mapStore.setVisualizationType('usage');
     mapStore.goToPosition('home');
+    return () => {
+      mapStore.setMapFilter(null);
+    };
   }, []);
 
   return (
