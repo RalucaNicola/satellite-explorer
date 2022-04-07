@@ -186,12 +186,14 @@ class MapStore {
   setView(view) {
     this.view = view;
     satelliteStore.setView(view);
+    if (this.mapPadding) {
+      this.updateMapPadding(this.mapPadding);
+    }
     whenFalseOnce(view, 'updating', () => {
-      this.goToPosition('home');
-      this.setLayerViews();
-      if (this.mapPadding) {
-        this.updateMapPadding(this.mapPadding);
+      if (!satelliteStore.selectedSatellite) {
+        this.goToPosition('home');
       }
+      this.setLayerViews();
     });
   }
 
