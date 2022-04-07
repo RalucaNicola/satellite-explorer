@@ -4,6 +4,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import { Point } from '@arcgis/core/geometry';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
+import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import { fields, orbitOrange, orbitYellow, orbitGreen, debrisLabelingConfig } from '../config';
 import { action, makeObservable, observable } from 'mobx';
 import {
@@ -185,11 +186,13 @@ class MapStore {
   setView(view) {
     this.view = view;
     satelliteStore.setView(view);
-    this.goToPosition('home');
-    this.setLayerViews();
-    if (this.mapPadding) {
-      this.updateMapPadding(this.mapPadding);
-    }
+    whenFalseOnce(view, 'updating', () => {
+      this.goToPosition('home');
+      this.setLayerViews();
+      if (this.mapPadding) {
+        this.updateMapPadding(this.mapPadding);
+      }
+    });
   }
 
   setLayerViews() {
