@@ -16,7 +16,7 @@ class SatelliteStore {
   satellitePosition = null;
   apogeePosition = null;
   perigeePosition = null;
-  followSatellite = false;
+  followSatellite = true;
 
   constructor() {
     makeObservable(this, {
@@ -63,17 +63,14 @@ class SatelliteStore {
             location: this.satellitePosition
           });
           this.view.graphics.addMany(satelliteGraphics);
-          if (satellite.featuredSatellite) {
-            this.followCamera({ animate: true });
-          } else {
-            this.view.goTo(new Point(this.satellitePosition));
-          }
-          this.timeInterval = window.setInterval(() => {
-            this.updateSatellitePosition(satellite, satelliteGraphics);
-            if (this.followSatellite) {
-              this.followCamera({ animate: false });
-            }
-          }, 200);
+          this.view
+            .goTo(satelliteGraphics[0])
+            .then(() => {
+              this.setTimeInterval(satellite, satelliteGraphics);
+            })
+            .catch(() => {
+              this.setTimeInterval(satellite, satelliteGraphics);
+            });
         }
       },
       () => {
@@ -82,15 +79,40 @@ class SatelliteStore {
     );
   }
 
+  setTimeInterval(satellite, satelliteGraphics) {
+    if (this.followSatellite) {
+      this.followCamera({ animate: true });
+    }
+    this.timeInterval = window.setInterval(() => {
+      this.updateSatellitePosition(satellite, satelliteGraphics);
+      if (this.followSatellite) {
+        this.followCamera({ animate: false });
+      }
+    }, 500);
+  }
+
+  getHeading() {
+    const oldPosition = new Point(
+      getSatelliteLocation(this.selectedSatellite.satrec, new Date(this.currentTime.getTime() - 1000), this.startTime)
+    );
+    const newPosition = new Point(this.satellitePosition);
+    const dx = newPosition.x - oldPosition.x;
+    const dy = newPosition.y - oldPosition.y;
+    const angle = Math.atan2(dy, dx);
+    const heading = (-angle / Math.PI) * 180 - 90;
+    return heading;
+  }
+
   followCamera({ animate }) {
     const cameraPosition = getSatelliteLocation(
       this.selectedSatellite.satrec,
-      new Date(this.currentTime.getTime() - 50000),
+      new Date(this.currentTime.getTime() - 70000),
       this.startTime
     );
+    cameraPosition.z += 500000;
     this.view.goTo(
-      { position: new Point(cameraPosition), center: new Point(this.satellitePosition), tilt: 30 },
-      { duration: 200, animate }
+      { position: new Point(cameraPosition), center: new Point(this.satellitePosition) },
+      { duration: 500, animate }
     );
   }
 
@@ -165,7 +187,8 @@ class SatelliteStore {
               type: 'object',
               resource: { href: featuredSatellite.model },
               material: { color: [255, 255, 255] },
-              height: 100000
+              height: 100000,
+              heading: this.getHeading()
             }
           ]
         }
@@ -197,6 +220,10 @@ class SatelliteStore {
     this.setCurrentTime();
     this.satellitePosition = getSatelliteLocation(satellite.satrec, this.currentTime, this.startTime);
     satelliteGraphics[0].geometry = new Point(this.satellitePosition);
+    const heading = this.getHeading();
+    const symbol = satelliteGraphics[0].symbol.clone();
+    symbol.symbolLayers.getItemAt(0).heading = heading;
+    satelliteGraphics[0].symbol = symbol;
     satelliteGraphics[1].geometry = new Polyline({
       paths: [
         [this.satellitePosition.x, this.satellitePosition.y, this.satellitePosition.z],

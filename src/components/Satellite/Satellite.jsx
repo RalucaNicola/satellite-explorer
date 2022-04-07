@@ -21,6 +21,7 @@ const ListItem = ({ field, value, children }) => {
 export const Satellite = observer(() => {
   const [attr, setAttr] = useState(null);
   const [featured, setFeatured] = useState(null);
+  console.log('Satellite rendered');
   useEffect(() => {
     if (satelliteStore.selectedSatellite) {
       setAttr(satelliteStore.selectedSatellite.metadata);
@@ -29,7 +30,7 @@ export const Satellite = observer(() => {
     }
     return () => {
       satelliteStore.setSelectedSatellite(null);
-      satelliteStore.followSatellite = false;
+      satelliteStore.followSatellite = true;
     };
   }, []);
 
@@ -61,6 +62,7 @@ export const Satellite = observer(() => {
                 <label className={styles.switchContainer}>
                   <input
                     type='checkbox'
+                    defaultChecked={satelliteStore.followSatellite}
                     onChange={(event) => {
                       satelliteStore.followSatellite = event.target.checked;
                     }}
