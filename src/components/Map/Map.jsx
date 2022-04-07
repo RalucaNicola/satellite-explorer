@@ -40,7 +40,7 @@ export const Map = observer(() => {
           },
           clipDistance: {
             mode: 'manual',
-            near: 1e5,
+            near: 1e4,
             far: 1e9 + 5e10
           }
         }
