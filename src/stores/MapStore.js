@@ -146,32 +146,32 @@ class MapStore {
         if (layer.title === 'debris') {
           this.debrisLayer = layer;
           this.debrisLayer.screenSizePerspectiveEnabled = false;
-          this.debrisLayer.labelingInfo = debrisLabelingConfig.map((deb) => {
-            return new LabelClass({
-              where: `name = '${deb.name}'`,
-              labelExpressionInfo: { expression: '$feature.name' },
-              labelPlacement: 'center-right',
-              symbol: {
-                type: 'label-3d',
-                symbolLayers: [
-                  {
-                    type: 'text',
-                    material: {
-                      color: [255, 255, 255]
-                    },
-                    background: {
-                      color: deb.color
-                    },
-                    font: {
-                      size: 11,
-                      family: 'sans-serif'
-                    }
-                  }
-                ]
-              }
-            });
-          });
-          this.debrisLayer.labelsVisible = true;
+          // this.debrisLayer.labelingInfo = debrisLabelingConfig.map((deb) => {
+          //   return new LabelClass({
+          //     where: `name = '${deb.name}'`,
+          //     labelExpressionInfo: { expression: '$feature.name' },
+          //     labelPlacement: 'center-right',
+          //     symbol: {
+          //       type: 'label-3d',
+          //       symbolLayers: [
+          //         {
+          //           type: 'text',
+          //           material: {
+          //             color: [255, 255, 255]
+          //           },
+          //           background: {
+          //             color: deb.color
+          //           },
+          //           font: {
+          //             size: 11,
+          //             family: 'sans-serif'
+          //           }
+          //         }
+          //       ]
+          //     }
+          //   });
+          // });
+          // this.debrisLayer.labelsVisible = true;
         }
       });
       this.setMap(map);
