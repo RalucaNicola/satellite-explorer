@@ -1,6 +1,6 @@
 import * as styles from './Menu.module.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from '../index';
 import appStore from '../../stores/AppStore';
 

@@ -33,6 +33,7 @@ const App = observer(() => {
   return (
     <>
       <Map></Map>
+      <Menu></Menu>
       {appStore.activeState === 'general' && <Stories />}
       {appStore.activeState === 'usage' && <SatelliteUsage />}
       {appStore.activeState === 'orbits' && <SatelliteOrbits />}
@@ -40,7 +41,6 @@ const App = observer(() => {
       {appStore.activeState === 'search' && <Search />}
       {appStore.activeState === 'satellite' && <Satellite />}
       {appStore.activeState === 'owners' && <SatelliteOwners />}
-      <Menu></Menu>
       {appStore.isLoading && <Loading></Loading>}
       {appStore.displayAbout && <About />}
     </>
