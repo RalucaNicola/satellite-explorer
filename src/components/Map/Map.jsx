@@ -43,6 +43,19 @@ export const Map = observer(() => {
             near: 1e4,
             far: 1e9 + 5e10
           }
+        },
+        popup: {
+          dockEnabled: true,
+          dockOptions: {
+            position: 'top-right',
+            buttonEnabled: false,
+            breakpoint: false
+          }
+        },
+        highlightOptions: {
+          color: [255, 118, 0],
+          haloOpacity: 0.25,
+          fillOpacity: 1
         }
       });
       let homeWidget = new Home({
