@@ -1,13 +1,13 @@
 import * as styles from './StoryCard.module.css';
 import { Link } from '../index';
 
-export function StoryCard({ toState, image, children }) {
+export function StoryCard({ toState, title, description }) {
   return (
-    <li>
+    <li className={styles.overrideLink}>
       <Link toState={toState}>
         <div className={styles.storyLink}>
-          <img src={image} className={styles.listImage}></img>
-          <p className={styles.title}>{children}</p>
+          <p className={styles.title}>{title}</p>
+          <p className={styles.description}>{description}</p>
         </div>
       </Link>
     </li>

@@ -5,18 +5,10 @@ export function Stories() {
   return (
     <div className={styles.stories}>
       <ul className={styles.storiesList}>
-        <StoryCard toState='usage' image='./assets/satellite-6.jpg'>
-          Why do we need satellites?
-        </StoryCard>
-        <StoryCard toState='orbits' image='./assets/satellite-2.jpg'>
-          What is the altitude of a satellite?
-        </StoryCard>
-        <StoryCard toState='owners' image='./assets/satellite-1.jpg'>
-          Who owns all the satellites?
-        </StoryCard>
-        <StoryCard toState='debris' image='./assets/satellite-7.jpg'>
-          A space debris crisis?
-        </StoryCard>
+        <StoryCard toState='usage' title='usage' description='Why do we need satellites?' />
+        <StoryCard toState='orbits' title='orbits' description='Where are satellite orbits?' />
+        <StoryCard toState='owners' title='owners' description='Who owns all the satellites?' />
+        <StoryCard toState='debris' title='debris' description='A space debris crisis?' />
       </ul>
     </div>
   );
