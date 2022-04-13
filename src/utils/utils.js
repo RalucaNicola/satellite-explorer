@@ -42,8 +42,8 @@ export const clamp = (min, percentage, max, total) => {
 };
 
 export const getChartWidth = (appPadding) => {
-  const innerPaddingMobile = 20;
-  const innerPaddingDesktop = 47;
+  const innerPaddingMobile = 30;
+  const innerPaddingDesktop = 50;
   let width = 350;
   if (appPadding[1] > 0) {
     width = appPadding[1] - innerPaddingDesktop * 2;

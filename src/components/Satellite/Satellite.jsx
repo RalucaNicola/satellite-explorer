@@ -1,6 +1,6 @@
 import * as styles from './Satellite.module.css';
 
-import { BackButton } from '../index';
+import { BackButton, InfoPanel } from '../index';
 
 import { formatOrbitClass } from '../../utils/utils';
 import { observer } from 'mobx-react';
@@ -34,7 +34,7 @@ export const Satellite = observer(() => {
   }, []);
 
   return (
-    <div className={styles.menu}>
+    <InfoPanel>
       <BackButton></BackButton>
       {attr ? (
         <div>
@@ -137,6 +137,6 @@ export const Satellite = observer(() => {
         <p>Loading satellite information...</p>
       )}
       <BackButton></BackButton>
-    </div>
+    </InfoPanel>
   );
 });

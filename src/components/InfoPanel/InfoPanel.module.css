@@ -1,0 +1,35 @@
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 20, 31, 0.6) 60%, rgba(47, 98, 116, 0.6) 100%);
+  height: clamp(250px, 30%, 400px);
+  color: white;
+  padding: 20px;
+  font-size: 1.1rem;
+  overflow: auto;
+  line-height: 1.9rem;
+  box-sizing: border-box;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 30px 30px 0 0;
+}
+
+.scroller {
+  height: 100%;
+  overflow: auto;
+  padding-right: 10px;
+}
+
+@media (min-width: 550px) {
+  .panel {
+    top: 0;
+    width: clamp(350px, 40%, 600px);
+    padding: 40px;
+    left: revert;
+    height: revert;
+    box-sizing: border-box;
+    border-radius: 30px 0 0 30px;
+  }
+}

@@ -4,7 +4,7 @@ import { filterDefinition } from '../../config';
 import dataStore from '../../stores/DataStore';
 import mapStore from '../../stores/MapStore';
 
-import { Accordion, UsageChart, BackButton, FilterButton } from '../index';
+import { Accordion, UsageChart, BackButton, FilterButton, InfoPanel } from '../index';
 
 import { useEffect, useState } from 'react';
 
@@ -12,7 +12,6 @@ const navigation = filterDefinition.navigation.id;
 const communications = filterDefinition.communications.id;
 const earthObservation = filterDefinition.earthObservation.id;
 const spaceObservation = filterDefinition.spaceObservation.id;
-const technologyDevelopment = filterDefinition.technologyDevelopment.id;
 
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -33,7 +32,7 @@ export const SatelliteUsage = () => {
   }, []);
 
   return (
-    <div className={styles.menu}>
+    <InfoPanel>
       <BackButton toState='general'></BackButton>
       <h2>Why do we need satellites?</h2>
       <div className={styles.block}>
@@ -160,20 +159,7 @@ export const SatelliteUsage = () => {
         </p>
         {countsByPurpose ? <UsageChart category={spaceObservation} data={countsByPurpose}></UsageChart> : ''}
       </div>
-      <div className={styles.block}>
-        <p>
-          <FilterButton
-            filter={technologyDevelopment}
-            active={activeFilter === technologyDevelopment}
-            clickHandler={handleFilter}
-          >
-            Technology development
-          </FilterButton>{' '}
-          to do: add description here
-        </p>
-        {countsByPurpose ? <UsageChart category={technologyDevelopment} data={countsByPurpose}></UsageChart> : ''}
-      </div>
       <BackButton toState='general'></BackButton>
-    </div>
+    </InfoPanel>
   );
 };

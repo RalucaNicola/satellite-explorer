@@ -3,7 +3,7 @@ import * as styles from './SatelliteOwners.module.css';
 import dataStore from '../../stores/DataStore';
 import mapStore from '../../stores/MapStore';
 
-import { BackButton, FilterButton, CountriesChart, BarChart } from '../index';
+import { BackButton, FilterButton, CountriesChart, BarChart, InfoPanel } from '../index';
 
 import { useEffect, useState } from 'react';
 import { filterDefinition } from '../../config';
@@ -33,7 +33,7 @@ export const SatelliteOwners = () => {
     };
   }, []);
   return (
-    <div className={styles.menu}>
+    <InfoPanel>
       <BackButton toState='general'></BackButton>
       <h2>Who owns all the satellites?</h2>
       <div className={styles.block}>
@@ -132,6 +132,6 @@ export const SatelliteOwners = () => {
       </div>
 
       <BackButton toState='general'></BackButton>
-    </div>
+    </InfoPanel>
   );
 };

@@ -1,8 +1,10 @@
 @import 'https://js.arcgis.com/4.22/@arcgis/core/assets/esri/themes/dark/main.css';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+/* variables */
+
 :root {
-  --background-color: rgba(0, 0, 0, 0.8);
+  --background-color: rgba(0, 0, 0, 0.6);
   --pink: rgb(239, 138, 223);
   --pink-background: rgba(239, 138, 223, 0.6);
   --blue: rgb(109, 189, 232);
@@ -40,6 +42,8 @@ body,
   font-family: var(--font-source-sans);
 }
 
+/* link style */
+
 a {
   text-decoration: none;
   color: white;
@@ -52,32 +56,26 @@ a:hover {
   color: var(--primary);
 }
 
-.rightPanel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--background-color);
-  height: clamp(250px, 30%, 400px);
-  color: white;
-  padding: 20px;
-  font-size: 1.1rem;
-  overflow: auto;
-  line-height: 1.9rem;
-  box-sizing: border-box;
-}
-
-@media (min-width: 550px) {
-  .rightPanel {
-    top: 0;
-    width: clamp(350px, 40%, 600px);
-    padding: 40px;
-    left: revert;
-    height: revert;
-    box-sizing: border-box;
-  }
-}
-
 .noUnderline {
   border: none;
+}
+
+/* scrollbar styles */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.8);
 }

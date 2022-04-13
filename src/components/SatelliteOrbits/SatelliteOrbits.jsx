@@ -1,6 +1,6 @@
 import * as styles from './SatelliteOrbits.module.css';
 
-import { BackButton, FilterButton, OrbitsChart } from '../index';
+import { BackButton, FilterButton, OrbitsChart, InfoPanel } from '../index';
 
 import { filterDefinition } from '../../config';
 import dataStore from '../../stores/DataStore';
@@ -37,7 +37,7 @@ export function SatelliteOrbits() {
     mapStore.goToPosition(filter);
   };
   return (
-    <div className={styles.menu}>
+    <InfoPanel>
       <BackButton toState='general'></BackButton>
       <h2>What is the altitude of a satellite?</h2>
       <div className={styles.block}>
@@ -106,6 +106,6 @@ export function SatelliteOrbits() {
         designed to provide communications and remote sensing coverage over high latitudes.
       </div>
       <BackButton toState='general'></BackButton>
-    </div>
+    </InfoPanel>
   );
 }

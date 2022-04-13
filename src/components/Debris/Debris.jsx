@@ -1,5 +1,5 @@
 import * as styles from './Debris.module.css';
-import { BackButton, FilterButton } from '../index';
+import { BackButton, FilterButton, InfoPanel } from '../index';
 import mapStore from '../../stores/MapStore';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +19,7 @@ export const Debris = () => {
     mapStore.filterSpaceDebris(filter);
   };
   return (
-    <div className={styles.menu}>
+    <InfoPanel>
       <BackButton toState='general'></BackButton>
       <h2>A space debris crisis?</h2>
       <div className={styles.block}>
@@ -126,6 +126,6 @@ export const Debris = () => {
         <p>Privateer - Steve Wozniak's startup plans to launch hundreds of satellites to study space debris.</p>
       </div>
       <BackButton toState='general'></BackButton>
-    </div>
+    </InfoPanel>
   );
 };
