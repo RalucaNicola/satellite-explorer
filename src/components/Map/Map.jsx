@@ -33,6 +33,7 @@ export const Map = observer(() => {
             directShadowsEnabled: false
           }
         },
+        ui: { components: [] },
         constraints: {
           altitude: {
             max: 1e9
@@ -44,15 +45,13 @@ export const Map = observer(() => {
           }
         }
       });
-      view.ui.empty('top-left');
-      view.ui.add(['navigation-toggle', 'compass', 'zoom'], 'top-right');
       let homeWidget = new Home({
         view: view,
         viewpoint: new Viewpoint({
           camera: initialCamera
         })
       });
-      view.ui.add(homeWidget, 'top-right');
+      view.ui.add(['navigation-toggle', 'compass', 'zoom', homeWidget], 'top-right');
       window.view = view;
 
       const popupTemplate = {

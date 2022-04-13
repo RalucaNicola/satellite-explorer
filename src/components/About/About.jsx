@@ -22,6 +22,10 @@ export function About() {
           </p>
           <h2>Data</h2>
           <p>
+            Firefly basemap by John Nelson. Basemap data providers: Esri, Maxar, Earthstar Geographics, CNES/Airbus DS,
+            USDA, USGS, AeroGRID, IGN, and the GIS User Community.
+          </p>
+          <p>
             Metadata for active satellites from the{' '}
             <a href='https://www.ucsusa.org/resources/satellite-database'>
               Union of Concerned Scientists Satellite Database
@@ -29,7 +33,7 @@ export function About() {
             .
           </p>
           <p>
-            Latest Two Line Element (TLE) files for active satellites from{' '}
+            Two Line Element (TLE) files for active satellites from{' '}
             <a href='https://celestrak.com/NORAD/elements/active.txt'>CelesTrack</a>.
           </p>
         </div>
