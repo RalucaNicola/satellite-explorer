@@ -80,12 +80,12 @@ class SatelliteStore {
   }
 
   setTimeInterval(satellite, satelliteGraphics) {
-    if (this.followSatellite) {
+    if (this.followSatellite && satellite.featuredSatellite) {
       this.followCamera({ animate: true });
     }
     this.timeInterval = window.setInterval(() => {
       this.updateSatellitePosition(satellite, satelliteGraphics);
-      if (this.followSatellite) {
+      if (this.followSatellite && satellite.featuredSatellite) {
         this.followCamera({ animate: false });
       }
     }, 500);
