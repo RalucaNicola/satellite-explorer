@@ -26,12 +26,12 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       infoCollection[norad] = {
         name: items[1],
         official_name: items[2],
-        country_UN_registry: items[3],
+        // country_UN_registry: items[3],
         country_operator: items[4],
         operator: items[5],
-        users: items[6],
+        // users: items[6],
         purpose: items[7],
-        detailed_purpose: items[8],
+        // detailed_purpose: items[8],
         orbit_class: items[9],
         orbit_type: items[10],
         perigee: items[12],
@@ -39,14 +39,14 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
         //eccentricity: items[14],
         //inclination: items[15],
         //period: items[16],
-        launch_mass: items[17],
-        dry_mass: items[18],
-        power: items[19],
+        // launch_mass: items[17],
+        // dry_mass: items[18],
+        // power: items[19],
         launch_date: items[20],
-        expected_lifetime: items[21],
-        contractor: items[22],
+        // expected_lifetime: items[21],
+        // contractor: items[22],
         launch_site: items[24],
-        launch_vehicle: items[25],
+        // launch_vehicle: items[25],
         cospar: items[26],
         norad: items[27]
       };
@@ -155,6 +155,9 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
           display = 0;
           break;
         }
+      }
+      if (sat.norad == 39084) {
+        display = 1;
       }
       if (display === 1) {
         unique++;
@@ -311,8 +314,8 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
   }
 
   function main() {
-    //updateSatellites();
-    updateDebris();
+    updateSatellites();
+    //updateDebris();
   }
 
   main();

@@ -1,12 +1,9 @@
 export const fields = [
   { name: 'name', metadataIndex: 1, type: 'string' },
   { name: 'official_name', metadataIndex: 2, type: 'string' },
-  { name: 'country_UN_registry', metadataIndex: 3, type: 'string' },
   { name: 'country_operator', metadataIndex: 4, type: 'string' },
   { name: 'operator', metadataIndex: 5, type: 'string' },
-  { name: 'users', metadataIndex: 6, type: 'string' },
   { name: 'purpose', metadataIndex: 7, type: 'string' },
-  { name: 'detailed_purpose', metadataIndex: 8, type: 'string' },
   { name: 'orbit_class', metadataIndex: 9, type: 'string' },
   { name: 'orbit_type', metadataIndex: 10, type: 'string' },
   { name: 'perigee', metadataIndex: 12, type: 'double' },
@@ -14,17 +11,11 @@ export const fields = [
   { name: 'eccentricity', metadataIndex: 14, type: 'double' },
   { name: 'inclination', metadataIndex: 15, type: 'double' },
   { name: 'period', metadataIndex: 16, type: 'double' },
-  { name: 'launch_mass', metadataIndex: 17, type: 'double' },
-  { name: 'dry_mass', metadataIndex: 18, type: 'double' },
-  { name: 'power', metadataIndex: 19, type: 'double' },
   { name: 'launch_date', metadataIndex: 20, type: 'date' },
   { name: 'expected_lifetime', metadataIndex: 21, type: 'string' },
-  { name: 'contractor', metadataIndex: 22, type: 'string' },
   { name: 'launch_site', metadataIndex: 24, type: 'string' },
-  { name: 'launch_vehicle', metadataIndex: 25, type: 'string' },
   { name: 'cospar', metadataIndex: 26, type: 'string' },
-  { name: 'norad', metadataIndex: 27, type: 'long' },
-  { name: 'source', metadataIndex: 29, type: 'string' }
+  { name: 'norad', metadataIndex: 27, type: 'long' }
 ];
 
 export const pink = [239, 138, 223];
