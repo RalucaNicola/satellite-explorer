@@ -22,7 +22,7 @@
   padding-right: 10px;
 }
 
-@media (min-width: 550px) {
+@media (min-width: 700px) {
   .panel {
     top: 0;
     width: clamp(350px, 40%, 600px);

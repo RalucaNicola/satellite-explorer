@@ -1,4 +1,15 @@
-.menuContainer {
+.menu {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+}
+
+.mobileMenuContainer {
   position: absolute;
   left: 0;
   top: 0;
@@ -14,10 +25,7 @@
   text-align: center;
 }
 
-.menuButton {
-  position: absolute;
-  left: 15px;
-  top: 25px;
+.mobileMenuButton {
   background: none;
   border: none;
   cursor: pointer;
@@ -25,15 +33,31 @@
   padding: 0;
 }
 
+.desktopMenuContainer {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .mobileMenuButton {
+    display: none;
+  }
+  .desktopMenuContainer {
+    display: revert;
+  }
+  .menu {
+    justify-content: flex-start;
+  }
+}
+
 .animatedLine {
   stroke-dasharray: 35;
   stroke-dashoffset: 17.5;
 }
 
-.menuButton:hover .animatedLine {
+.mobileMenuButton:hover .animatedLine {
   animation: dash 200ms linear forwards;
 }
-.menuButton:hover .menuLine {
+.mobileMenuButton:hover .menuLine {
   stroke: var(--orange);
 }
 
@@ -50,11 +74,21 @@
   stroke-width: 3px;
   transition: stroke 200ms;
 }
-.menuList {
+.mobileMenuList,
+.desktopMenuList {
   list-style-type: none;
   padding-left: 0;
+  margin: 0;
 }
 
+.desktopMenuList > li {
+  display: inline;
+  padding: 10px;
+}
+
+.title {
+  font-size: 1.5rem;
+}
 .closeButton {
   position: absolute;
   top: 25px;

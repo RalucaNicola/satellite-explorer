@@ -40,9 +40,9 @@ const App = observer(() => {
       {appStore.activeState === 'search' && <Search />}
       {appStore.activeState === 'satellite' && <Satellite />}
       {appStore.activeState === 'owners' && <SatelliteOwners />}
-      {appStore.displayAbout && <About />}
       <Menu></Menu>
       {appStore.isLoading && <Loading></Loading>}
+      {appStore.displayAbout && <About />}
     </>
   );
 });

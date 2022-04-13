@@ -48,14 +48,14 @@ class AppStore {
 
   setAppPadding() {
     if (this.activeState === 'general' || this.activeState === 'about') {
-      this.appPadding = [0, 0, 0, 0];
+      this.appPadding = [50, 0, 0, 0];
     } else {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      if (width < 550) {
-        this.appPadding = [0, 0, clamp(250, 30, 400, height), 0];
+      if (width < 700) {
+        this.appPadding = [50, 0, clamp(250, 30, 400, height), 0];
       } else {
-        this.appPadding = [0, clamp(350, 40, 600, width), 0, 0];
+        this.appPadding = [50, clamp(350, 40, 600, width), 0, 0];
       }
     }
     mapStore.setMapPadding(this.appPadding);

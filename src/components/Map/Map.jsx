@@ -24,7 +24,7 @@ export const Map = observer(() => {
       const view = new SceneView({
         container: mapDiv.current,
         map: map,
-        qualityProfile: window.innerWidth < 550 || window.innerHeight < 550 ? 'low' : 'high',
+        qualityProfile: window.innerWidth < 700 || window.innerHeight < 700 ? 'low' : 'high',
         environment: {
           starsEnabled: true,
           atmosphereEnabled: true,
@@ -51,7 +51,7 @@ export const Map = observer(() => {
           camera: initialCamera
         })
       });
-      view.ui.add(['navigation-toggle', 'compass', 'zoom', homeWidget], 'top-right');
+      view.ui.add(['compass', 'zoom', homeWidget], 'top-left');
       window.view = view;
 
       const popupTemplate = {
