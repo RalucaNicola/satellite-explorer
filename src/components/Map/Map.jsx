@@ -24,7 +24,7 @@ export const Map = observer(() => {
       const view = new SceneView({
         container: mapDiv.current,
         map: map,
-        qualityProfile: window.innerWidth < 700 || window.innerHeight < 700 ? 'low' : 'high',
+        qualityProfile: 'high',
         environment: {
           starsEnabled: true,
           atmosphereEnabled: true,
