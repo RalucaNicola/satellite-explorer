@@ -9,7 +9,8 @@ import {
   Debris,
   Search,
   Satellite,
-  About
+  About,
+  Title
 } from './components';
 import { parseHash } from './utils/urlUtils';
 import appStore from './stores/AppStore';
@@ -34,6 +35,7 @@ const App = observer(() => {
     <>
       <Map></Map>
       <Menu></Menu>
+      <Title isLoading={appStore.isLoading}></Title>
       {appStore.activeState === 'general' && <Stories />}
       {appStore.activeState === 'usage' && <SatelliteUsage />}
       {appStore.activeState === 'orbits' && <SatelliteOrbits />}

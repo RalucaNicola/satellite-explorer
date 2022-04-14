@@ -11,15 +11,6 @@
   align-items: center;
 }
 
-.loadingPanel img {
-  max-width: 400px;
-  z-index: 2;
-}
-
-.loadingPanel p {
-  color: white;
-  z-index: 2;
-  padding: 0 40px;
-  text-align: center;
-  font-size: 0.9rem;
+.logo {
+  max-width: 300px;
 }

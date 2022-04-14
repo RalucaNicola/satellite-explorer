@@ -12,9 +12,6 @@ export const Menu = () => {
   return (
     <>
       <div className={styles.menu}>
-        <div className={styles.title}>
-          <Link toState='general'>SatelliteExplorer</Link>
-        </div>
         <button onClick={toggleMenu} className={styles.mobileMenuButton}>
           <svg width='50px' height='25px'>
             <line className={styles.menuLine} x1='1.5' y1='1.5' x2='36.5' y2='1.5' />

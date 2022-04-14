@@ -1,10 +1,10 @@
 .menu {
   position: absolute;
-  left: 0;
+  left: 170px;
   top: 0;
   right: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 20px;
   align-items: center;
 }
@@ -90,9 +90,6 @@
   text-shadow: 0 0 2px rgb(0 0 0 / 80%);
 }
 
-.title {
-  font-size: 1.5rem;
-}
 .closeButton {
   position: absolute;
   top: 25px;

@@ -1,0 +1,28 @@
+.title {
+  position: absolute;
+  top: 20%;
+  left: 20px;
+  right: 20px;
+  color: white;
+  text-align: center;
+  z-index: 2;
+  font-size: 2rem;
+  transition: left 2s, right 2s, font-size 2s, top 1s;
+}
+
+.title span {
+  color: var(--primary);
+}
+
+.title.left {
+  top: 13px;
+  left: 20px;
+  right: calc(100% - 20px);
+  font-size: 1.4rem;
+}
+
+@media (min-width: 700px) {
+  .title {
+    font-size: 4rem;
+  }
+}

@@ -5,6 +5,7 @@ export * from './FilterButton/FilterButton';
 export * from './StoryCard/StoryCard';
 export * from './Link/Link';
 export * from './InfoPanel/InfoPanel';
+export * from './Title/Title';
 
 /* charting components */
 export * from './UsageChart/UsageChart';
