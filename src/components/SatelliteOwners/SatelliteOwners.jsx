@@ -14,10 +14,10 @@ const oneweb = 'oneweboperator';
 const planetlabs = 'planetlabs';
 const nofilter = 'nofilter';
 
+const { countsByCountry, countsByOperator } = dataStore;
+
 export const SatelliteOwners = () => {
   const [activeFilter, setActiveFilter] = useState(null);
-  const [countsByCountry, setCountsByCountry] = useState(null);
-  const [countsByOperator, setCountsByOperator] = useState(null);
 
   const handleFilter = ({ filter }) => {
     if (filter === nofilter) {
@@ -30,8 +30,6 @@ export const SatelliteOwners = () => {
   };
 
   useEffect(() => {
-    setCountsByCountry(dataStore.getCountsByCountry());
-    setCountsByOperator(dataStore.getCountsByOperator());
     mapStore.setVisualizationType('owners');
     mapStore.goToPosition('home');
     return () => {

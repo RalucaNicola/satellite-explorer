@@ -4,7 +4,6 @@
   left: 0;
   right: 0;
   background-color: var(--background-color);
-  color: white;
   max-height: 30%;
   overflow: auto;
 }

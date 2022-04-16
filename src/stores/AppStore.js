@@ -63,6 +63,7 @@ class AppStore {
 
   setSearchString(searchString) {
     this.searchString = searchString;
+    console.log(searchString);
   }
 }
 

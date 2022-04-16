@@ -5,6 +5,14 @@ import { purposeCategories, orbitTypes } from '../config';
 class DataStore {
   data = satellites;
 
+  constructor() {
+    this.countsByPurpose = this.getCountsByPurpose();
+    this.countsByOrbit = this.getCountsByOrbit();
+    this.countsByCountry = this.getCountsByCountry();
+    this.countsByOperator = this.getCountsByOperator();
+    this.featuredSatellites = this.getFeaturedSatellites();
+  }
+
   getCountsByPurpose() {
     const meta = this.data.map((d) => d.metadata);
     const countsByPurpose = {};
@@ -67,6 +75,10 @@ class DataStore {
       return b.value - a.value;
     });
     return countsByOperator;
+  }
+
+  getFeaturedSatellites() {
+    return this.data.filter((satellite) => satellite.featuredSatellite);
   }
 
   getSatelliteById(id) {

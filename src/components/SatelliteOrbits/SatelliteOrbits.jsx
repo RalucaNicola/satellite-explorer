@@ -16,15 +16,15 @@ const heo = 'heo';
 const molniya = 'molniya';
 const geostationary = 'geostationary';
 
+const { countsByOrbit } = dataStore;
+
 export function SatelliteOrbits() {
-  const [countsByOrbit, setCountsByOrbit] = useState(null);
   const [activeFilter, setActiveFilter] = useState(false);
   useEffect(() => {
     mapStore.setVisualizationType('orbits');
     mapStore.drawOrbitRanges(true);
     mapStore.setMapFilter('1=2');
     mapStore.goToPosition('home');
-    setCountsByOrbit(dataStore.getCountsByOrbit());
     return () => {
       mapStore.drawOrbitRanges(false);
       mapStore.setMapFilter(null);

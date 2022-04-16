@@ -11,7 +11,6 @@ import { observer } from 'mobx-react';
 export const Search = observer(() => {
   const [searchString, setSearchString] = useState('');
   const [searchResults, setSearchResults] = useState(null);
-  const [featuredSatellites, setFeaturedSatellites] = useState([]);
 
   const getSuggestions = (searchString) => {
     let filteredData = [...dataStore.data];
@@ -25,8 +24,13 @@ export const Search = observer(() => {
         );
       });
       const limitedFilteredData = filteredData.slice(0, 30);
+      console.log('results:');
+      limitedFilteredData.forEach((f) =>
+        console.log(`${f.metadata.name}, ${f.metadata.official_name}, ${f.metadata.operator}`)
+      );
       setSearchResults(limitedFilteredData);
     } else {
+      console.log('no results');
       setSearchResults(null);
     }
   };
@@ -38,7 +42,6 @@ export const Search = observer(() => {
       setSearchString(appStore.searchString);
       getSuggestions(appStore.searchString);
     }
-    setFeaturedSatellites(dataStore.data.filter((satellite) => satellite.featuredSatellite));
   }, []);
 
   function inputHandler(event) {
@@ -46,7 +49,7 @@ export const Search = observer(() => {
     setSearchString(filter);
     if (filter && filter.length > 2) {
       appStore.setSearchString(filter);
-      getSuggestions(searchString);
+      getSuggestions(filter);
     } else {
       appStore.setSearchString(null);
       setSearchResults(null);
@@ -96,8 +99,8 @@ export const Search = observer(() => {
         ) : (
           <>
             <p>Featured satellites</p>
-            {featuredSatellites ? (
-              <FeaturedSatellitesList satellites={featuredSatellites}></FeaturedSatellitesList>
+            {dataStore.featuredSatellites ? (
+              <FeaturedSatellitesList satellites={dataStore.featuredSatellites}></FeaturedSatellitesList>
             ) : (
               'Loading...'
             )}

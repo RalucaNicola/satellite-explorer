@@ -13,16 +13,16 @@ const comm = 'communications';
 const eo = 'earthObservation';
 const so = 'spaceObservation';
 
+const { countsByPurpose } = dataStore;
+
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
-  const [countsByPurpose, setCountsByPurpose] = useState(null);
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;
     mapStore.setMapFilter(filterExpression);
   };
   useEffect(() => {
-    setCountsByPurpose(dataStore.getCountsByPurpose());
     handleFilter({ filter: nav });
     mapStore.setVisualizationType('usage');
     mapStore.goToPosition('home');
