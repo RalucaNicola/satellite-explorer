@@ -139,3 +139,15 @@ a.link:hover {
 .esri-popup__action-text {
   color: var(--font-color) !important;
 }
+
+.loadingAnimation {
+  padding: 0 8px;
+  box-sizing: border-box;
+  animation: rotating 2s linear infinite;
+}
+
+@keyframes rotating {
+  to {
+    transform: rotate(360deg);
+  }
+}

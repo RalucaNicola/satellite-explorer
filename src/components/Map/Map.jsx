@@ -58,13 +58,19 @@ export const Map = observer(() => {
           fillOpacity: 1
         }
       });
-      let homeWidget = new Home({
+      const homeWidget = new Home({
         view: view,
         viewpoint: new Viewpoint({
           camera: initialCamera
         })
       });
-      view.ui.add(['compass', 'zoom', homeWidget], 'top-left');
+
+      const loading = document.createElement('div');
+
+      loading.classList.add('loadingAnimation', 'esri-icon', 'esri-icon-loading-indicator');
+
+      view.ui.add(['compass', 'zoom', homeWidget, loading], 'top-left');
+
       window.view = view;
 
       const popupTemplate = {
@@ -101,6 +107,10 @@ export const Map = observer(() => {
       view.when(() => {
         mapStore.setView(view);
         appStore.setIsLoading(false);
+      });
+
+      view.watch('updating', (value) => {
+        loading.style.display = value ? 'block' : 'none';
       });
     }
 
