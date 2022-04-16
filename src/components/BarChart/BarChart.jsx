@@ -1,4 +1,3 @@
-import * as styles from './BarChart.module.css';
 import appStore from '../../stores/AppStore';
 import { BarChartComponent } from '../index';
 import { observer } from 'mobx-react';

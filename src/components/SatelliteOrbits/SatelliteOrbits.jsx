@@ -3,17 +3,18 @@ import * as styles from './SatelliteOrbits.module.css';
 import { BackButton, FilterButton, OrbitsChart, InfoPanel } from '../index';
 
 import { filterDefinition } from '../../config';
+import { kmToMiles, formatNumber } from '../../utils/utils';
 import dataStore from '../../stores/DataStore';
 import mapStore from '../../stores/MapStore';
 
 import { useEffect, useState } from 'react';
 
-const leo = filterDefinition.leo.id;
-const meo = filterDefinition.meo.id;
-const geo = filterDefinition.geo.id;
-const heo = filterDefinition.heo.id;
-const molniya = filterDefinition.molniya.id;
-const geostationary = filterDefinition.geostationary.id;
+const leo = 'leo';
+const meo = 'meo';
+const geo = 'geo';
+const heo = 'heo';
+const molniya = 'molniya';
+const geostationary = 'geostationary';
 
 export function SatelliteOrbits() {
   const [countsByOrbit, setCountsByOrbit] = useState(null);
@@ -54,7 +55,7 @@ export function SatelliteOrbits() {
         )}
       </div>
       <div className={styles.block}>
-        <p className={styles.orbitTitle}>160 km / 111 miles</p>
+        <p className={styles.orbitTitle}>160 km / {kmToMiles(160)} miles</p>
         <div className={styles.orbitContent}>
           <FilterButton filter={leo} active={activeFilter === leo} clickHandler={handleFilter}>
             Low Earth Orbit satellites
@@ -65,7 +66,7 @@ export function SatelliteOrbits() {
         </div>
       </div>
       <div className={styles.block}>
-        <p className={styles.orbitTitle}>2,000 km / 1,243 miles</p>
+        <p className={styles.orbitTitle}>2,000 km / {formatNumber(kmToMiles(2000))} miles</p>
         <div className={styles.orbitContent}>
           <FilterButton filter={meo} active={activeFilter === meo} clickHandler={handleFilter}>
             Medium Earth Orbit satellites
@@ -76,9 +77,9 @@ export function SatelliteOrbits() {
           onboard electronic systems.
         </div>
       </div>
-      <p className={styles.orbitTitle}>35,000 km / 22,369 miles</p>
+      <p className={styles.orbitTitle}>35,000 km / {formatNumber(kmToMiles(35000))} miles</p>
       <div className={styles.block}>
-        <p className={styles.orbitTitle}>35,786 km / 22,236 miles</p>
+        <p className={styles.orbitTitle}>35,786 km / {formatNumber(kmToMiles(35786))} miles</p>
         <div className={styles.orbitContent}>
           <FilterButton filter={geo} active={activeFilter === geo} clickHandler={handleFilter}>
             Geosynchronous Orbit satellites
@@ -91,7 +92,7 @@ export function SatelliteOrbits() {
           which is a circular geosynchronous orbit in Earth's equatorial plane (their inclination is zero).
         </div>
       </div>
-      <p className={styles.orbitTitle}>35,786 km / 22,236 miles</p>
+      <p className={styles.orbitTitle}>35,786 km / {formatNumber(kmToMiles(35786))} miles</p>
 
       <div className={styles.block}>
         <FilterButton filter={heo} active={activeFilter === heo} clickHandler={handleFilter}>

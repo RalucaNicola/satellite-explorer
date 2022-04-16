@@ -35,7 +35,7 @@
 
 .gotoButton {
   background: none;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   border: 1px solid white;
   color: white;
   padding: 5px 10px;

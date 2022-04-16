@@ -1,6 +1,7 @@
 import * as styles from './BarChartComponent.module.css';
 
 import { scaleLinear } from 'd3-scale';
+import { formatNumber } from '../../utils/utils';
 
 export const BarChartComponent = ({ rank, total, title, value, y = 0, width, rgbColor }) => {
   const xScale = scaleLinear().domain([0, total]).range([0, width]);
@@ -13,8 +14,8 @@ export const BarChartComponent = ({ rank, total, title, value, y = 0, width, rgb
       <text x='0' y={y - 5} className={styles.label}>
         {`${rank + 1}. ${title}`}
       </text>
-      <text textAnchor='end' x={width - 5} y={y + barHeight / 1.5} className={styles.label}>
-        {value} satellites, {percentage.toFixed(2)}% of total
+      <text textAnchor='end' x={width - 3} y={y + barHeight / 1.5} className={styles.label}>
+        {formatNumber(value)} satellites, {percentage.toFixed(2)}% of total
       </text>
     </>
   );

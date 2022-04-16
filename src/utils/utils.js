@@ -1,3 +1,11 @@
+export const formatNumber = (number) => {
+  return new Intl.NumberFormat('en-US').format(number);
+};
+
+export const kmToMiles = (number) => {
+  return Math.round(number * 0.621371);
+};
+
 const checkForNaN = (value) => {
   if (isNaN(value)) {
     return null;

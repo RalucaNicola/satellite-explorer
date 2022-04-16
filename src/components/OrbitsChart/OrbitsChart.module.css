@@ -1,9 +1,9 @@
 .caption {
-  font-size: 0.8rem;
+  font-size: var(--small-font-size);
 }
 
 .label {
-  font-size: 0.8rem;
+  font-size: var(--small-font-size);
   font-weight: bold;
   fill: white;
 }

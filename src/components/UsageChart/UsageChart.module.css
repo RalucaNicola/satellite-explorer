@@ -1,9 +1,10 @@
 .caption {
-  font-size: 0.8rem;
+  font-size: var(--small-font-size);
+  line-height: var(--small-line-height);
 }
 
 .label {
-  font-size: 0.8rem;
+  font-size: var(--small-font-size);
   font-weight: bold;
-  fill: white;
+  fill: var(--font-color);
 }

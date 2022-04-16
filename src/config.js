@@ -61,144 +61,94 @@ export const orbitTypes = {
 export const filterDefinition = {
   navigation: {
     color: pink,
-    lightColor: lightPink,
-    id: 'navigation',
     expression: `purpose IN ('${purposeCategories.navigation.join("','")}')`
   },
   gps: {
     color: pink,
-    lightColor: lightPink,
-    id: 'gps',
     expression: `LOWER(name) LIKE '%gps%'`
   },
   glonass: {
     color: pink,
-    lightColor: lightPink,
-    id: 'glonass',
     expression: `LOWER(name) LIKE '%glonass%'`
   },
   beidou: {
     color: pink,
-    lightColor: lightPink,
-    id: 'beidou',
     expression: `LOWER(name) LIKE '%beidou%'`
   },
   galileo: {
     color: pink,
-    lightColor: lightPink,
-    id: 'galileo',
     expression: `LOWER(name) LIKE '%galileo%'`
   },
   communications: {
     color: blue,
-    lightColor: lightBlue,
-    id: 'communications',
     expression: `purpose IN ('${purposeCategories.communications.join("','")}')`
   },
   starlink: {
     color: blue,
-    lightColor: lightBlue,
-    id: 'starlink',
     expression: `LOWER(name) LIKE '%starlink%'`
   },
   oneweb: {
     color: blue,
-    lightColor: lightBlue,
-    id: 'oneweb',
     expression: `LOWER(name) LIKE '%oneweb%'`
   },
   iridium: {
     color: blue,
-    lightColor: lightBlue,
-    id: 'iridium',
     expression: `LOWER(name) LIKE '%iridium%'`
   },
   globalstar: {
     color: blue,
-    lightColor: lightBlue,
-    id: 'globalstar',
     expression: `LOWER(name) LIKE '%globalstar%'`
   },
   earthObservation: {
     color: green,
-    lightColor: lightGreen,
-    id: 'earthObservation',
     expression: `purpose IN ('${purposeCategories.earthObservation.join("','")}') `
   },
   landsat: {
     color: green,
-    lightColor: lightGreen,
-    id: 'landsat',
     expression: `LOWER(name) LIKE '%landsat%'`
   },
   doves: {
     color: green,
-    lightColor: lightGreen,
-    id: 'doves',
     expression: `LOWER(name) LIKE '%dove%'`
   },
   spaceObservation: {
-    color: orange,
-    lightColor: lightOrange,
-    id: 'spaceObservation',
+    color: purple,
     expression: `purpose IN ('${purposeCategories.spaceObservation.join("','")}') `
   },
-  technologyDevelopment: {
-    id: 'technologyDevelopment',
-    color: purple,
-    lightColor: lightPurple,
-    expression: `purpose IN ('${purposeCategories.technologyDevelopment.join("','")}') `
-  },
   molniya: {
-    id: 'molniya',
     color: [255, 255, 255, 0.7],
-    lightColor: [255, 255, 255, 0.7],
     expression: `orbit_type = 'Molniya'`
   },
   leo: {
-    id: 'leo',
     color: orbitOrange,
-    lightColor: [...orbitOrange, 0.7],
     expression: `orbit_class = 'LEO'`
   },
   meo: {
-    id: 'meo',
     color: orbitYellow,
-    lightColor: [...orbitYellow, 0.7],
     expression: `orbit_class = 'MEO'`
   },
   geo: {
-    id: 'geo',
     color: orbitGreen,
-    lightColor: [...orbitGreen, 0.7],
     expression: `orbit_class = 'GEO'`
   },
   heo: {
-    id: 'heo',
     color: orbitYellow,
-    lightColor: [...orbitYellow, 0.7],
     expression: `orbit_class = 'Elliptical'`
   },
   geostationary: {
-    id: 'geostationary',
     color: orbitYellow,
-    lightColor: [...orbitYellow, 0.7],
     expression: `orbit_class ='GEO' AND inclination < 0.04 AND inclination > 0.00`
   },
   spacex: {
-    id: 'spacex',
     expression: `operator='SpaceX'`
   },
-  onewebsatellites: {
-    id: 'onewebsatellites',
+  oneweboperator: {
     expression: `operator='OneWeb Satellites'`
   },
   planetlabs: {
-    id: 'planetlabs',
     expression: `operator='Planet Labs, Inc.'`
   },
   nofilter: {
-    id: 'nofilter',
     expression: null
   }
 };
@@ -240,11 +190,6 @@ export const usageRendererConfig = {
     },
     {
       value: 'spaceObservation',
-      color: orange,
-      lightColor: lightOrange
-    },
-    {
-      value: 'technologyDevelopment',
       color: purple,
       lightColor: lightPurple
     }

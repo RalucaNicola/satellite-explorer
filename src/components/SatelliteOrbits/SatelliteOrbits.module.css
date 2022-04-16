@@ -1,11 +1,11 @@
 .block {
-  margin: 40px 0;
+  margin: var(--article-margin) 0;
 }
 
 .orbitTitle {
   display: flex;
   flex-direction: row;
-  font-size: 0.8rem;
+  font-size: var(--small-font-size);
   font-weight: bold;
 }
 
@@ -13,7 +13,7 @@
 .orbitTitle:after {
   content: '';
   flex: 1 1;
-  border-bottom: 1px solid var(--outline-gray);
+  border-bottom: 1px solid var(--border-gray);
   margin: auto;
 }
 
@@ -26,8 +26,8 @@
 }
 
 .orbitContent {
-  border-left: 1px dashed var(--outline-gray);
+  border-left: 1px dashed var(--border-gray);
   padding: 30px 20px;
-  margin-top: -28px;
+  margin-top: -35px;
   margin-bottom: -55px;
 }

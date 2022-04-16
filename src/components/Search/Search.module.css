@@ -3,7 +3,7 @@
   height: 2rem;
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   color: white;
   padding: 0 1rem;
   box-sizing: border-box;

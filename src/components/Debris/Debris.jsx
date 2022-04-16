@@ -15,7 +15,11 @@ export const Debris = () => {
   }, []);
 
   const handleFilter = ({ filter }) => {
-    setActiveFilter(filter);
+    if (filter === 'all') {
+      setActiveFilter(null);
+    } else {
+      setActiveFilter(filter);
+    }
     mapStore.filterSpaceDebris(filter);
   };
   return (
@@ -114,10 +118,12 @@ export const Debris = () => {
               earlier.
             </div>
           </li>
-        </ul>
-        <FilterButton filter='all' active={activeFilter === 'all'} clickHandler={handleFilter}>
-          Remove filters
-        </FilterButton>
+        </ul>{' '}
+        <div style={{ textAlign: 'center' }}>
+          <FilterButton filter='all' clickHandler={handleFilter}>
+            Remove filters
+          </FilterButton>
+        </div>
       </div>
       <div className={styles.block}>
         <h3>Who cleans up the space?</h3>

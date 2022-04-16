@@ -1,13 +1,13 @@
 .block {
-  margin: 40px 0;
+  margin: var(--article-margin) 0;
 }
 
 .shortInfo {
-  font-size: 0.9rem;
-  line-height: 1.3rem;
-  margin: 0 0 20px 0;
+  font-size: var(--small-font-size);
+  line-height: var(--small-line-height);
+  margin: 0 0 10px 0;
 }
 
 .shortInfo > p {
-  margin: 0 0 10px 0;
+  margin: 0 0 5px 0;
 }

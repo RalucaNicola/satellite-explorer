@@ -5,6 +5,7 @@
 
 :root {
   --background-color: rgba(0, 0, 0, 0.6);
+  --background-color-opaque: #020204;
   --pink: rgb(239, 138, 223);
   --pink-background: rgba(239, 138, 223, 0.6);
   --blue: rgb(109, 189, 232);
@@ -15,13 +16,8 @@
   --purple-background: rgba(137, 109, 232, 0.6);
   --green: rgb(193, 232, 118);
   --green-background: rgba(193, 232, 118, 0.6);
-  --font-source-sans: 'Poppins', sans-serif;
-  --primary: rgb(255, 118, 0);
-  --primary-transparent: rgba(255, 118, 0, 0.6);
-
   --perigee-yellow: rgb(255, 217, 0);
   --apogee-blue: rgb(66, 135, 245);
-
   --orbit-orange: rgb(255, 147, 0);
   --orbit-orange-background: rgb(255, 147, 0, 0.6);
   --orbit-yellow: rgb(255, 206, 0);
@@ -29,7 +25,28 @@
   --orbit-green: rgb(111, 170, 0);
   --orbit-green-background: rgba(111, 170, 0, 0.6);
 
-  --outline-gray: rgb(100, 100, 100);
+  --font-source-sans: 'Poppins', sans-serif;
+  --font-color: rgba(255, 255, 255, 0.9);
+  --small-font-size: 0.8rem;
+  --small-line-height: 1rem;
+  --medium-font-size: 1.1rem;
+  --medium-line-height: 1.8rem;
+  --large-font-size: 1.8rem;
+
+  --primary: rgb(255, 118, 0);
+  --primary-transparent: rgba(255, 118, 0, 0.6);
+
+  --transition-time: 500ms;
+
+  --padding-desktop-large: 40px;
+  --padding-mobile-large: 20px;
+  --padding-small: 5px;
+  --padding-medium: 15px;
+  --article-margin: 40px;
+  --paragraph-margin: 20px;
+
+  --border-radius: 5px;
+  --border-gray: rgb(200, 200, 200);
 }
 
 html,
@@ -41,20 +58,32 @@ body,
   width: 100%;
   background-color: black;
   font-family: var(--font-source-sans);
+  color: var(--font-color);
+}
+
+p {
+  margin: var(--paragraph-margin) 0;
 }
 
 /* link style */
 
 a {
   text-decoration: none;
-  color: white;
-  transition: color 500ms;
-  border-bottom: 1px solid white;
+  color: var(--font-color);
+  transition: color var(--transition-time);
   cursor: pointer;
 }
 
 a:hover {
   color: var(--primary);
+}
+
+a.link {
+  color: var(--primary);
+}
+
+a.link:hover {
+  color: var(--primary-transparent);
 }
 
 .noUnderline {
@@ -74,7 +103,7 @@ a:hover {
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border: none;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -89,6 +118,8 @@ a:hover {
 
 .esri-widget {
   background-color: transparent !important;
+  color: var(--font-color) !important;
+  font-family: var(--font-source-sans) !important;
 }
 
 .esri-popup__main-container {
@@ -103,4 +134,8 @@ a:hover {
 
 .esri-view-width-less-than-medium .esri-popup__action-text {
   display: revert !important;
+}
+
+.esri-popup__action-text {
+  color: var(--font-color) !important;
 }

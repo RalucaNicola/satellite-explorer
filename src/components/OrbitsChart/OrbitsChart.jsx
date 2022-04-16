@@ -3,7 +3,7 @@ import * as styles from './OrbitsChart.module.css';
 import { scaleLinear } from 'd3-scale';
 
 import { filterDefinition } from '../../config';
-import { getChartWidth } from '../../utils/utils';
+import { getChartWidth, formatNumber } from '../../utils/utils';
 import appStore from '../../stores/AppStore';
 
 import { observer } from 'mobx-react';
@@ -24,8 +24,8 @@ export const OrbitsChart = observer(({ data, type, title }) => {
       <svg width={width} height={height}>
         <rect x='0' y='0' height={height} width={width} fill='rgba(255, 255, 255, 0.3)'></rect>
         <rect x='0' y='0' height={height} width={x(data[type])} fill={rgbColor}></rect>
-        <text x='15' y={height / 1.4} className={styles.label}>
-          {data[type]} satellites ({percentage.toFixed(2)}%)
+        <text x='20' y={height / 1.4} className={styles.label}>
+          {formatNumber(data[type])} satellites ({percentage.toFixed(2)}%)
         </text>
       </svg>
     </>

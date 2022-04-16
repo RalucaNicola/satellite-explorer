@@ -1,11 +1,10 @@
 .title {
   position: absolute;
-  top: 20%;
+  top: 15%;
   left: 20px;
   right: 20px;
-  color: white;
   text-align: center;
-  z-index: 2;
+  z-index: 1;
   font-size: 2rem;
   transition: left 2s, right 2s, font-size 2s, top 1s;
 }

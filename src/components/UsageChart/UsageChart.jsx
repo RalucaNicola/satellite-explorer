@@ -3,14 +3,14 @@ import * as styles from './UsageChart.module.css';
 import { scaleLinear } from 'd3-scale';
 
 import { filterDefinition } from '../../config';
-import { getChartWidth } from '../../utils/utils';
+import { getChartWidth, formatNumber } from '../../utils/utils';
 import appStore from '../../stores/AppStore';
 
 import { observer } from 'mobx-react';
 
 const height = 15;
 
-export const UsageChart = observer(({ data, category }) => {
+export const UsageChart = observer(({ data, category, label }) => {
   const width = getChartWidth(appStore.appPadding);
   const x = scaleLinear().domain([0, data.total]).range([0, width]);
   const categoryColor = filterDefinition[category].color;
@@ -22,11 +22,11 @@ export const UsageChart = observer(({ data, category }) => {
         <rect x='0' y='0' height={height} width={width} fill='rgba(255, 255, 255, 0.3)'></rect>
         <rect x='0' y='0' height={height} width={x(data[category])} fill={rgbColor}></rect>
         <text x={x(data[category]) + 5} y={height / 1.2} className={styles.label}>
-          {data[category]} satellites
+          {formatNumber(data[category])} satellites
         </text>
       </svg>
       <div className={styles.caption}>
-        {percentage.toFixed(2)}% of total satellites used for {category} purposes.
+        {percentage.toFixed(2)}% of total satellites used for {label} purposes.
       </div>
     </>
   );

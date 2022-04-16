@@ -5,11 +5,11 @@
   bottom: 0;
   background: linear-gradient(180deg, rgba(0, 20, 31, 0.6) 0%, rgba(47, 98, 116, 0.6) 100%);
   height: clamp(250px, 30%, 400px);
-  color: white;
-  padding: 20px;
-  font-size: 1.1rem;
+  color: var(--font-color);
+  padding: var(--padding-mobile-large);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-line-height);
   overflow: auto;
-  line-height: 1.9rem;
   box-sizing: border-box;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -26,7 +26,7 @@
   .panel {
     top: 0;
     width: clamp(350px, 40%, 600px);
-    padding: 40px;
+    padding: var(--padding-desktop-large);
     left: revert;
     height: revert;
     box-sizing: border-box;

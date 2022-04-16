@@ -15,14 +15,15 @@
   top: 0;
   bottom: 0;
   right: 0;
-  background-color: var(--background-color);
+  background-color: var(--background-color-opaque);
   color: white;
-  padding: 40px;
-  font-size: 1.6rem;
+  padding: 80px 40px 40px 41px;
+  font-size: var(--large-font-size);
   overflow: auto;
   line-height: 4rem;
   box-sizing: border-box;
   text-align: center;
+  z-index: 2;
 }
 
 .mobileMenuButton {

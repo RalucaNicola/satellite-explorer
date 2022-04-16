@@ -1,5 +1,5 @@
 .loadingPanel {
-  background-color: #020204;
+  background-color: var(--background-color);
   position: absolute;
   top: 0;
   left: 0;
@@ -12,5 +12,5 @@
 }
 
 .logo {
-  max-width: 300px;
+  max-width: 250px;
 }

@@ -8,10 +8,10 @@ import { Accordion, UsageChart, BackButton, FilterButton, InfoPanel } from '../i
 
 import { useEffect, useState } from 'react';
 
-const navigation = filterDefinition.navigation.id;
-const communications = filterDefinition.communications.id;
-const earthObservation = filterDefinition.earthObservation.id;
-const spaceObservation = filterDefinition.spaceObservation.id;
+const nav = 'navigation';
+const comm = 'communications';
+const eo = 'earthObservation';
+const so = 'spaceObservation';
 
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -23,7 +23,7 @@ export const SatelliteUsage = () => {
   };
   useEffect(() => {
     setCountsByPurpose(dataStore.getCountsByPurpose());
-    handleFilter({ filter: navigation });
+    handleFilter({ filter: nav });
     mapStore.setVisualizationType('usage');
     mapStore.goToPosition('home');
     return () => {
@@ -42,15 +42,14 @@ export const SatelliteUsage = () => {
       </div>
       <div className={styles.block}>
         <p>
-          <FilterButton filter={navigation} active={activeFilter === navigation} clickHandler={handleFilter}>
+          <FilterButton filter={nav} active={activeFilter === nav} clickHandler={handleFilter}>
             Localization
           </FilterButton>{' '}
           via satellite navigation systems is widely used in almost all industries: transportation, emergency response,
           farming, banking, military, science. These satellites determine the location, velocity and current time of
           small electronic devices (like the ones in our smart phones).
         </p>
-        {countsByPurpose ? <UsageChart category={navigation} data={countsByPurpose}></UsageChart> : ''}
-        <Accordion title='Global navigation satellite systems'>
+        <Accordion title='Discover global navigation satellite systems'>
           <p>
             <FilterButton filter='gps' active={activeFilter === 'gps'} clickHandler={handleFilter}>
               GPS
@@ -77,16 +76,17 @@ export const SatelliteUsage = () => {
             - created by the European Union through the Europen Space Agency. It went live in 2016.
           </p>
         </Accordion>
+        {countsByPurpose ? <UsageChart category={nav} data={countsByPurpose} label={nav}></UsageChart> : ''}
       </div>
       <div className={styles.block}>
         <p>
-          <FilterButton filter={communications} active={activeFilter === communications} clickHandler={handleFilter}>
+          <FilterButton filter={comm} active={activeFilter === comm} clickHandler={handleFilter}>
             Communications
           </FilterButton>{' '}
           satellites are used for television, radio and internet broadcasting. This sector increased lately with more
           and more companies launching satellites to provide internet everywhere on the globe.
         </p>
-        {countsByPurpose ? <UsageChart category={communications} data={countsByPurpose}></UsageChart> : ''}
+        {countsByPurpose ? <UsageChart category={comm} data={countsByPurpose} label={comm}></UsageChart> : ''}
         <Accordion title='Biggest communications satellite systems'>
           <p>
             <FilterButton filter='starlink' active={activeFilter === 'starlink'} clickHandler={handleFilter}>
@@ -117,17 +117,17 @@ export const SatelliteUsage = () => {
       </div>
       <div className={styles.block}>
         <p>
-          <FilterButton
-            filter={earthObservation}
-            active={activeFilter === earthObservation}
-            clickHandler={handleFilter}
-          >
+          <FilterButton filter={eo} active={activeFilter === eo} clickHandler={handleFilter}>
             Earth Observation
           </FilterButton>{' '}
           satellites provide information about earth resources, weather, climate and environmental monitoring. Imaging
           satellites produce high-resolution data of almost the entire landmass on earth.
         </p>
-        {countsByPurpose ? <UsageChart category={earthObservation} data={countsByPurpose}></UsageChart> : ''}
+        {countsByPurpose ? (
+          <UsageChart category={eo} data={countsByPurpose} label='earth observation'></UsageChart>
+        ) : (
+          ''
+        )}
         <Accordion title='Earth observation satellite systems'>
           <p>
             <FilterButton filter='landsat' active={activeFilter === 'landsat'} clickHandler={handleFilter}>
@@ -147,17 +147,17 @@ export const SatelliteUsage = () => {
       </div>
       <div className={styles.block}>
         <p>
-          <FilterButton
-            filter={spaceObservation}
-            active={activeFilter === spaceObservation}
-            clickHandler={handleFilter}
-          >
+          <FilterButton filter={so} active={activeFilter === so} clickHandler={handleFilter}>
             Space Observation
           </FilterButton>{' '}
           also benefits from satellite data: satellite telescopes have been critical to understanding phenomena like
           pulsars and black holes as well as measuring the age of the universe.
         </p>
-        {countsByPurpose ? <UsageChart category={spaceObservation} data={countsByPurpose}></UsageChart> : ''}
+        {countsByPurpose ? (
+          <UsageChart category={so} data={countsByPurpose} label='space observation'></UsageChart>
+        ) : (
+          ''
+        )}
       </div>
       <BackButton toState='general'></BackButton>
     </InfoPanel>

@@ -3,10 +3,11 @@
   border: 1px solid #ffffff;
   color: #ffffff;
   cursor: pointer;
-  padding: 8px;
+  padding: 4px 10px;
   margin: 4px 0;
-  font-size: 1rem;
-  border-radius: 5px;
+  font-size: var(--medium-font-size);
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-time);
 }
 
 .filterButton:hover,
@@ -83,24 +84,12 @@
 
 .spaceObservation {
   composes: filterButton;
-  border-color: var(--orange);
-  color: var(--orange);
-}
-
-.spaceObservation:hover,
-.spaceObservation.active {
-  background-color: var(--orange-background);
-  color: white;
-}
-
-.technologyDevelopment {
-  composes: filterButton;
   border-color: var(--purple);
   color: var(--purple);
 }
 
-.technologyDevelopment:hover,
-.technologyDevelopment.active {
+.spaceObservation:hover,
+.spaceObservation.active {
   background-color: var(--purple-background);
   color: white;
 }
