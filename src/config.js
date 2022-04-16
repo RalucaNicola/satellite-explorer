@@ -222,25 +222,6 @@ export const countriesRendererConfig = {
   ]
 };
 
-export const debrisLabelingConfig = [
-  {
-    name: 'COSMOS 2251',
-    color: '#a7c636'
-  },
-  {
-    name: 'COSMOS 1408',
-    color: '#43abeb'
-  },
-  {
-    name: 'IRIDIUM 33',
-    color: '#ffd159'
-  },
-  {
-    name: 'FENGYUN 1C',
-    color: '#ff8200'
-  }
-];
-
 export const initialCamera = {
   position: {
     x: 0,

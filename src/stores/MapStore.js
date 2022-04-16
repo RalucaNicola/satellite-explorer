@@ -1,15 +1,10 @@
 import WebScene from '@arcgis/core/WebScene';
-import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import Graphic from '@arcgis/core/Graphic';
-import { Point } from '@arcgis/core/geometry';
-import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
-import { fields, orbitOrange, orbitYellow, orbitGreen, debrisLabelingConfig } from '../config';
+import { orbitOrange, orbitYellow, orbitGreen } from '../config';
 import { action, makeObservable, observable } from 'mobx';
 import {
   getGeneralLineRenderer,
-  getGeneralPointRenderer,
   getUsageLineRenderer,
   getCountryLineRenderer,
   fadeIn,
@@ -18,14 +13,10 @@ import {
   fadeOutSymbol
 } from '../utils/visualizationUtils';
 
-import { getSatelliteLocation } from '../utils/satPositionUtils';
-
 import { initialCamera, leoCamera } from '../config';
 
 import satelliteStore from './SatelliteStore';
-import dataStore from './DataStore';
 
-const generalPointRenderer = getGeneralPointRenderer();
 const generalLineRenderer = getGeneralLineRenderer();
 const usageLineRenderer = getUsageLineRenderer();
 const orbitLineRenderer = getGeneralLineRenderer(0.3);
@@ -34,110 +25,32 @@ const countriesLineRenderer = getCountryLineRenderer();
 class MapStore {
   map = null;
   view = null;
-  satellitesLayer = null;
   orbitsLayer = null;
-  layerViews = null;
+  orbitsLV = null;
   visualizationType = null;
   mapFilter = null;
   mapPadding = null;
-  currentTimeForSatellitePosition = null;
   debrisLayer = null;
   debrisLV = null;
 
   constructor() {
     makeObservable(this, {
       map: observable.ref,
-      setMap: action,
-      currentTimeForSatellitePosition: observable.ref,
-      setCurrentTimeForSatellitePosition: action
+      setMap: action
     });
-    this.initializeMap(dataStore.data);
+    this.initializeMap();
   }
 
-  getSatellitesLayer(data) {
-    const NOW = new Date();
-    this.setCurrentTimeForSatellitePosition(NOW);
-    const satelliteGraphics = [];
-    for (let index = 0; index < data.length; index++) {
-      const sat = data[index];
-      const { satrec, metadata } = sat;
-      const coordinate = getSatelliteLocation(satrec, NOW);
-      if (!coordinate) {
-        continue;
-      }
-      const geometry = new Point(coordinate);
-
-      const attributes = {
-        index,
-        ...metadata
-      };
-
-      satelliteGraphics.push(
-        new Graphic({
-          attributes,
-          geometry
-        })
-      );
-    }
-    const objectIdField = 'index';
-    const layerFields = [
-      { name: 'index', type: 'oid' },
-      ...fields.map((field) => {
-        return { name: field.name, type: field.type };
-      })
-    ];
-    return new FeatureLayer({
-      title: 'satellites',
-      fields: layerFields,
-      geometryType: 'point',
-      source: satelliteGraphics,
-      objectIdField,
-      spatialReference: {
-        wkid: 4326
-      },
-      labelsVisible: false,
-      screenSizePerspectiveEnabled: true,
-      renderer: generalPointRenderer,
-      visible: false
-    });
-  }
-
-  updateCurrentSatellites(data) {
-    const NOW = new Date();
-    this.setCurrentTimeForSatellitePosition(NOW);
-    const updateFeatures = [];
-    for (let index = 0; index < data.length; index++) {
-      const sat = data[index];
-      const { satrec } = sat;
-      const coordinate = getSatelliteLocation(satrec, NOW);
-      if (!coordinate) {
-        continue;
-      }
-      const geometry = new Point(coordinate);
-      updateFeatures.push({
-        attributes: { index },
-        geometry
-      });
-    }
-    this.satellitesLayer.applyEdits({ updateFeatures }).catch(console.error);
-  }
-
-  setCurrentTimeForSatellitePosition(value) {
-    this.currentTimeForSatellitePosition = value;
-  }
-
-  initializeMap(data) {
+  initializeMap() {
     const map = new WebScene({
       portalItem: {
         id: '53411b46fdbe4161b356030eae9905e0'
       }
     });
-
-    this.satellitesLayer = this.getSatellitesLayer(data);
     this.orbitRangesLayer = new GraphicsLayer({
       title: 'orbitRanges'
     });
-    map.addMany([this.satellitesLayer, this.orbitRangesLayer]);
+    map.addMany([this.orbitRangesLayer]);
     map.loadAll().then(() => {
       map.allLayers.forEach((layer) => {
         if (layer.title === 'orbits') {
@@ -146,32 +59,6 @@ class MapStore {
         if (layer.title === 'debris') {
           this.debrisLayer = layer;
           this.debrisLayer.screenSizePerspectiveEnabled = false;
-          // this.debrisLayer.labelingInfo = debrisLabelingConfig.map((deb) => {
-          //   return new LabelClass({
-          //     where: `name = '${deb.name}'`,
-          //     labelExpressionInfo: { expression: '$feature.name' },
-          //     labelPlacement: 'center-right',
-          //     symbol: {
-          //       type: 'label-3d',
-          //       symbolLayers: [
-          //         {
-          //           type: 'text',
-          //           material: {
-          //             color: [255, 255, 255]
-          //           },
-          //           background: {
-          //             color: deb.color
-          //           },
-          //           font: {
-          //             size: 11,
-          //             family: 'sans-serif'
-          //           }
-          //         }
-          //       ]
-          //     }
-          //   });
-          // });
-          // this.debrisLayer.labelsVisible = true;
         }
       });
       this.setMap(map);
@@ -199,11 +86,9 @@ class MapStore {
 
   setLayerViews() {
     (async () => {
-      const orbitLV = await this.view.whenLayerView(this.orbitsLayer);
-      const satelliteLV = await this.view.whenLayerView(this.satellitesLayer);
+      this.orbitsLV = await this.view.whenLayerView(this.orbitsLayer);
       this.debrisLV = await this.view.whenLayerView(this.debrisLayer);
-      this.layerViews = [orbitLV, satelliteLV];
-      this.filterLayerViews(this.mapFilter);
+      //this.filterOrbits(this.mapFilter);
     })();
   }
 
@@ -225,7 +110,7 @@ class MapStore {
 
   setVisualizationType(type) {
     this.visualizationType = type;
-    if (this.orbitsLayer && this.satellitesLayer) {
+    if (this.orbitsLayer) {
       this.styleLayers(type);
     }
   }
@@ -256,18 +141,14 @@ class MapStore {
       case 'search':
         this.orbitsLayer.visible = false;
         this.debrisLayer.visible = false;
-        this.satellitesLayer.visible = true;
-        fadeIn(this.satellitesLayer);
         break;
       case 'usage':
-        this.satellitesLayer.visible = false;
         this.debrisLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = usageLineRenderer;
         fadeIn(this.orbitsLayer);
         break;
       case 'general':
-        this.satellitesLayer.visible = false;
         this.debrisLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = generalLineRenderer;
@@ -275,25 +156,21 @@ class MapStore {
         break;
       case 'satellite':
         this.debrisLayer.visible = false;
-        this.satellitesLayer.visible = false;
         this.orbitsLayer.visible = false;
         break;
       case 'orbits':
         this.debrisLayer.visible = false;
-        this.satellitesLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = orbitLineRenderer;
         fadeIn(this.orbitsLayer);
         break;
       case 'owners':
-        this.satellitesLayer.visible = false;
         this.debrisLayer.visible = false;
         this.orbitsLayer.visible = true;
         this.orbitsLayer.renderer = countriesLineRenderer;
         fadeIn(this.orbitsLayer);
         break;
       case 'debris':
-        this.satellitesLayer.visible = false;
         this.orbitsLayer.visible = false;
         this.debrisLayer.visible = true;
     }
@@ -301,18 +178,16 @@ class MapStore {
 
   setMapFilter(mapFilter, effect = true) {
     this.mapFilter = mapFilter;
-    if (this.layerViews) {
-      this.filterLayerViews(mapFilter, effect);
-    }
+    this.filterOrbits(mapFilter, effect);
   }
 
-  filterLayerViews(filterExpression, effect) {
-    this.layerViews.forEach((lyrView) => {
-      lyrView.filter = { where: filterExpression };
-      if (effect && lyrView.layer.opacity === 1) {
-        fadeIn(lyrView.layer);
+  filterOrbits(filterExpression, effect) {
+    if (this.orbitsLV) {
+      this.orbitsLV.filter = { where: filterExpression };
+      if (effect && this.orbitsLV.layer.opacity === 1) {
+        fadeIn(this.orbitsLV.layer);
       }
-    });
+    }
   }
 
   drawOrbitRanges(rangesVisible) {

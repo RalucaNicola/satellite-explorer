@@ -1,6 +1,6 @@
 import * as styles from './Search.module.css';
 
-import { BackButton, SatellitesResults, InfoPanel } from '../index';
+import { SatellitesResults, FeaturedSatellitesList } from '../index';
 import appStore from '../../stores/AppStore';
 import dataStore from '../../stores/DataStore';
 import mapStore from '../../stores/MapStore';
@@ -54,74 +54,56 @@ export const Search = observer(() => {
   }
 
   return (
-    <InfoPanel>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <BackButton
-            toState='general'
+    <div className={styles.container}>
+      <button
+        className={styles.closeButton}
+        onClick={() => {
+          appStore.setActiveState('general');
+          appStore.setSearchString(null);
+        }}
+      >
+        <img src='./assets/close.svg'></img>
+      </button>
+      <div className={styles.header}>
+        <h2>Search satellites</h2>
+        <input
+          className={styles.searchInput}
+          type='text'
+          onChange={inputHandler}
+          placeholder='Search by name or operator'
+          value={appStore.searchString ? appStore.searchString : searchString}
+        ></input>
+        {searchString ? (
+          <button
+            className={styles.clearButton}
             onClick={() => {
-              appStore.setSearchString(null);
+              inputHandler({ target: { value: '' } });
             }}
-          ></BackButton>
-          <h2>Search satellites</h2>
-          <input
-            className={styles.searchInput}
-            type='text'
-            onChange={inputHandler}
-            placeholder='Search by name or operator'
-            value={appStore.searchString ? appStore.searchString : searchString}
-          ></input>
-          {searchString ? (
-            <button
-              className={styles.clearButton}
-              onClick={() => {
-                inputHandler({ target: { value: '' } });
-              }}
-            >
-              <img src='./assets/close.svg' />
-            </button>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className={styles.results}>
-          {searchResults ? (
-            searchResults.length ? (
-              <SatellitesResults satellites={searchResults}></SatellitesResults>
-            ) : (
-              <p>No results found</p>
-            )
-          ) : (
-            <>
-              <p>Featured satellites</p>
-              {featuredSatellites ? (
-                <SatellitesResults satellites={featuredSatellites}></SatellitesResults>
-              ) : (
-                'Loading...'
-              )}
-            </>
-          )}
-        </div>
-        <div className={styles.footer}>
-          <div className={styles.updatesContainer}>
-            Satellite positions generated on{' '}
-            {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(mapStore.positionTime)}.{' '}
-            <a
-              onClick={() => {
-                mapStore.updateCurrentSatellites(dataStore.data);
-              }}
-            >
-              Update satellite positions
-            </a>
-          </div>
-          <BackButton
-            toState='general'
-            onClick={() => {
-              appStore.setSearchString(null);
-            }}
-          ></BackButton>
-        </div>
+          >
+            <img src='./assets/close.svg' />
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
-    </InfoPanel>
+      <div className={styles.results}>
+        {searchResults ? (
+          searchResults.length ? (
+            <SatellitesResults satellites={searchResults}></SatellitesResults>
+          ) : (
+            <p>No results found</p>
+          )
+        ) : (
+          <>
+            <p>Featured satellites</p>
+            {featuredSatellites ? (
+              <FeaturedSatellitesList satellites={featuredSatellites}></FeaturedSatellitesList>
+            ) : (
+              'Loading...'
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 });

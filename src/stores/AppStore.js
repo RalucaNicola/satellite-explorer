@@ -47,7 +47,7 @@ class AppStore {
   }
 
   setAppPadding() {
-    if (this.activeState === 'general' || this.activeState === 'about') {
+    if (this.activeState === 'general' || this.activeState === 'about' || this.activeState === 'search') {
       this.appPadding = [50, 0, 0, 0];
     } else {
       const width = window.innerWidth;
@@ -63,13 +63,6 @@ class AppStore {
 
   setSearchString(searchString) {
     this.searchString = searchString;
-    if (searchString) {
-      mapStore.setMapFilter(
-        `LOWER(name) LIKE '%${searchString}%' OR LOWER(official_name) LIKE '%${searchString}%' OR LOWER(operator) LIKE '%${searchString}%'`
-      );
-    } else {
-      mapStore.setMapFilter(null, false);
-    }
   }
 }
 

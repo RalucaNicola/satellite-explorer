@@ -1,0 +1,54 @@
+.satelliteLink {
+  border: none;
+}
+
+.listResults {
+  max-height: 90%;
+  list-style-type: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--padding-medium);
+  justify-content: center;
+}
+
+.listResults h5 {
+  margin: 0;
+  line-height: initial;
+}
+
+.listResults p {
+  font-size: 0.8rem;
+  line-height: initial;
+  margin: 0;
+}
+
+.imageContainer {
+  width: 100%;
+}
+
+.imageContainer img {
+  width: 100%;
+  image-rendering: -webkit-optimize-contrast;
+  transition: transform var(--transition-time);
+}
+
+.listResults > li {
+  padding: 1em;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  max-width: 200px;
+}
+.listResults > li:hover img {
+  transform: scale(1.1);
+}
+
+.listResults > li:hover {
+  cursor: pointer;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-medium);
+}

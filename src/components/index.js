@@ -16,6 +16,7 @@ export * from './BarChartComponent/BarChartComponent';
 
 /* larger components */
 export * from './SatellitesResults/SatellitesResults';
+export * from './FeaturedSatellitesList/FeaturedSatellitesList';
 export * from './Map/Map';
 export * from './Menu/Menu';
 export * from './Stories/Stories';

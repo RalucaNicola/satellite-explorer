@@ -2,7 +2,9 @@
   "25544": {
     "norad": 25544,
     "model": "./assets/iss/scene.gltf",
-    "info": "The International Space Station (ISS) is a habitable artificial satellite in low Earth orbit. It is a multinational collaborative project involving five participating space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada).The station serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields.",
+    "info": "The International Space Station (ISS) is a habitable artificial satellite in low Earth orbit. It is a multinational collaborative project involving five participating space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada). The station serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields.",
+    "image": "./assets/iss/image.jpg",
+    "shortInfo": "A multinational habitable satellite where astronauts conduct research in astrobiology, astronomy, meteorology, physics and other fields.",
     "links": [
       {
         "url": "https://blogs.nasa.gov/spacestation/",
@@ -18,6 +20,8 @@
     "norad": 49260,
     "model": "./assets/landsat/scene.gltf",
     "info": "Landsat 9 — a partnership between NASA and the U.S. Geological Survey — continues the Landsat program's critical role in monitoring, understanding and managing the land resources needed to sustain human life.",
+    "image": "./assets/landsat/image.jpg",
+    "shortInfo": "Landsat is a system of satellites for moderate-resolution optical remote sensing for land, coastal areas and shallow waters. Its mission is to monitor, understand and manage Earth's resources.",
     "links": [
       {
         "title": "Landsat 9 mission page",
