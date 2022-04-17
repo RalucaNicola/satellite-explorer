@@ -58,7 +58,7 @@ export function About() {
               <a className='link' href='https://celestrak.com/NORAD/elements/active.txt' target='_blank'>
                 CelesTrack
               </a>{' '}
-              based on the <a href='https://en.wikipedia.org/wiki/Satellite_Catalog_Number'>NORAD number</a>. Around 300
+              based on the <a href='https://en.wikipedia.org/wiki/Satellite_Catalog_Number'>NORAD number</a>. Some
               satellites could not be matched to TLE data and are therefore not displayed in the application.
             </p>
             <p>
