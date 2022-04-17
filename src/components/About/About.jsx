@@ -35,7 +35,7 @@ export function About() {
             </p>
           </div>
           <div className={styles.block}>
-            <h2 className={styles.title}>Data</h2>
+            <h2 className={styles.title}>Basemap data</h2>
             <p>
               Firefly basemap by{' '}
               <a className='link' href='https://www.esri.com/arcgis-blog/author/j_nelson/' target='_blank'>
@@ -44,25 +44,29 @@ export function About() {
               . Basemap data providers: Esri, Maxar, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN,
               and the GIS User Community.
             </p>
+          </div>
+
+          <div className={styles.block}>
+            <h2 className={styles.title}>Satellite data</h2>
             <p>
-              Metadata for active satellites from the{' '}
+              The rich metadata for the active satellites is derived from the{' '}
               <a className='link' href='https://www.ucsusa.org/resources/satellite-database' target='_blank'>
                 Union of Concerned Scientists Satellite Database
               </a>
-              .
-            </p>
-            <p>
-              Two Line Element (TLE) files for active satellites from{' '}
+              . This dataset was updated last on January 1, 2022. The metadata is merged with two line element (TLE)
+              data for active satellites from{' '}
               <a className='link' href='https://celestrak.com/NORAD/elements/active.txt' target='_blank'>
                 CelesTrack
-              </a>
-              .
+              </a>{' '}
+              based on the <a href='https://en.wikipedia.org/wiki/Satellite_Catalog_Number'>NORAD number</a>. Around 300
+              satellites could not be matched to TLE data and are therefore not displayed in the application.
             </p>
             <p>
+              The computations for orbits and satellite positions are made using{' '}
               <a className='link' href='https://github.com/shashwatak/satellite-js' target='_blank'>
                 Satellite.js
               </a>{' '}
-              to calculate the satellite position and orbits.
+              .
             </p>
           </div>
           <div className={styles.block}>
