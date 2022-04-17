@@ -40,6 +40,7 @@ class AppStore {
       mapStore.setVisualizationType('general');
       mapStore.setMapFilter(null);
     }
+    mapStore.clearPopup();
   }
 
   setDisplayAbout(value) {
@@ -63,7 +64,6 @@ class AppStore {
 
   setSearchString(searchString) {
     this.searchString = searchString;
-    console.log(searchString);
   }
 }
 

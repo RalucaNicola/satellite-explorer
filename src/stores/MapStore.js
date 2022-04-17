@@ -88,7 +88,6 @@ class MapStore {
     (async () => {
       this.orbitsLV = await this.view.whenLayerView(this.orbitsLayer);
       this.debrisLV = await this.view.whenLayerView(this.debrisLayer);
-      //this.filterOrbits(this.mapFilter);
     })();
   }
 
@@ -179,6 +178,7 @@ class MapStore {
   setMapFilter(mapFilter, effect = true) {
     this.mapFilter = mapFilter;
     this.filterOrbits(mapFilter, effect);
+    this.clearPopup();
   }
 
   filterOrbits(filterExpression, effect) {
@@ -200,6 +200,13 @@ class MapStore {
       } else {
         this.orbitRangesLayer.removeAll();
       }
+    }
+  }
+
+  clearPopup() {
+    if (this.view) {
+      this.view.popup.clear();
+      this.view.popup.close();
     }
   }
 
