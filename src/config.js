@@ -14,6 +14,7 @@ export const fields = [
   { name: 'launch_date', metadataIndex: 20, type: 'date' },
   { name: 'expected_lifetime', metadataIndex: 21, type: 'string' },
   { name: 'launch_site', metadataIndex: 24, type: 'string' },
+  { name: 'launch_vehicle', metadataIndex: 25, type: 'string' },
   { name: 'cospar', metadataIndex: 26, type: 'string' },
   { name: 'norad', metadataIndex: 27, type: 'long' }
 ];

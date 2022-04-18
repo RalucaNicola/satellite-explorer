@@ -2,7 +2,7 @@ import * as styles from './Satellite.module.css';
 
 import { BackButton, InfoPanel } from '../index';
 
-import { formatOrbitClass } from '../../utils/utils';
+import { formatNumber, formatOrbitClass, kmToMiles } from '../../utils/utils';
 import { observer } from 'mobx-react';
 import satelliteStore from '../../stores/SatelliteStore';
 import mapStore from '../../stores/MapStore';
@@ -23,15 +23,20 @@ export const Satellite = observer(() => {
   const [featured, setFeatured] = useState(null);
   useEffect(() => {
     if (satelliteStore.selectedSatellite) {
-      setAttr(satelliteStore.selectedSatellite.metadata);
       setFeatured(satelliteStore.selectedSatellite.featuredSatellite);
       mapStore.setVisualizationType('satellite');
     }
     return () => {
       satelliteStore.setSelectedSatellite(null);
-      satelliteStore.followSatellite = true;
+      satelliteStore.followSatellite = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (satelliteStore.selectedSatellite) {
+      setAttr(satelliteStore.selectedSatellite.metadata);
+    }
+  }, [satelliteStore.selectedSatellite]);
 
   return (
     <InfoPanel>
@@ -41,20 +46,23 @@ export const Satellite = observer(() => {
           <h2>{attr.official_name}</h2>
           {featured ? <p>{featured.info}</p> : <></>}
           <div className={styles.itemValue}>
-            <img src='./assets/current_location.png' className={styles.legendImage}></img>
-            Current satellite location on{' '}
-            {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(
-              satelliteStore.currentTime
-            )}
-            .{' '}
-            <button
-              className={styles.gotoButton}
-              onClick={() => {
-                satelliteStore.gotoPosition('satellite');
-              }}
-            >
-              Go to current location
-            </button>{' '}
+            <div className={styles.positionInfo}>
+              {!featured ? <img src='./assets/current_location.png' className={styles.legendImage}></img> : <></>}
+              <span>Current satellite location on </span>{' '}
+              {new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(
+                satelliteStore.currentTime
+              )}
+            </div>
+            <div className={styles.centerButtonContainer}>
+              <button
+                className={styles.gotoButton}
+                onClick={() => {
+                  satelliteStore.gotoPosition('satellite');
+                }}
+              >
+                Go to current location
+              </button>{' '}
+            </div>
             {featured ? (
               <div>
                 Follow satellite
@@ -99,29 +107,35 @@ export const Satellite = observer(() => {
           <ListItem field='Orbital parameters' value={formatOrbitClass(attr.orbit_class)}>
             <div className={styles.itemValue}>
               <img src='./assets/perigee.png' className={styles.legendImage}></img>
-              <span>Perigee</span> - the satellite is {attr.perigee} km away from the Earth surface at its closest point
-              on the orbit.{' '}
-              <button
-                className={styles.gotoButton}
-                onClick={() => {
-                  satelliteStore.gotoPosition('perigee');
-                }}
-              >
-                Go to perigee
-              </button>
+              <span>Perigee</span> - the satellite is {formatNumber(attr.perigee)} km /{' '}
+              {formatNumber(kmToMiles(attr.perigee))} miles away from the Earth surface at its closest point on the
+              orbit.{' '}
+              <div className={styles.centerButtonContainer}>
+                <button
+                  className={styles.gotoButton}
+                  onClick={() => {
+                    satelliteStore.gotoPosition('perigee');
+                  }}
+                >
+                  Go to perigee
+                </button>
+              </div>
             </div>
             <div className={styles.itemValue}>
               <img src='./assets/apogee.png' className={styles.legendImage}></img>
-              <span>Apogee</span> - the satellite is {attr.apogee} km away from the Earth surface at its furthest point
-              on the orbit.
-              <button
-                className={styles.gotoButton}
-                onClick={() => {
-                  satelliteStore.gotoPosition('apogee');
-                }}
-              >
-                Go to apogee
-              </button>
+              <span>Apogee</span> - the satellite is {formatNumber(attr.apogee)} km /{' '}
+              {formatNumber(kmToMiles(attr.apogee))} miles away from the Earth surface at its furthest point on the
+              orbit.
+              <div className={styles.centerButtonContainer}>
+                <button
+                  className={styles.gotoButton}
+                  onClick={() => {
+                    satelliteStore.gotoPosition('apogee');
+                  }}
+                >
+                  Go to apoge
+                </button>
+              </div>
             </div>
             <div className={styles.inclinationContainer}>
               <img src='./assets/inclination.png' className={styles.inclinationImage}></img>

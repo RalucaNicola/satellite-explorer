@@ -41,11 +41,19 @@
   padding: 5px 10px;
   cursor: pointer;
   vertical-align: top;
-  margin: 0 10px;
+  margin: 0;
 }
 
 .gotoButton:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+.centerButtonContainer {
+  padding: var(--padding-medium) 0;
+}
+
+.positionInfo {
+  font-size: var(--small-font-size);
 }
 
 .switchContainer {
