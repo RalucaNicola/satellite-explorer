@@ -140,6 +140,10 @@ a.link:hover {
   color: var(--font-color) !important;
 }
 
+.esri-component {
+  box-shadow: none !important;
+}
+
 .loadingAnimation {
   padding: 0 8px;
   box-sizing: border-box;

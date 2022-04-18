@@ -7,6 +7,7 @@
   z-index: 1;
   font-size: 2rem;
   transition: left 2s, right 2s, font-size 2s, top 1s;
+  text-shadow: 0 0 10px black;
 }
 
 .title span {
