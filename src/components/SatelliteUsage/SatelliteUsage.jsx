@@ -37,8 +37,7 @@ export const SatelliteUsage = () => {
       <h2>Why do we need satellites?</h2>
       <div className={styles.block}>
         Did you ever get your location on your phone or set the navigation system in the car to guide you to a
-        destination? Or did you buy products in an airplane using your credit card or used the internet connection on a
-        plane? Then you've definitely used satellites.
+        destination? Then you've definitely used satellites.
       </div>
       <div className={styles.block}>
         <p>

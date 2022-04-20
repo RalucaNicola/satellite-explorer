@@ -105,8 +105,6 @@ class SatelliteStore {
     const dx = futurePosition.x - this.satellitePosition.x;
     const dy = futurePosition.y - this.satellitePosition.y;
     this.heading = (-Math.atan2(dy, dx) / Math.PI) * 180 + 90;
-
-    console.log(this.heading);
   }
 
   setFollowingCamera() {

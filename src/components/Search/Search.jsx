@@ -16,21 +16,19 @@ export const Search = observer(() => {
     let filteredData = [...dataStore.data];
     if (searchString) {
       const searchRegExp = new RegExp(searchString, 'i');
+
       filteredData = dataStore.data.filter((satellite) => {
+        const stringNorad = String(satellite.metadata.norad);
         return (
           satellite.metadata.name.search(searchRegExp) >= 0 ||
           satellite.metadata.official_name.search(searchRegExp) >= 0 ||
-          satellite.metadata.operator.search(searchRegExp) >= 0
+          satellite.metadata.operator.search(searchRegExp) >= 0 ||
+          stringNorad.search(searchRegExp) >= 0
         );
       });
       const limitedFilteredData = filteredData.slice(0, 30);
-      console.log('results:');
-      limitedFilteredData.forEach((f) =>
-        console.log(`${f.metadata.name}, ${f.metadata.official_name}, ${f.metadata.operator}`)
-      );
       setSearchResults(limitedFilteredData);
     } else {
-      console.log('no results');
       setSearchResults(null);
     }
   };
@@ -73,7 +71,7 @@ export const Search = observer(() => {
           className={styles.searchInput}
           type='text'
           onChange={inputHandler}
-          placeholder='Search by name or operator'
+          placeholder='Search by name, operator or norad number'
           value={appStore.searchString ? appStore.searchString : searchString}
         ></input>
         {searchString ? (

@@ -70,15 +70,72 @@ export function About() {
             </p>
           </div>
           <div className={styles.block}>
-            <h2 className={styles.title}>Assets</h2>
-            <p>tbd</p>
+            <h2 className={styles.title}>3D Assets</h2>
+            <p>
+              <a className='link' href='https://skfb.ly/orFzK' target='_blank'>
+                International Space Station
+              </a>{' '}
+              by{' '}
+              <a className='link' href='https://sketchfab.com/slightlyintelligent' target='_blank'>
+                Jack Kelly
+              </a>
+              {' and '}
+              <a className='link' href='https://skfb.ly/6tGCP' target='_blank'>
+                EOES satellite Landsat
+              </a>{' '}
+              by{' '}
+              <a className='link' href='https://sketchfab.com/elliottebbs' target='_blank'>
+                wireframe
+              </a>
+              {' are licensed under '}
+              <a className='link' href='http://creativecommons.org/licenses/by/4.0/' target='_blank'>
+                Creative Commons Attribution
+              </a>
+              .
+            </p>
+          </div>
+          <div className={styles.block}>
+            <h2 className={styles.title}>Content</h2>
+            <p>Sources that we used to find information about satellites or to get inspiration:</p>
+            <ul>
+              <li>
+                News about Space{' '}
+                <a className='link' href='https://www.space.com/news' target='_blank'>
+                  www.space.com
+                </a>
+              </li>
+              <li>
+                European Space Agency -{' '}
+                <a className='link' href='https://www.esa.int/Applications' target='_blank'>
+                  Satellites and their applications
+                </a>
+              </li>
+              <li>
+                European Space Agency -{' '}
+                <a className='link' href='https://www.esa.int/Safety_Security/Clean_Space' target='_blank'>
+                  Clean space
+                </a>
+              </li>
+              <li>
+                A series of articles on orbit calculations{' '}
+                <a className='link' href='https://celestrak.com/columns/' target='_blank'>
+                  Satellite Times - Computers & Satellites
+                </a>
+              </li>
+              <li>
+                {' '}
+                <a className='link' href='https://earthobservatory.nasa.gov/features/OrbitsCatalog' target='_blank'>
+                  Catalog of Earth Satellite Orbits
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
         <footer className={styles.footer}>
           <p>
             Application developed by the{' '}
-            <a className='link' href='https://esriis.sharepoint.com/sites/GeoXC' target='_blank'>
+            <a className='link' href='https://www.esriurl.com/GeoXCDemos' target='_blank'>
               Geo Experience Center
             </a>{' '}
             at{' '}
@@ -87,8 +144,12 @@ export function About() {
             </a>
             .
           </p>
-          <img src='./assets/GeoXC-logo.png' className={styles.logoGeoxc}></img>
-          <img src='./assets/esri-logo.png' className={styles.logoEsri}></img>
+          <a href='https://www.esriurl.com/GeoXCDemos' target='_blank'>
+            <img src='./assets/GeoXC-logo.png' className={styles.logoGeoxc}></img>
+          </a>
+          <a href='https://www.esri.com' target='_blank'>
+            <img src='./assets/esri-logo.png' className={styles.logoEsri}></img>
+          </a>
         </footer>
       </div>
     </>

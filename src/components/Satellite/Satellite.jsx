@@ -86,7 +86,7 @@ export const Satellite = observer(() => {
               <ListItem field='Links'>
                 {featured.links.map((link, index) => {
                   return (
-                    <a key={index} className={styles.newsLink} target='_blank' href={link.url}>
+                    <a key={index} className={`${styles.newsLink} link`} target='_blank' href={link.url}>
                       {link.title}
                     </a>
                   );
@@ -133,7 +133,7 @@ export const Satellite = observer(() => {
                     satelliteStore.gotoPosition('apogee');
                   }}
                 >
-                  Go to apoge
+                  Go to apogee
                 </button>
               </div>
             </div>
