@@ -51,6 +51,7 @@ class AppStore {
     if (value === 'general') {
       mapStore.setVisualizationType('general');
       mapStore.setMapFilter(null);
+      mapStore.goToPosition('home');
     }
     mapStore.clearPopup();
   }
