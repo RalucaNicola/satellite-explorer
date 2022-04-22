@@ -32,7 +32,6 @@ class AppStore {
   }
 
   get isLoading() {
-    console.log(this.viewLoading, this.dataLoading);
     return this.viewLoading || this.dataLoading;
   }
 

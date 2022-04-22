@@ -19,7 +19,6 @@ class DataStore {
   }
 
   getCountsByPurpose() {
-    console.log(this.data);
     const meta = this.data.map((d) => d.metadata);
     const countsByPurpose = {};
     countsByPurpose.total = meta.slice().length;
@@ -34,7 +33,6 @@ class DataStore {
         }
       });
     }
-    console.log(countsByPurpose);
     return countsByPurpose;
   }
 

@@ -96,7 +96,6 @@ export const Map = observer(() => {
 
       view.popup.on('trigger-action', (event) => {
         if (event.action.id === 'go-to') {
-          console.log(view.popup.viewModel.selectedFeature.attributes);
           const norad = view.popup.viewModel.selectedFeature.attributes.norad;
           const sat = dataStore.getSatelliteById(norad);
           appStore.setActiveState('satellite');
