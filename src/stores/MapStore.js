@@ -31,7 +31,6 @@ function startAnimation(view) {
 
   let animationFrameTask = addFrameTask({
     update: (ev) => {
-      console.log('updating');
       t += ev?.deltaTime ?? 0;
       update();
     }
