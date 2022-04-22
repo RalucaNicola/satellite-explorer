@@ -97,13 +97,12 @@ export function SatelliteOrbits() {
         <FilterButton filter={heo} active={activeFilter === heo} clickHandler={handleFilter}>
           Highly Elliptical Orbit satellites
         </FilterButton>{' '}
-        orbit the Earth on a long elliptical path. These type of satellites spend a significantly greater portion of
-        time over one hemisphere or the other. Many space observation satellites have a highly elliptical orbit. An
-        example of this type of orbit are the{' '}
+        orbit the Earth on a long elliptical path. These satellites spend a significantly greater portion of time over
+        one hemisphere or the other. For example, the{' '}
         <FilterButton filter={molniya} active={activeFilter === molniya} clickHandler={handleFilter}>
           Molniya orbits
         </FilterButton>{' '}
-        designed to provide communications and remote sensing coverage over high latitudes.
+        are designed to provide communications and remote sensing coverage over high latitudes.
       </div>
       <BackButton toState='general'></BackButton>
     </InfoPanel>

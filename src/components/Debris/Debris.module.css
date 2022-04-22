@@ -24,11 +24,15 @@ ul {
   padding-left: 1rem;
 }
 
+.collisionLegend {
+  white-space: nowrap;
+}
+
 .collisionLegend:before {
   content: '';
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   vertical-align: middle;
 }
 
@@ -38,7 +42,7 @@ h4 {
 }
 
 .blue {
-  color: #43abeb;
+  border-bottom: 1px solid #43abeb;
 }
 
 .blue:before {
@@ -46,7 +50,7 @@ h4 {
 }
 
 .green {
-  color: #a7c636;
+  border-bottom: 1px solid #a7c636;
 }
 
 .green:before {
@@ -54,16 +58,16 @@ h4 {
 }
 
 .yellow {
-  color: #ffd159;
+  border-bottom: 1px solid #ffd159;
 }
 .yellow:before {
   background-color: #ffd159;
 }
 
 .orange {
-  color: #ff8200;
+  border-bottom: 1px solid #faa83f;
 }
 
 .orange:before {
-  background-color: #ff8200;
+  background-color: #faa83f;
 }

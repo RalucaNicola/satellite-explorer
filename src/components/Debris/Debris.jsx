@@ -119,7 +119,7 @@ export const Debris = () => {
                   active={activeFilter === 'chinese-antitest'}
                   clickHandler={handleFilter}
                 >
-                  Filter anti-satellite test fragments
+                  Chinese anti-satellite test fragments
                 </FilterButton>
               </div>
             </div>
@@ -132,11 +132,11 @@ export const Debris = () => {
         </div>
       </div>
       <div className={styles.block}>
-        <h3>Who cleans up the space?</h3>
+        <h3>Who cleans up outer space?</h3>
         <p>
           Space debris poses a real challenge in the future, especially with the rise of megaconstellations. Space
-          organizations and companies compete for innovative solutions to clean up debris and make the space safer.
-          Below are some examples of projects in development that use various technologies to clean up the space:
+          organizations and companies compete for innovative solutions to clean up debris and make outer space safer.
+          Below are some examples of projects in development that use various technologies to clean up space:
         </p>
         <h4>Izaña-1 laser ranging station</h4>
         <p>
@@ -171,7 +171,7 @@ export const Debris = () => {
         </p>
         <h4>ELSA spacecraft retrieval service</h4>
         <p>
-          The idea of the program is to launch a two spacecrafts, a servicer satellite and a client satellite to track
+          The idea of the program is to launch two spacecrafts - a servicer satellite and a client satellite - to track
           down and dock dead satellites and remove them from the orbit. Astroscale, the Japanese-based company behind
           the mission successfully carried tests in 2021 where they did multiple dockings and releasing of satellite
           targets. In 2022 they experienced difficulties with the test program. Read more about{' '}
@@ -186,8 +186,8 @@ export const Debris = () => {
             E-Space
           </a>{' '}
           is a startup that plans to launch a network of satellites that would capture pieces of debris while in orbit.
-          Once they captured a set amount of debris they're programmed to de-orbit and burn up in the atmosphere. The
-          first three test satellites will be launched later in 2022.
+          Once they have captured a set amount of debris they are programmed to de-orbit and burn up in the atmosphere.
+          The first three test satellites will be launched later in 2022.
         </p>
       </div>
       <BackButton toState='general'></BackButton>

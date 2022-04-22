@@ -129,7 +129,7 @@ export const SatelliteUsage = () => {
         <Accordion title='Earth observation satellite systems'>
           <p>
             <FilterButton filter='landsat' active={activeFilter === 'landsat'} clickHandler={handleFilter}>
-              Landsat programme
+              Landsat program
             </FilterButton>{' '}
             a joint NASA / USGS program launched on 23 July 1972.
           </p>
