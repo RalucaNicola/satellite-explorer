@@ -7,12 +7,14 @@ import { getSatellitePointSymbol, getStippledLineSymbol, getLineSymbol } from '.
 import { getSatelliteLocation, getOrbit } from '../utils/satPositionUtils';
 
 import { updateHashParam } from '../utils/urlUtils';
+import { when } from '@arcgis/core/core/reactiveUtils';
 class SatelliteStore {
   selectedSatellite = null;
   view = null;
   currentTime = null;
   startTime = null;
   timeInterval = null;
+  interactingWatchHandle = null;
   satellitePosition = null;
   satelliteGraphics = null;
   apogeeGraphics = null;
@@ -48,6 +50,10 @@ class SatelliteStore {
       } else {
         clearInterval(this.timeInterval);
         this.timeInterval = null;
+        if (this.interactingWatchHandle) {
+          this.interactingWatchHandle.remove();
+          this.interactingWatchHandle = null;
+        }
         this.view.graphics.removeAll();
         updateHashParam({ key: 'norad', value: null });
       }
@@ -65,6 +71,14 @@ class SatelliteStore {
           this.setSatelliteGraphics();
           this.view.goTo(this.satelliteGraphics);
           this.startSatelliteAnimation(satellite, this.satelliteGraphics);
+          this.interactingWatchHandle = when(
+            () => this.view.interacting,
+            () => {
+              if (this.followSatellite) {
+                this.followSatellite = false;
+              }
+            }
+          );
         }
       },
       () => {

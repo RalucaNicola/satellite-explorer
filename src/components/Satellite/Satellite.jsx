@@ -69,7 +69,7 @@ export const Satellite = observer(() => {
                 <label className={styles.switchContainer}>
                   <input
                     type='checkbox'
-                    defaultChecked={satelliteStore.followSatellite}
+                    checked={satelliteStore.followSatellite}
                     onChange={(event) => {
                       satelliteStore.followSatellite = event.target.checked;
                     }}
