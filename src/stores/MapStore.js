@@ -39,7 +39,6 @@ function startAnimation(view) {
   when(
     () => view.interacting || appStore.activeState !== 'general',
     () => {
-      console.log('removing');
       animationFrameTask.remove();
       animationFrameTask = null;
     },

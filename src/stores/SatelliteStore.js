@@ -268,7 +268,6 @@ class SatelliteStore {
   updateSatellitePosition(satellite, satelliteGraphics) {
     this.setCurrentTime();
     // update the graphic's geometry with the satellite new position
-    console.log(this.currentTime, this.startTime);
     this.satellitePosition = new Point(getSatelliteLocation(satellite.satrec, this.currentTime, this.startTime));
     satelliteGraphics[0].geometry = this.satellitePosition;
     // update satellite leader line
