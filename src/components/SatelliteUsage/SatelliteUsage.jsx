@@ -13,10 +13,9 @@ const comm = 'communications';
 const eo = 'earthObservation';
 const so = 'spaceObservation';
 
-const { countsByPurpose } = dataStore;
-
 export const SatelliteUsage = () => {
   const [activeFilter, setActiveFilter] = useState(null);
+  const { countsByPurpose } = dataStore;
   const handleFilter = ({ filter }) => {
     setActiveFilter(filter);
     const filterExpression = filterDefinition[filter].expression;

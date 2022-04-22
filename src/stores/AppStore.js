@@ -1,9 +1,10 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, computed } from 'mobx';
 import { clamp } from '../utils/utils';
 import mapStore from './MapStore';
 
 class AppStore {
-  isLoading = true;
+  viewLoading = true;
+  dataLoading = true;
   activeState = null;
   previousState = null;
   displayAbout = false;
@@ -12,8 +13,11 @@ class AppStore {
 
   constructor() {
     makeObservable(this, {
-      isLoading: observable,
-      setIsLoading: action,
+      viewLoading: observable,
+      setViewLoading: action,
+      dataLoading: observable,
+      setDataLoading: action,
+      isLoading: computed,
       activeState: observable,
       setActiveState: action,
       previousState: false,
@@ -27,8 +31,17 @@ class AppStore {
     window.addEventListener('resize', this.setAppPadding.bind(this));
   }
 
-  setIsLoading(value) {
-    this.isLoading = value;
+  get isLoading() {
+    console.log(this.viewLoading, this.dataLoading);
+    return this.viewLoading || this.dataLoading;
+  }
+
+  setViewLoading(value) {
+    this.viewLoading = value;
+  }
+
+  setDataLoading(value) {
+    this.dataLoading = value;
   }
 
   setActiveState(value) {

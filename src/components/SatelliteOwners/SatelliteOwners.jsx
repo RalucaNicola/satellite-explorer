@@ -14,10 +14,9 @@ const oneweb = 'oneweboperator';
 const planetlabs = 'planetlabs';
 const nofilter = 'nofilter';
 
-const { countsByCountry, countsByOperator } = dataStore;
-
 export const SatelliteOwners = () => {
   const [activeFilter, setActiveFilter] = useState(null);
+  const { countsByCountry, countsByOperator } = dataStore;
 
   const handleFilter = ({ filter }) => {
     if (filter === nofilter) {

@@ -16,10 +16,9 @@ const heo = 'heo';
 const molniya = 'molniya';
 const geostationary = 'geostationary';
 
-const { countsByOrbit } = dataStore;
-
 export function SatelliteOrbits() {
   const [activeFilter, setActiveFilter] = useState(false);
+  const { countsByOrbit } = dataStore;
   useEffect(() => {
     mapStore.setVisualizationType('orbits');
     mapStore.drawOrbitRanges(true);

@@ -21,15 +21,18 @@ import { useEffect } from 'react';
 
 const App = observer(() => {
   useEffect(() => {
-    const hashParams = parseHash();
-    if (hashParams.hasOwnProperty('norad')) {
-      appStore.setActiveState('satellite');
-      const satellite = dataStore.getSatelliteById(hashParams.norad);
-      satelliteStore.setSelectedSatellite(satellite);
-    } else {
-      appStore.setActiveState('general');
+    console.log(appStore.isLoading);
+    if (!appStore.isLoading) {
+      const hashParams = parseHash();
+      if (hashParams.hasOwnProperty('norad')) {
+        appStore.setActiveState('satellite');
+        const satellite = dataStore.getSatelliteById(hashParams.norad);
+        satelliteStore.setSelectedSatellite(satellite);
+      } else {
+        appStore.setActiveState('general');
+      }
     }
-  }, []);
+  }, [appStore.isLoading]);
 
   return (
     <>

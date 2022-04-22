@@ -1,19 +1,25 @@
-import satellites from '../services/satellites';
 import { group } from 'd3-array';
 import { purposeCategories, orbitTypes } from '../config';
+import loadSatellites from '../services/satellites';
+import appStore from './AppStore';
 
 class DataStore {
-  data = satellites;
-
   constructor() {
-    this.countsByPurpose = this.getCountsByPurpose();
-    this.countsByOrbit = this.getCountsByOrbit();
-    this.countsByCountry = this.getCountsByCountry();
-    this.countsByOperator = this.getCountsByOperator();
-    this.featuredSatellites = this.getFeaturedSatellites();
+    loadSatellites()
+      .then((data) => {
+        this.data = data;
+        this.countsByPurpose = this.getCountsByPurpose();
+        this.countsByOrbit = this.getCountsByOrbit();
+        this.countsByCountry = this.getCountsByCountry();
+        this.countsByOperator = this.getCountsByOperator();
+        this.featuredSatellites = this.getFeaturedSatellites();
+        appStore.setDataLoading(false);
+      })
+      .catch(console.error);
   }
 
   getCountsByPurpose() {
+    console.log(this.data);
     const meta = this.data.map((d) => d.metadata);
     const countsByPurpose = {};
     countsByPurpose.total = meta.slice().length;
@@ -28,6 +34,7 @@ class DataStore {
         }
       });
     }
+    console.log(countsByPurpose);
     return countsByPurpose;
   }
 
