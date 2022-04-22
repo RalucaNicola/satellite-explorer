@@ -21,7 +21,6 @@ import { useEffect } from 'react';
 
 const App = observer(() => {
   useEffect(() => {
-    console.log(appStore.isLoading);
     if (!appStore.isLoading) {
       const hashParams = parseHash();
       if (hashParams.hasOwnProperty('norad')) {

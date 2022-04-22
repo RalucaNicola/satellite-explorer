@@ -16,6 +16,36 @@ import {
 import { initialCamera, leoCamera } from '../config';
 
 import satelliteStore from './SatelliteStore';
+import { addFrameTask } from '@arcgis/core/core/scheduling';
+import { when } from '@arcgis/core/core/reactiveUtils';
+
+function startAnimation(view) {
+  let t = 0;
+  let rotationDurationSeconds = 60;
+
+  const update = () => {
+    const camera = view.camera.clone();
+    camera.position.longitude = -(360 * (t / 1000 / rotationDurationSeconds)) % 360;
+    view.goTo(camera, { animate: false });
+  };
+
+  let animationFrameTask = addFrameTask({
+    update: (ev) => {
+      console.log('updating');
+      t += ev?.deltaTime ?? 0;
+      update();
+    }
+  });
+
+  when(
+    () => view.interacting,
+    () => {
+      animationFrameTask.remove();
+      animationFrameTask = null;
+    },
+    { once: true }
+  );
+}
 
 const generalLineRenderer = getGeneralLineRenderer();
 const usageLineRenderer = getUsageLineRenderer();
@@ -78,7 +108,7 @@ class MapStore {
     }
     whenFalseOnce(view, 'updating', () => {
       if (!satelliteStore.selectedSatellite) {
-        this.goToPosition('home');
+        this.goToPosition('home').then(startAnimation(view));
       }
       this.setLayerViews();
     });
@@ -238,20 +268,15 @@ class MapStore {
   goToPosition(position) {
     switch (position) {
       case 'home':
-        this.view.goTo(initialCamera, { speedFactor: 0.25 });
-        break;
+        return this.view.goTo(initialCamera, { speedFactor: 0.25 });
       case 'search':
-        this.view.goTo(initialCamera, { speedFactor: 1.2 });
-        break;
+        return this.view.goTo(initialCamera, { speedFactor: 1.2 });
       case 'debris':
-        this.view.goTo(this.view.map.initialViewProperties.viewpoint);
-        break;
+        return this.view.goTo(this.view.map.initialViewProperties.viewpoint);
       case 'leo':
-        this.view.goTo(leoCamera, { speedFactor: 1.2 });
-        break;
+        return this.view.goTo(leoCamera, { speedFactor: 1.2 });
       default:
-        this.view.goTo(initialCamera);
-        break;
+        return this.view.goTo(initialCamera);
     }
   }
 }
