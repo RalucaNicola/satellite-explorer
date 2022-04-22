@@ -4,7 +4,7 @@
 
 [View it live](https://geoxc-apps.bd.esri.com/space/satellite-explorer/)
 
-[![App](./image.jpg)](https://geoxc-apps.bd.esri.com/space/satellite-explorer/)
+[![App](./public/assets/image.jpg)](https://geoxc-apps.bd.esri.com/space/satellite-explorer/)
 
 ## Instructions:
 
