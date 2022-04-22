@@ -224,7 +224,7 @@ export const countriesRendererConfig = {
 };
 
 export const initialCamera = {
-  position: [-51.16188033, 13.94163087, 131349695.83433],
+  position: [0, 13.94163087, 131349695.83433],
   heading: 0,
   tilt: 0.02
 };

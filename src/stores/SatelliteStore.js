@@ -19,6 +19,7 @@ class SatelliteStore {
   satelliteGraphics = null;
   apogeeGraphics = null;
   perigeeGraphics = null;
+  orbitGraphics = null;
   followSatellite = false;
 
   constructor() {
@@ -99,7 +100,14 @@ class SatelliteStore {
   }
 
   startSatelliteAnimation(satellite, satelliteGraphics) {
+    const orbitUpdateInterval = satellite.metadata.period * 60000;
     this.timeInterval = window.setInterval(() => {
+      if (this.currentTime - this.startTime > orbitUpdateInterval) {
+        this.startTime = new Date();
+        const orbitCoordinates = getOrbit(satellite.satrec, satellite.metadata.period, this.startTime, 200);
+        this.updateOrbit(orbitCoordinates);
+        this.setApogeeAndPerigeeGraphics(orbitCoordinates);
+      }
       this.updateSatellitePosition(satellite, satelliteGraphics);
       if (this.selectedSatellite.featuredSatellite) {
         this.updateSymbolHeading();
@@ -128,6 +136,17 @@ class SatelliteStore {
     );
   }
 
+  updateOrbit(coords) {
+    const geometry = new Polyline({
+      paths: [coords.map((coord) => [coord.x, coord.y, coord.z])]
+    });
+    const geometryShadow = new Polyline({
+      paths: [coords.map((coord) => [coord.x, coord.y, 1000])]
+    });
+    this.orbitGraphics[0].geometry = geometry;
+    this.orbitGraphics[1].geometry = geometryShadow;
+  }
+
   animateSatelliteOrbit(coords) {
     const geometry = new Polyline({
       paths: [coords.map((coord) => [coord.x, coord.y, coord.z])]
@@ -140,10 +159,19 @@ class SatelliteStore {
           [coords[1].x, coords[1].y, coords[1].z]
         ]
       }),
-      symbol: getStippledLineSymbol([255, 255, 255, 0.7], 1.5),
-      id: 'orbitGraphic'
+      symbol: getStippledLineSymbol([255, 255, 255, 0.7], 1.5)
     });
-    this.view.graphics.add(orbitGraphic);
+    const orbitGraphicShadow = new Graphic({
+      geometry: new Polyline({
+        paths: [
+          [coords[0].x, coords[0].y, 1000],
+          [coords[1].x, coords[1].y, 1000]
+        ]
+      }),
+      symbol: getLineSymbol([255, 255, 255, 0.4], 1)
+    });
+    this.orbitGraphics = [orbitGraphic, orbitGraphicShadow];
+    this.view.graphics.addMany(this.orbitGraphics);
 
     return new Promise((resolve, reject) => {
       const addLineSegment = (i) => {
@@ -152,6 +180,10 @@ class SatelliteStore {
             paths: [...orbitGraphic.geometry.paths[0], [coords[i].x, coords[i].y, coords[i].z]]
           });
           orbitGraphic.geometry = polyline;
+          let polylineShadow = new Polyline({
+            paths: [...orbitGraphicShadow.geometry.paths[0], [coords[i].x, coords[i].y, 1000]]
+          });
+          orbitGraphicShadow.geometry = polylineShadow;
           if (this.selectedSatellite) {
             window.requestAnimationFrame(() => {
               addLineSegment(i + 1);
@@ -172,14 +204,18 @@ class SatelliteStore {
     orbitCoordinatesByHeight.sort((coord1, coord2) => {
       return coord1.z - coord2.z;
     });
-
+    if (this.apogeeGraphics) {
+      this.view.graphics.removeMany(this.apogeeGraphics);
+    }
     const apogeePosition = new Point(orbitCoordinatesByHeight[orbitCoordinatesByHeight.length - 1]);
     this.apogeeGraphics = this.getGraphics({
       color: apogeeBlue,
       location: apogeePosition
     });
     this.view.graphics.addMany(this.apogeeGraphics);
-
+    if (this.perigeeGraphics) {
+      this.view.graphics.removeMany(this.perigeeGraphics);
+    }
     const perigeePosition = new Point(orbitCoordinatesByHeight[0]);
     this.perigeeGraphics = this.getGraphics({
       color: perigeeYellow,
@@ -232,6 +268,7 @@ class SatelliteStore {
   updateSatellitePosition(satellite, satelliteGraphics) {
     this.setCurrentTime();
     // update the graphic's geometry with the satellite new position
+    console.log(this.currentTime, this.startTime);
     this.satellitePosition = new Point(getSatelliteLocation(satellite.satrec, this.currentTime, this.startTime));
     satelliteGraphics[0].geometry = this.satellitePosition;
     // update satellite leader line

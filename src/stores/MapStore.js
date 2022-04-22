@@ -15,8 +15,9 @@ import {
 import { initialCamera, leoCamera } from '../config';
 
 import satelliteStore from './SatelliteStore';
+import appStore from './AppStore';
 import { addFrameTask } from '@arcgis/core/core/scheduling';
-import { when, whenOnce } from '@arcgis/core/core/reactiveUtils';
+import { when } from '@arcgis/core/core/reactiveUtils';
 
 function startAnimation(view) {
   let t = 0;
@@ -36,8 +37,9 @@ function startAnimation(view) {
   });
 
   when(
-    () => view.interacting,
+    () => view.interacting || appStore.activeState !== 'general',
     () => {
+      console.log('removing');
       animationFrameTask.remove();
       animationFrameTask = null;
     },
