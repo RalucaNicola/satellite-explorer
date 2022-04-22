@@ -1,6 +1,5 @@
 import WebScene from '@arcgis/core/WebScene';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import { orbitOrange, orbitYellow, orbitGreen } from '../config';
 import { action, makeObservable, observable } from 'mobx';
 import {
@@ -17,7 +16,7 @@ import { initialCamera, leoCamera } from '../config';
 
 import satelliteStore from './SatelliteStore';
 import { addFrameTask } from '@arcgis/core/core/scheduling';
-import { when } from '@arcgis/core/core/reactiveUtils';
+import { when, whenOnce } from '@arcgis/core/core/reactiveUtils';
 
 function startAnimation(view) {
   let t = 0;
@@ -105,12 +104,16 @@ class MapStore {
     if (this.mapPadding) {
       this.updateMapPadding(this.mapPadding);
     }
-    whenFalseOnce(view, 'updating', () => {
-      if (!satelliteStore.selectedSatellite) {
-        this.goToPosition('home').then(startAnimation(view));
-      }
-      this.setLayerViews();
-    });
+    when(
+      () => !view.updating,
+      () => {
+        if (!satelliteStore.selectedSatellite) {
+          startAnimation(view);
+        }
+        this.setLayerViews();
+      },
+      { once: true }
+    );
   }
 
   setLayerViews() {

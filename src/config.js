@@ -224,13 +224,9 @@ export const countriesRendererConfig = {
 };
 
 export const initialCamera = {
-  position: {
-    x: 0,
-    y: 20,
-    z: 2e8
-  },
+  position: [-24.17171816, 24.85169084, 131280447.86795],
   heading: 0,
-  tilt: 0
+  tilt: 0.4
 };
 
 export const leoCamera = {
