@@ -37,7 +37,15 @@ export function About() {
           <div className={styles.block}>
             <h2 className={styles.title}>Basemap data</h2>
             <p>
-              Firefly basemap by{' '}
+              <a
+                className='link'
+                href='https://www.arcgis.com/home/item.html?id=a66bfb7dd3b14228bf7ba42b138fe2ea'
+                target='_blank'
+              >
+                {' '}
+                Firefly basemap
+              </a>{' '}
+              by{' '}
               <a className='link' href='https://www.esri.com/arcgis-blog/author/j_nelson/' target='_blank'>
                 John Nelson
               </a>
