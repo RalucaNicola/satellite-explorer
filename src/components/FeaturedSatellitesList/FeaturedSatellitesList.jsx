@@ -18,9 +18,9 @@ export const FeaturedSatellitesList = ({ satellites }) => {
               }}
             >
               <div className={styles.info}>
-                <div className={styles.imageContainer}>
+                {/* <div className={styles.imageContainer}>
                   <img src={image}></img>
-                </div>
+                </div> */}
                 <div>
                   <h5>{name}</h5>
                   <p>{shortInfo}</p>

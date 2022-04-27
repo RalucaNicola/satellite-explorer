@@ -21,7 +21,7 @@
     "model": "./assets/landsat/landsat2.glb",
     "info": "Landsat 9 — a partnership between NASA and the U.S. Geological Survey — continues the Landsat program's critical role in monitoring, understanding and managing the land resources needed to sustain human life.",
     "image": "./assets/landsat/image.jpg",
-    "shortInfo": "Landsat is a system of satellites for moderate-resolution optical remote sensing for land, coastal areas and shallow waters. Its mission is to monitor, understand and manage Earth's resources.",
+    "shortInfo": "Landsat is a system of satellites for moderate-resolution optical remote sensing for monitoring land, coastal areas and shallow waters.",
     "links": [
       {
         "title": "Landsat 9 mission page",
