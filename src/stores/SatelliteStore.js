@@ -131,7 +131,7 @@ class SatelliteStore {
 
   setFollowingCamera() {
     this.view.goTo(
-      { target: this.satelliteGraphics, heading: this.heading, tilt: 45 },
+      { target: this.satelliteGraphics[0], heading: this.heading, tilt: 65 },
       { duration: 500, animate: false }
     );
   }
@@ -282,7 +282,7 @@ class SatelliteStore {
   updateSymbolHeading() {
     this.setHeading();
     const symbol = this.satelliteGraphics[0].symbol.clone();
-    symbol.symbolLayers.getItemAt(0).heading = this.heading - 180;
+    symbol.symbolLayers.getItemAt(0).heading = this.heading;
     this.satelliteGraphics[0].symbol = symbol;
   }
 
