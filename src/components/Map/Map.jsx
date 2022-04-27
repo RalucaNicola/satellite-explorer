@@ -87,8 +87,13 @@ export const Map = observer(() => {
       };
 
       view.map.allLayers.forEach((layer) => {
-        if (layer.title === 'orbits' || layer.title === 'satellites') {
+        if (layer.title === 'orbits') {
           layer.popupTemplate = popupTemplate;
+          view.whenLayerView(layer).then((lyrView) => {
+            lyrView.watch('updating', (value) => {
+              loading.style.display = value ? 'block' : 'none';
+            });
+          });
         }
       });
 
@@ -107,10 +112,6 @@ export const Map = observer(() => {
       view.when(() => {
         mapStore.setView(view);
         appStore.setViewLoading(false);
-      });
-
-      view.watch('updating', (value) => {
-        loading.style.display = value ? 'block' : 'none';
       });
     }
 
