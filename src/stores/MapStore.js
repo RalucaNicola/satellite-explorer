@@ -108,7 +108,7 @@ class MapStore {
     when(
       () => !view.updating,
       () => {
-        if (!satelliteStore.selectedSatellite) {
+        if (!satelliteStore.selectedSatellite && appStore.activeState === 'general') {
           startAnimation(view);
         }
         this.setLayerViews();
