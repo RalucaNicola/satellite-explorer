@@ -1,5 +1,6 @@
 import Graphic from '@arcgis/core/Graphic';
 import { Point, Polyline } from '@arcgis/core/geometry';
+import { lngLatToXY } from '@arcgis/core/geometry/support/webMercatorUtils';
 import { apogeeBlue, perigeeYellow } from '../config';
 import { action, makeObservable, observable } from 'mobx';
 import { getSatellitePointSymbol, getStippledLineSymbol, getLineSymbol } from '../utils/visualizationUtils';
@@ -124,14 +125,16 @@ class SatelliteStore {
       new Date(this.currentTime.getTime() + 10000),
       this.startTime
     );
-    const dx = futurePosition.x - this.satellitePosition.x;
-    const dy = futurePosition.y - this.satellitePosition.y;
-    this.heading = (-Math.atan2(dy, dx) / Math.PI) * 180 + 90;
+    const [futureX, futureY] = lngLatToXY(futurePosition.x, futurePosition.y);
+    const [currentX, currentY] = lngLatToXY(this.satellitePosition.x, this.satellitePosition.y);
+    const dx = futureX - currentX;
+    const dy = futureY - currentY;
+    this.heading = (-Math.atan2(dy, dx) / Math.PI) * 180 - 90;
   }
 
   setFollowingCamera() {
     this.view.goTo(
-      { target: this.satelliteGraphics[0], heading: this.heading, tilt: 65 },
+      { target: this.satelliteGraphics[0], heading: this.heading + 180, tilt: 65 },
       { duration: 500, animate: false }
     );
   }
