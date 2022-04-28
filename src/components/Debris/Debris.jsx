@@ -36,7 +36,7 @@ export const Debris = () => {
         <p>
           It's not possible to track all the debris objects. According to{' '}
           <a
-            class='link'
+            className='link'
             href='https://www.esa.int/Safety_Security/Space_Debris/Space_debris_by_the_numbers'
             target='_blank'
           >
@@ -65,7 +65,7 @@ export const Debris = () => {
           There have been several prominent space collisions, whose fragments are displayed on the map (their positions
           are predicted as of March 28th, 2022). The collision in 2009 was accidental and the others were triggered on
           purpose by{' '}
-          <a class='link' href='https://en.wikipedia.org/wiki/Anti-satellite_weapon' target='_blank'>
+          <a className='link' href='https://en.wikipedia.org/wiki/Anti-satellite_weapon' target='_blank'>
             anti-satellite weapons
           </a>
           .
@@ -154,8 +154,8 @@ export const Debris = () => {
         </p>
         <h4>Mission ClearSpace-1</h4>{' '}
         <p>
-          The mission, planned for 2025, will use a <bold>four-armed robot</bold> to capture a Vega Secondary Payload
-          Adapter, left behind by ESA's Vega launcher in 2013. This is a partnership between the{' '}
+          The mission, planned for 2025, will use a four-armed robot to capture a Vega Secondary Payload Adapter, left
+          behind by ESA's Vega launcher in 2013. This is a partnership between the{' '}
           <a
             className='link'
             href='https://www.esa.int/Safety_Security/Clean_Space/ESA_commissions_world_s_first_space_debris_removal'
