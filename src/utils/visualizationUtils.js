@@ -245,7 +245,7 @@ export const getOrbitRangeGraphic = (minHeight, maxHeight, color) => {
       symbolLayers: [
         {
           type: 'fill',
-          material: { color: [...color, 0.5] },
+          material: { color: [...color, 0.9] },
           outline: { size: 0 }
         }
       ]
