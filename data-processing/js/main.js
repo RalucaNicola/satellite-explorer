@@ -51,7 +51,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
         norad: items[27]
       };
     }
-    const tleResponse = await fetch('../public/data/norad-tle.txt');
+    const tleResponse = await fetch('../public/data/norad-tle-test.txt');
     const tleData = await tleResponse.text();
     const lines = tleData.split('\n');
     const count = (lines.length - (lines.length % 3)) / 3;
@@ -72,21 +72,21 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       const norad = Number.parseInt(satrec.satnum, 10);
       if (uniqueSatelliteIDs.indexOf(norad) === -1) {
         uniqueSatelliteIDs.push(norad);
-        if (infoCollection.hasOwnProperty(norad)) {
-          const sat = {
-            norad,
-            satrec,
-            metadata: {
-              inclination: (satrec.inclo * 180) / Math.PI,
-              period: (2 * Math.PI) / satrec.no,
-              eccentricity: (satrec.ecco * 180) / Math.PI,
-              perigee_argument: (satrec.argpo * 180) / Math.PI,
-              node: (satrec.nodeo * 180) / Math.PI,
-              ...infoCollection[norad]
-            }
-          };
-          satellites.push(sat);
-        }
+        // if (infoCollection.hasOwnProperty(norad)) {
+        const sat = {
+          norad,
+          satrec,
+          metadata: {
+            inclination: (satrec.inclo * 180) / Math.PI,
+            period: (2 * Math.PI) / satrec.no,
+            eccentricity: (satrec.ecco * 180) / Math.PI,
+            perigee_argument: (satrec.argpo * 180) / Math.PI,
+            node: (satrec.nodeo * 180) / Math.PI
+            // ...infoCollection[norad]
+          }
+        };
+        satellites.push(sat);
+        // }
       }
     }
   }
@@ -94,6 +94,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
   function getSatelliteLocation(satrec, date) {
     const propagation = propagate(satrec, date);
     const position = propagation?.position;
+    console.log(position);
     if (!position || Number.isNaN(position.x) || Number.isNaN(position.y) || Number.isNaN(position.z)) {
       return null;
     }
@@ -313,8 +314,12 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       .catch(console.error);
   }
 
-  function main() {
-    updateSatellites();
+  async function main() {
+    await loadSatelliteData();
+    const sat = satellites[0];
+    console.log(sat);
+    getOrbit(sat.satrec, sat.metadata.period, NOW);
+    //updateSatellites();
     //updateDebris();
   }
 

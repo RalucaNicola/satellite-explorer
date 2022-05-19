@@ -25,7 +25,7 @@ export const Debris = () => {
   return (
     <InfoPanel>
       <BackButton toState='general'></BackButton>
-      <h2>A space debris crisis?</h2>
+      <h2>What is space debris?</h2>
       <div className={styles.block}>
         <p>
           Space debris represents defunct artificial objects in space which no longer serve a useful function. The

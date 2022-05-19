@@ -4,29 +4,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Satellite Explorer</title>
+  <title>Satellite Map | Explore Active Satellites Orbiting Earth</title>
 
   <meta name="author" content="@esri" />
   <meta name="keywords" content="Esri ArcGIS Satellite Map Maps Space Debris Trajectory Orbit Geosynchronous" />
   <meta name="description"
-    content="Learn about active satellites orbiting the Earth: what are they used for, where are they and who owns them? Discover the current position of each satellite along with purpose, operator and launch information." />
-  <meta name="title" content="Satellite Explorer" />
+    content="Satellite map of active satellites orbiting the Earth. View satellites along with information about the purpose, operator, orbital parameters, launch date & location of the satellite." />
+  <meta name="title" content="Satellite Map | Explore Active Satellites Orbiting Earth" />
 
   <meta property="og:url" content="https://geoxc-apps.bd.esri.com/space/satellite-explorer/index.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Satellite Explorer" />
+  <meta property="og:title" content="Satellite Map | Explore Active Satellites Orbiting Earth" />
   <meta property="og:description"
-    content="Learn about active satellites orbiting the Earth: what are they used for, where are they and who owns them? Discover the current position of each satellite along with purpose, operator and launch information." />
+    content="Satellite map of active satellites orbiting the Earth. View satellites along with information about the purpose, operator, orbital parameters, launch date & location of the satellite." />
   <meta property="og:image" content="https://geoxc-apps.bd.esri.com/space/satellite-explorer/assets/image.jpg" />
 
   <meta name="twitter:card" value="summary_large_image" />
   <meta name="twitter:image" content="https://geoxc-apps.bd.esri.com/space/satellite-explorer/assets/image.jpg" />
-  <meta name="twitter:title" content="Satellite Explorer" />
+  <meta name="twitter:title" content="Satellite Map | Explore Active Satellites Orbiting Earth" />
   <meta name="twitter:site" content="@esri" />
   <meta property="twitter:url" content="https://geoxc-apps.bd.esri.com/space/satellite-explorer/index.html" />
   <meta name="twitter:creator" content="@nicolaraluk" />
   <meta name="twitter:description"
-    content="Learn about active satellites orbiting the Earth: what are they used for, where are they and who owns them? Discover the current position of each satellite along with purpose, operator and launch information.">
+    content="Satellite map of active satellites orbiting the Earth. View satellites along with information about the purpose, operator, orbital parameters, launch date & location of the satellite.">
 
   <link rel="icon" media="(prefers-color-scheme:dark)" type="image/png" sizes="32x32"
     href="https://www.esri.com/content/dam/esrisites/en-us/common/favicon/esri-favicon-dark-32.png" />
@@ -38,6 +38,50 @@
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
   <script src="//mtags.esri.com/tags.js"></script>
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why do we need satellites?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Did you ever get your location on your phone or set the navigation system in the car to guide you to a
+            destination? Then you've definitely used satellites."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Where are satellite orbits?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Although the space beyond Earth's atmosphere is vast, human-man satellites are typically located in one of the three popular orbital regimes: low earth orbit, medium earth orbit and geosynchronous orbit."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Who owns all the satellites?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There are thousands of active satellites out there and 75 different countries have at least one satellite orbiting Earth. United States, China, and United Kingdom top the list of countries with hundreds of operational satellites."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "What is space debris?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Space debris represents defunct artificial objects in space which no longer serve a useful function. The debris is composed of old satellites, abandoned launch vehicle stages, mission-related debris, and fragmentation debris."
+          }
+        }
+      ]
+    }
+    </script>
 </body>
 
 </html>

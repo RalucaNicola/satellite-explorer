@@ -40,9 +40,9 @@ export const SatelliteOwners = () => {
       <BackButton toState='general'></BackButton>
       <h2>Who owns all the satellites?</h2>
       <div className={styles.block}>
-        There are {countsByCountry ? formatNumber(countsByCountry.total) : ''} active satellites out there and 75
-        different countries have at least one satellite orbiting Earth. United States, China, and United Kingdom top the
-        list of countries with hundreds of operational satellites.
+        There are thousands of active satellites out there and 75 different countries have at least one satellite
+        orbiting Earth. United States, China, and United Kingdom top the list of countries with hundreds of operational
+        satellites.
         <div>{countsByCountry ? <CountriesChart data={countsByCountry}></CountriesChart> : ''} </div>
       </div>
       <div className={styles.block}>
