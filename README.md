@@ -4,7 +4,7 @@
 
 [View it live](https://geoxc-apps.bd.esri.com/space/satellite-explorer/)
 
-[![App](./public/assets/image.jpg)](https://geoxc-apps.bd.esri.com/space/satellite-explorer/)
+[![App](./public/assets/image.jpeg)](https://geoxc-apps.bd.esri.com/space/satellite-explorer/)
 
 ## Instructions:
 
@@ -29,7 +29,7 @@ npm run dev
 
 ## Deployment
 
-To build/deploye the app, you can simply run:
+To build/deploy the app, you can simply run:
 
 ```sh
 # it will place all files needed for deployment into the /dist directory
