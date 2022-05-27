@@ -41,7 +41,7 @@ export function SatelliteOrbits() {
       <BackButton toState='general'></BackButton>
       <h2>Where are satellite orbits?</h2>
       <div className={styles.block}>
-        Although the space beyond Earth's atmosphere is vast, human-man satellites are typically located in one of the
+        Although the space beyond Earth's atmosphere is vast, man-made satellites are typically located in one of the
         three popular orbital regimes: low earth orbit, medium earth orbit and geosynchronous orbit.
         {countsByOrbit ? (
           <>

@@ -44,7 +44,7 @@ export const SatelliteUsage = () => {
             Localization
           </FilterButton>{' '}
           via satellite navigation systems is widely used in almost all industries: transportation, emergency response,
-          farming, banking, military, science. These satellites determine the location, velocity and current time of
+          farming, banking, military, science. These satellites determine the location, velocity, and current time of
           small electronic devices (like the ones in our smart phones).
         </p>
         <Accordion title='Discover global navigation satellite systems'>
@@ -81,7 +81,7 @@ export const SatelliteUsage = () => {
           <FilterButton filter={comm} active={activeFilter === comm} clickHandler={handleFilter}>
             Communications
           </FilterButton>{' '}
-          satellites are used for television, radio and internet broadcasting. This sector increased lately with more
+          satellites are used for television, radio, and internet broadcasting. This sector increased lately with more
           and more companies launching satellites to provide internet everywhere on the globe.
         </p>
         {countsByPurpose ? <UsageChart category={comm} data={countsByPurpose} label={comm}></UsageChart> : ''}
@@ -118,7 +118,7 @@ export const SatelliteUsage = () => {
           <FilterButton filter={eo} active={activeFilter === eo} clickHandler={handleFilter}>
             Earth Observation
           </FilterButton>{' '}
-          satellites provide information about earth resources, weather, climate and environmental monitoring. Imaging
+          satellites provide information about earth resources, weather, climate, and environmental monitoring. Imaging
           satellites produce high-resolution data of almost the entire landmass on earth.
         </p>
         {countsByPurpose ? (

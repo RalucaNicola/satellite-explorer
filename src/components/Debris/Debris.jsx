@@ -40,7 +40,7 @@ export const Debris = () => {
             href='https://www.esa.int/Safety_Security/Space_Debris/Space_debris_by_the_numbers'
             target='_blank'
           >
-            an European Space Agency article
+            a European Space Agency article
           </a>{' '}
           there are around:
         </p>
