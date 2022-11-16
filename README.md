@@ -8,17 +8,20 @@
 
 ## Instructions:
 
-Clone this repository to your computer
+You need to have [git](https://git-scm.com/) and [npm](https://www.npmjs.com/) installed on your machine.
+Clone this repository to your computer with the following command:
 
 ```sh
 git clone git@github.com:RalucaNicola/satellite-explorer.git
 ```
 
+Install the modules that are need to run the app:
+
 ```sh
 npm install
 ```
 
-## Running the app
+## Running the app for development
 
 Now you can start the vite development server to test the app on your local machine:
 
@@ -36,9 +39,11 @@ To build/deploy the app, you can simply run:
 npm run build
 ```
 
+Copy the content of the `/dist` directory to the server where you want to deploy the application.
+
 ## Requirements
 
-- [ArcGIS API for JavaScript (version 4.23)](https://developers.arcgis.com/javascript/index.html)
+- [ArcGIS API for JavaScript (version 4.25)](https://developers.arcgis.com/javascript/index.html)
 - [SatelliteJS](https://github.com/shashwatak/satellite-js)
 
 ## Data
