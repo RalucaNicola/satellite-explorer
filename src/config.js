@@ -1,3 +1,6 @@
+export const satelliteLayerServiceUrl =
+  'https://services9.arcgis.com/FF3qnCUixr5w9JQi/arcgis/rest/services/satellite_orbits/FeatureServer/0';
+
 export const fields = [
   { name: 'name', metadataIndex: 1, type: 'string' },
   { name: 'official_name', metadataIndex: 2, type: 'string' },

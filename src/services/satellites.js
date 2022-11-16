@@ -1,28 +1,28 @@
 import { twoline2satrec } from 'satellite.js';
-import Papa from 'papaparse';
-import { fields } from '../config';
+import { fields, satelliteLayerServiceUrl } from '../config';
 import { convertToType } from '../utils/utils';
 import * as featuredSatellitesModule from '/data/featured_satellites.json?raw';
+import * as query from '@arcgis/core/rest/query';
 
 const loadSatellites = async () => {
   /**
-   * Metadata for active satellites
+   * Get metadata for active satellites
    * Union of Concerned Scientists Satellite Database
-   * 4550 satellites
    * https://www.ucsusa.org/resources/satellite-database
    */
   const satellites = [];
   const metadataCollection = {};
-  const metadataResponse = await fetch('./data/sat_metadata_012022.csv');
-  const metadataText = await metadataResponse.text();
-  const result = Papa.parse(metadataText, { delimiter: ',' });
-  const metadata = result.data;
-  for (let i = 1; i < metadata.length; i++) {
-    const item = metadata[i];
-    const norad = Number(item[27]);
+  const { features } = await query.executeQueryJSON(satelliteLayerServiceUrl, {
+    where: '1=1',
+    outFields: ['*'],
+    maxRecordCountFactor: 5
+  });
+  for (let i = 1; i < features.length; i++) {
+    const item = features[i].attributes;
+    const { norad } = item;
     metadataCollection[norad] = {};
     fields.forEach((field) => {
-      metadataCollection[norad][field.name] = convertToType(item[field.metadataIndex], field.type);
+      metadataCollection[norad][field.name] = convertToType(item[field.name], field.type);
     });
   }
 
