@@ -140,6 +140,10 @@ a.link:hover {
   color: var(--font-color) !important;
 }
 
+.esri-popup__navigation {
+  background-color: transparent !important;
+}
+
 .esri-component {
   box-shadow: none !important;
 }

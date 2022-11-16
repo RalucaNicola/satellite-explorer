@@ -18,12 +18,11 @@
     "vite": "^2.7.13"
   },
   "dependencies": {
-    "@arcgis/core": "^4.23",
+    "@arcgis/core": "^4.25",
     "d3-array": "^3.1.1",
     "d3-scale": "^4.0.2",
     "mobx": "^6.4.1",
     "mobx-react": "^7.3.0",
-    "papaparse": "^5.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "satellite.js": "^4.1.3"
