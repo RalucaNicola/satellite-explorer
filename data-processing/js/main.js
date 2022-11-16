@@ -3,55 +3,115 @@ import Polyline from 'https://js.arcgis.com/4.22/@arcgis/core/geometry/Polyline.
 import Point from 'https://js.arcgis.com/4.22/@arcgis/core/geometry/Point.js';
 import Graphic from 'https://js.arcgis.com/4.22/@arcgis/core/Graphic.js';
 import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/FeatureLayer.js';
+
 (async function () {
+  // testEnv is true when testing if the update works
+  // when updating the production service it should be false
+  const testEnv = true;
+  const satURL = testEnv
+    ? 'https://services9.arcgis.com/FF3qnCUixr5w9JQi/arcgis/rest/services/satellite_orbits_updates_test/FeatureServer'
+    : 'https://services9.arcgis.com/FF3qnCUixr5w9JQi/arcgis/rest/services/satellite_orbits/FeatureServer';
   const satellites = [];
+  const norad_important_satellites = [
+    49260, // Landsat 9
+    39084, // Landsat 8
+    25544 // ISS
+  ];
   const debris = [];
   const NOW = new Date();
   let unique = 0;
   const satelliteLayer = new FeatureLayer({
-    url: 'https://services9.arcgis.com/FF3qnCUixr5w9JQi/arcgis/rest/services/satellite_orbits/FeatureServer'
+    url: satURL
   });
   const debrisLayer = new FeatureLayer({
     url: 'https://services9.arcgis.com/FF3qnCUixr5w9JQi/arcgis/rest/services/Debris/FeatureServer'
   });
+
+  // double check if the keys are correct,
+  // sometimes they change the field names in the UCS Satellite database
+  const keys = {
+    norad: 'NORAD Number',
+    official_name: 'Current Official Name of Satellite',
+    name: 'Name of Satellite, Alternate Names',
+    country_operator: 'Country of Operator/Owner',
+    operator: 'Operator/Owner',
+    purpose: 'Purpose',
+    orbit_class: 'Class of Orbit',
+    orbit_type: 'Type of Orbit',
+    perigee: 'Perigee (km)',
+    apogee: 'Apogee (km)',
+    launch_date: 'Date of Launch',
+    launch_site: 'Launch Site',
+    cospar: 'COSPAR Number'
+  };
+
+  async function main() {
+    // Uncomment these lines to see that the updates of metadata and orbit prediction look ok
+    // await loadSatelliteData();
+    // console.log(`${satellites.length} satellites that matched both lists`);
+    // const sat = satellites[0];
+    // console.log('Showing first satellite results: ', sat, getOrbit(sat.satrec, sat.metadata.period, NOW));
+
+    // Uncomment this line to update the satellites feature layer
+    updateSatellites();
+    // Debris doesn't need to be updated, the actual location doesn't matter too much
+    // updateDebris();
+  }
+
+  main();
+
+  // deletes features in the satellite feature layer and adds the updated ones
+  async function updateSatellites() {
+    await loadSatelliteData();
+    satelliteLayer
+      .queryObjectIds()
+      .then((results) => {
+        console.log(`Deleting ${results.lenght} features...`);
+        const deleteFeatures = results.map((id) => {
+          return {
+            objectId: id
+          };
+        });
+        satelliteLayer
+          .applyEdits({ deleteFeatures })
+          .then((result) => {
+            console.log('Deleted features: ', result);
+            console.log('Adding new features...');
+            addSatellites(0);
+          })
+          .catch(console.error);
+      })
+      .catch(console.error);
+  }
+
   async function loadSatelliteData() {
-    const metadataResponse = await fetch('../public/data/sat_metadata_012022.csv');
+    const metadataResponse = await fetch('../data/sat_metadata_052022.csv');
     const metadata = await metadataResponse.text();
     const mu = 398600.5;
     const infoCollection = {};
-    const result = Papa.parse(metadata, { delimiter: ',' });
+    const result = Papa.parse(metadata, { delimiter: ',', header: true });
+    console.log(`${result.data.length} satellites in the metadata`);
     for (let i = 1; i < result.data.length; i++) {
-      const items = result.data[i];
-      const norad = Number(items[27]);
+      const item = result.data[i];
+      const norad = Number(item[keys.norad]);
       infoCollection[norad] = {
-        name: items[1],
-        official_name: items[2],
-        // country_UN_registry: items[3],
-        country_operator: items[4],
-        operator: items[5],
-        // users: items[6],
-        purpose: items[7],
-        // detailed_purpose: items[8],
-        orbit_class: items[9],
-        orbit_type: items[10],
-        perigee: items[12],
-        apogee: items[13],
-        //eccentricity: items[14],
-        //inclination: items[15],
-        //period: items[16],
-        // launch_mass: items[17],
-        // dry_mass: items[18],
-        // power: items[19],
-        launch_date: items[20],
-        // expected_lifetime: items[21],
-        // contractor: items[22],
-        launch_site: items[24],
-        // launch_vehicle: items[25],
-        cospar: items[26],
-        norad: items[27]
+        name: item[keys.name],
+        official_name: item[keys.official_name],
+        country_operator: item[keys.country_operator],
+        operator: item[keys.operator],
+        purpose: item[keys.purpose],
+        orbit_class: item[keys.orbit_class],
+        orbit_type: item[keys.orbit_type],
+        perigee: Number(item[keys.perigee].replaceAll("'", '')),
+        apogee: Number(item[keys.apogee].replaceAll("'", '')),
+        date: item[keys.launch_date],
+        launch_date: formatDate(item[keys.launch_date]),
+        launch_site: item[keys.lauch_site],
+        cospar: item[keys.cospar],
+        norad
       };
     }
-    const tleResponse = await fetch('../public/data/norad-tle-test.txt');
+    const tleResponse = await fetch('../public/data/active.txt');
     const tleData = await tleResponse.text();
     const lines = tleData.split('\n');
     const count = (lines.length - (lines.length % 3)) / 3;
@@ -72,67 +132,38 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       const norad = Number.parseInt(satrec.satnum, 10);
       if (uniqueSatelliteIDs.indexOf(norad) === -1) {
         uniqueSatelliteIDs.push(norad);
-        // if (infoCollection.hasOwnProperty(norad)) {
-        const sat = {
-          norad,
-          satrec,
-          metadata: {
-            inclination: (satrec.inclo * 180) / Math.PI,
-            period: (2 * Math.PI) / satrec.no,
-            eccentricity: (satrec.ecco * 180) / Math.PI,
-            perigee_argument: (satrec.argpo * 180) / Math.PI,
-            node: (satrec.nodeo * 180) / Math.PI
-            // ...infoCollection[norad]
-          }
-        };
-        satellites.push(sat);
-        // }
+        if (infoCollection.hasOwnProperty(norad)) {
+          const sat = {
+            norad,
+            satrec,
+            metadata: {
+              inclination: (satrec.inclo * 180) / Math.PI,
+              period: (2 * Math.PI) / satrec.no,
+              eccentricity: (satrec.ecco * 180) / Math.PI,
+              perigee_argument: (satrec.argpo * 180) / Math.PI,
+              node: (satrec.nodeo * 180) / Math.PI,
+              ...infoCollection[norad]
+            }
+          };
+          satellites.push(sat);
+        }
       }
     }
+    console.log(`${uniqueSatelliteIDs.length} satellites in the tle data`);
   }
 
-  function getSatelliteLocation(satrec, date) {
-    const propagation = propagate(satrec, date);
-    const position = propagation?.position;
-    console.log(position);
-    if (!position || Number.isNaN(position.x) || Number.isNaN(position.y) || Number.isNaN(position.z)) {
-      return null;
-    }
-
-    const gmst = gstime(NOW);
-    const geographic = eciToGeodetic(position, gmst);
-    const { longitude, latitude, height } = geographic;
-
-    const x = radiansToDegrees(longitude);
-    const y = radiansToDegrees(latitude);
-    const z = height * 1000;
-    return { x, y, z };
-  }
-
-  function areSimilar(value1, value2) {
-    if (Math.abs(value1 - value2) > 5) {
-      return false;
-    }
-    return true;
-  }
-
-  function getOrbit(satrec, period, start) {
-    const SEGMENTS = period > 1000 ? 200 : period > 400 ? 100 : 50;
-    const milliseconds = (period * 60000) / SEGMENTS;
-
-    const vertices = [];
-    for (let i = 0; i <= SEGMENTS; i++) {
-      const date = new Date(start.getTime() + i * milliseconds);
-      const satelliteLocation = getSatelliteLocation(satrec, date);
-      if (!satelliteLocation) {
-        continue;
-      }
-      vertices.push(satelliteLocation);
-    }
-
-    return vertices;
-  }
-
+  /*********************************
+   * This method creates graphics and updates feature service
+   *
+   * Because some orbits overlap and we need to take care of performance
+   * we add a display property so that we only show one orbit out of the ones
+   * that are similar (display: 1 -> show orbit; display: 0 -> don't show).
+   * The layer has a definitionExpression using the display property.
+   * This reduces the number of displayed orbits to half.
+   *
+   * Some satellites marked as important should not be affected by this and
+   * should have the display property set to 1
+   ***********************/
   function addSatellites(start) {
     const orbitGraphics = [];
     const uniqueOrbits = [];
@@ -157,7 +188,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
           break;
         }
       }
-      if (sat.norad == 39084) {
+      if (norad_important_satellites.includes(sat.norad)) {
         display = 1;
       }
       if (display === 1) {
@@ -192,7 +223,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       })
       .then((result) => {
         start = start + 1000;
-        console.log('Added features: ', result, unique);
+        console.log('Added features: ', result, `A total of ${unique} features are visible.`);
         if (satellites.length - start > 0) {
           addSatellites(start);
         }
@@ -200,9 +231,43 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       .catch(console.error);
   }
 
-  async function updateSatellites() {
-    await loadSatelliteData();
-    satelliteLayer
+  function getOrbit(satrec, period, start) {
+    const SEGMENTS = period > 1000 ? 200 : period > 400 ? 100 : 50;
+    const milliseconds = (period * 60000) / SEGMENTS;
+
+    const vertices = [];
+    for (let i = 0; i <= SEGMENTS; i++) {
+      const date = new Date(start.getTime() + i * milliseconds);
+      const satelliteLocation = getSatelliteLocation(satrec, date);
+      if (!satelliteLocation) {
+        continue;
+      }
+      vertices.push(satelliteLocation);
+    }
+
+    return vertices;
+  }
+
+  function getSatelliteLocation(satrec, date) {
+    const propagation = propagate(satrec, date);
+    const position = propagation?.position;
+    if (!position || Number.isNaN(position.x) || Number.isNaN(position.y) || Number.isNaN(position.z)) {
+      return null;
+    }
+
+    const gmst = gstime(NOW);
+    const geographic = eciToGeodetic(position, gmst);
+    const { longitude, latitude, height } = geographic;
+
+    const x = radiansToDegrees(longitude);
+    const y = radiansToDegrees(latitude);
+    const z = height * 1000;
+    return { x, y, z };
+  }
+
+  async function updateDebris() {
+    await loadDebrisData();
+    debrisLayer
       .queryObjectIds()
       .then((results) => {
         const deleteFeatures = results.map((id) => {
@@ -210,12 +275,12 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
             objectId: id
           };
         });
-        satelliteLayer
+        debrisLayer
           .applyEdits({ deleteFeatures })
           .then((result) => {
             console.log('Deleted features: ', result);
             console.log('Adding new features...');
-            addSatellites(0);
+            addDebris(0);
           })
           .catch(console.error);
       })
@@ -291,37 +356,18 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
       })
       .catch(console.error);
   }
-
-  async function updateDebris() {
-    await loadDebrisData();
-    debrisLayer
-      .queryObjectIds()
-      .then((results) => {
-        const deleteFeatures = results.map((id) => {
-          return {
-            objectId: id
-          };
-        });
-        debrisLayer
-          .applyEdits({ deleteFeatures })
-          .then((result) => {
-            console.log('Deleted features: ', result);
-            console.log('Adding new features...');
-            addDebris(0);
-          })
-          .catch(console.error);
-      })
-      .catch(console.error);
-  }
-
-  async function main() {
-    await loadSatelliteData();
-    const sat = satellites[0];
-    console.log(sat);
-    getOrbit(sat.satrec, sat.metadata.period, NOW);
-    //updateSatellites();
-    //updateDebris();
-  }
-
-  main();
 })();
+
+function formatDate(stringDate) {
+  const [day, month, year] = stringDate.split('.');
+  const formattedYear = Number(year) > 25 ? `19${year}` : `20${year}`;
+  const isoDate = `${formattedYear}-${month}-${day}`;
+  return new Date(isoDate);
+}
+
+function areSimilar(value1, value2) {
+  if (Math.abs(value1 - value2) > 5) {
+    return false;
+  }
+  return true;
+}
