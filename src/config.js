@@ -15,7 +15,6 @@ export const fields = [
   { name: 'inclination', metadataIndex: 15, type: 'double' },
   { name: 'period', metadataIndex: 16, type: 'double' },
   { name: 'launch_date', metadataIndex: 20, type: 'date' },
-  { name: 'expected_lifetime', metadataIndex: 21, type: 'string' },
   { name: 'launch_site', metadataIndex: 24, type: 'string' },
   { name: 'launch_vehicle', metadataIndex: 25, type: 'string' },
   { name: 'cospar', metadataIndex: 26, type: 'string' },
