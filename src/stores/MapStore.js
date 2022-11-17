@@ -48,7 +48,7 @@ function startAnimation(view) {
 
 const generalLineRenderer = getGeneralLineRenderer();
 const usageLineRenderer = getUsageLineRenderer();
-const orbitLineRenderer = getGeneralLineRenderer(0.3);
+const orbitLineRenderer = getGeneralLineRenderer(0.2);
 const countriesLineRenderer = getCountryLineRenderer();
 
 class MapStore {
