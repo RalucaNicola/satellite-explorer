@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Satellite Map | Explore Active Satellites Orbiting Earth</title>
+  <link rel="canonical" href="https://geoxc-apps.bd.esri.com/space/satellite-explorer/" />
 
   <meta name="author" content="@esri" />
   <meta name="keywords" content="Esri ArcGIS Satellite Map Maps Space Debris Trajectory Orbit Geosynchronous" />
@@ -36,7 +37,191 @@
 
 <body>
   <div id="root"></div>
+  <div style="position:absolute; top:-10000px; font-size:0.1rem">
+    <h1>Satellite Explorer</h1>
+    <h2>Why do we need satellites?</h2>
+    <div>
+      Did you ever get your location on your phone or set the navigation system in the car to guide you to a
+      destination? Then you've definitely used satellites.
+      <p>
+        Localization via satellite navigation systems is widely used in almost all industries: transportation, emergency
+        response,
+        farming, banking, military, science. These satellites determine the location, velocity, and current time of
+        small electronic devices (like the ones in our smart phones).
+      </p>
+      <p>
+        Communications
+        satellites are used for television, radio, and internet broadcasting. This sector increased lately with more
+        and more companies launching satellites to provide internet everywhere on the globe.
+      </p>
+      <p>
+        Earth Observation
+        satellites provide information about earth resources, weather, climate, and environmental monitoring. Imaging
+        satellites produce high-resolution data of almost the entire landmass on earth.
+      </p>
+      <p>Space Observation also benefits from satellite data: satellite telescopes have been critical to understanding
+        phenomena like
+        pulsars and black holes as well as measuring the age of the universe.
+      </p>
+    </div>
+    <h2>Where are satellite orbits?</h2>
+    <div>
+      Although the space beyond Earth's atmosphere is vast, man-made satellites are typically located in one of the
+      three popular orbital regimes: low earth orbit, medium earth orbit and geosynchronous orbit.
+    </div>
+
+    <h2>Who owns all the satellites?</h2>
+    <div>
+      <p>There are thousands of active satellites out there and 75 different countries have at least one satellite
+        orbiting Earth. United States, China, and United Kingdom top the list of countries with hundreds of operational
+        satellites.</p>
+      <p> When looking at individual satellite operators we can see that private companies own most of the active
+        satellites. SpaceX is the big winner, with 1,735 satellites as of January 2022.</p>
+    </div>
+
+    <h2>What is space debris?</h2>
+    <div>
+      <p>
+        Space debris represents defunct artificial objects in space which no longer serve a useful function. The
+        debris is composed of old satellites, abandoned launch vehicle stages, mission-related debris, and
+        fragmentation debris.
+      </p>
+      <h3>How much space debris is out there?</h3>
+      <p>
+        It's not possible to track all the debris objects. According to{' '}
+        <a href='https://www.esa.int/Safety_Security/Space_Debris/Space_debris_by_the_numbers' target='_blank'>
+          a European Space Agency article
+        </a>{' '}
+        there are around:
+      </p>
+      <p>
+        <span>36,500</span> pieces of debris <br />
+        larger than 10 cm/4 inches
+      </p>
+      <p>
+        <span>1,000,000</span> pieces of debris <br />
+        larger than 1 cm/0.4 inches
+      </p>
+      <p>
+        <span>130 million</span> pieces of debris <br /> about 1 mm/0.04 inches and larger
+      </p>
+      These objects travel at speeds up to 28,160 kph/17,500 mph so even if they are very small they can damage a
+      spacecraft when travelling at these speeds.
+    </div>
+    <div>
+      <h3>Collisions in space</h3>
+      <p>
+        Satellite operators frequently maneuver their satellites to avoid potential collisions with debris fragments.
+        There have been several prominent space collisions, whose fragments are displayed on the map (their positions
+        are predicted as of March 28th, 2022). The collision in 2009 was accidental and the others were triggered on
+        purpose by{' '}
+        <a href='https://en.wikipedia.org/wiki/Anti-satellite_weapon' target='_blank'>
+          anti-satellite weapons
+        </a>
+        .
+      </p>
+      <ul>
+        <li>
+          <p>2021</p>
+          <div>
+            <span> Cosmos 1408</span> satellite was destroyed
+            in a Russian anti-satellite weapon test on November 15, 2021, resulting in space debris in orbits between
+            300 km/190 mi and 1,100 km/680 mi above the Earth. The threat of potential collision with debris caused
+            the crew of the International Space Station (ISS) to take shelter in their escape capsules for the first
+            few passes of the debris cloud, and increased the future risk of a debris collision with the ISS or other
+            satellites.
+          </div>
+        </li>
+        <li>
+          <p>2009</p>
+          <div>
+            On February 10, 2009, <span> Cosmos 2251</span> a
+            defunct Russian spacecraft collided with and destroyed{' '}
+            <span> Iridium 33</span> a functioning U.S.
+            Iridium commercial spacecraft. The collision added more than 2,300 pieces of large, trackable debris and
+            many more smaller debris into space.
+          </div>
+        </li>
+        <li>
+          <p>2007</p>
+          <div>
+            China's 2007 anti-satellite test, which used a missile to destroy{' '}
+            <span> Fengyun 1C</span> an old weather
+            satellite, added more than 3,500 pieces of large, trackable debris and many more smaller debris into
+            space.
+          </div>
+        </li>
+      </ul>{' '}
+
+    </div>
+    <div>
+      <h3>Who cleans up outer space?</h3>
+      <p>
+        Space debris poses a real challenge in the future, especially with the rise of megaconstellations. Space
+        organizations and companies compete for innovative solutions to clean up debris and make outer space safer.
+        Below are some examples of projects in development that use various technologies to clean up space:
+      </p>
+      <h4>Izaña-1 laser ranging station</h4>
+      <p>
+        The European Space Agency is testing a new laser ranging station in Tenerife, Spain. Using powerful lasers
+        they can rapidly determine the location, velocity and orbit of previously invisible defunct objects. They can
+        also gently nudge debris objects into new orbit to avoid collision. Read more about this technology on the{' '}
+        <a href='https://www.esa.int/Safety_Security/Space_Debris/New_laser_station_lights_the_way_to_debris_reduction'
+          target='_blank'>
+          ESA website
+        </a>
+        .
+      </p>
+      <h4>Mission ClearSpace-1</h4>{' '}
+      <p>
+        The mission, planned for 2025, will use a four-armed robot to capture a Vega Secondary Payload Adapter, left
+        behind by ESA's Vega launcher in 2013. This is a partnership between the{' '}
+        <a href='https://www.esa.int/Safety_Security/Clean_Space/ESA_commissions_world_s_first_space_debris_removal'
+          target='_blank'>
+          European Space Agency
+        </a>{' '}
+        and{' '}
+        <a href='https://clearspace.today/' target='_blank'>
+          ClearSpace
+        </a>
+        , a Swiss based start-up.
+      </p>
+      <h4>ELSA spacecraft retrieval service</h4>
+      <p>
+        The idea of the program is to launch two spacecrafts - a servicer satellite and a client satellite - to track
+        down and dock dead satellites and remove them from the orbit. Astroscale, the Japanese-based company behind
+        the mission successfully carried tests in 2021 where they did multiple dockings and releasing of satellite
+        targets. In 2022 they experienced difficulties with the test program. Read more about{' '}
+        <a href='https://astroscale.com/missions/elsa-d/' target='_blank'>
+          the mission on their website
+        </a>
+        .
+      </p>
+      <h4>E-Space</h4>
+      <p>
+        <a href='https://www.e-space.com/news' target='_blank'>
+          E-Space
+        </a>{' '}
+        is a startup that plans to launch a network of satellites that would capture pieces of debris while in orbit.
+        Once they have captured a set amount of debris they are programmed to de-orbit and burn up in the atmosphere.
+        The first three test satellites will be launched later in 2022.
+      </p>
+    </div>
+  </div>
   <script type="module" src="/src/main.jsx"></script>
+  <script type="text/javascript">
+    window.dataLayer = Object.assign({}, window.dataLayer, {
+      pageTitle: "Satellite Map | Explore Active Satellites Orbiting Earth",
+      pageName: "Home",
+      pagePath: "/space/satellite-explorer/",
+      pageType: "Demo",
+      domain: window.location.host,
+      authState: "false", //is the user authenticated?
+      locale: "en-us", // this should match the locale the current page is built for
+      language: "en", // this should match the language that is showing on the current page
+      countryCode: "us" // this should match the country the current page is built for
+    });
+  </script>
   <script src="//mtags.esri.com/tags.js"></script>
   <script type="application/ld+json">
     {
