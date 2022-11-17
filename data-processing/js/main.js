@@ -42,6 +42,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
     apogee: 'Apogee (km)',
     launch_date: 'Date of Launch',
     launch_site: 'Launch Site',
+    launch_vehicle: 'Launch Vehicle',
     cospar: 'COSPAR Number'
   };
 
@@ -66,7 +67,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
     satelliteLayer
       .queryObjectIds()
       .then((results) => {
-        console.log(`Deleting ${results.lenght} features...`);
+        console.log(`Deleting ${results.length} features...`);
         const deleteFeatures = results.map((id) => {
           return {
             objectId: id
@@ -85,7 +86,7 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
   }
 
   async function loadSatelliteData() {
-    const metadataResponse = await fetch('../data/sat_metadata_052022.csv');
+    const metadataResponse = await fetch('./data/sat_metadata_052022.csv');
     const metadata = await metadataResponse.text();
     const mu = 398600.5;
     const infoCollection = {};
@@ -106,7 +107,8 @@ import FeatureLayer from 'https://js.arcgis.com/4.22/@arcgis/core/layers/Feature
         apogee: Number(item[keys.apogee].replaceAll("'", '')),
         date: item[keys.launch_date],
         launch_date: formatDate(item[keys.launch_date]),
-        launch_site: item[keys.lauch_site],
+        launch_site: item[keys.launch_site],
+        launch_vehicle: item[keys.launch_vehicle],
         cospar: item[keys.cospar],
         norad
       };
