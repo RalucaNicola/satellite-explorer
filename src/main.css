@@ -112,6 +112,11 @@ a.link:hover {
 
 /* popup styles */
 
+.esri-popup {
+  --calcite-ui-background: transparent !important;
+  --calcite-ui-foreground-1: transparent !important;
+}
+
 .esri-popup--shadow {
   box-shadow: none !important;
 }

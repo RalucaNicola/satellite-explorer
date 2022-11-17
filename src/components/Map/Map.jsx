@@ -50,7 +50,8 @@ export const Map = observer(() => {
             position: 'top-right',
             buttonEnabled: false,
             breakpoint: false
-          }
+          },
+          collapseEnabled: false
         },
         highlightOptions: {
           color: [255, 118, 0],
