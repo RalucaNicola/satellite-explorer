@@ -29,7 +29,7 @@ export const convertToType = (value, type) => {
     return checkForNaN(intValue);
   }
   if (type === 'date') {
-    const date = Date.parse(value);
+    const date = new Date(value);
     return checkForNaN(date);
   }
   if (value) {
