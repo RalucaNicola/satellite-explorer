@@ -207,12 +207,12 @@ export const countriesRendererConfig = {
       color: blue
     },
     {
-      value: 'China',
-      color: orange
-    },
-    {
       value: 'United Kingdom',
       color: green
+    },
+    {
+      value: 'China',
+      color: orange
     },
     {
       value: 'Russia',
