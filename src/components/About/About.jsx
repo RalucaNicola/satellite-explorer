@@ -61,7 +61,7 @@ export function About() {
               <a className='link' href='https://www.ucsusa.org/resources/satellite-database' target='_blank'>
                 Union of Concerned Scientists Satellite Database
               </a>
-              . This dataset was updated last on January 1, 2022. The metadata is merged with two line element (TLE)
+              . This dataset was updated last on September 1, 2022. The metadata is merged with two line element (TLE)
               data for active satellites from{' '}
               <a className='link' href='https://celestrak.com/NORAD/elements/active.txt' target='_blank'>
                 CelesTrack
