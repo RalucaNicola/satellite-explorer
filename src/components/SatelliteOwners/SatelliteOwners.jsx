@@ -91,32 +91,9 @@ export const SatelliteOwners = () => {
         </div>
       </div>
       <div className={styles.block}>
-        {countsByOperator ? <BarChart rank={2} data={countsByOperator} rgbColor={'rgb(255,255,255)'}></BarChart> : ''}
-        <div className={styles.shortInfo}>
-          <p>
-            PlanetLabs revolutionizes the earth observation industry with the highest frequency satellite data
-            commercially available.
-          </p>
-          <p>Founding year: 2010.</p> <p>Headquarters: San Francisco, United States.</p>
-          <p>
-            {' '}
-            Learn more:{' '}
-            <a href='https://www.planet.com/' target='_blank'>
-              https://www.planet.com/
-            </a>
-          </p>
-        </div>
-        <div style={{ textAlign: 'center' }}>
-          <FilterButton filter={planetlabs} active={activeFilter === planetlabs} clickHandler={handleFilter}>
-            {' '}
-            Filter PlanetLabs satellites
-          </FilterButton>
-        </div>
-      </div>
-      <div className={styles.block}>
         Other operators:
         {countsByOperator
-          ? [3, 4, 5, 6, 7, 8, 9].map((rank, index) => {
+          ? [2, 3, 4, 5, 6, 7, 8, 9].map((rank, index) => {
               return (
                 <BarChart key={index} rank={rank} data={countsByOperator} rgbColor={'rgb(255,255,255)'}></BarChart>
               );
