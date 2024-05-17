@@ -28,5 +28,19 @@
         "url": "https://landsat.gsfc.nasa.gov/satellites/landsat-9/"
       }
     ]
+  },
+  "58016": {
+    "norad": 58016,
+    "model": "./assets/theos-2/theos-2.glb",
+    "info": "Thailand's high resolution Earth observation satellite is equipped with advanced imaging technology that will provide valuable data for various applications such as urban planning, environmental monitoring, disaster management, and agriculture.",
+    "image": "./assets/theos-2/image.jpg",
+    "shortInfo": "Thailand's high resolution Earth observation satellite.",
+    "links": [{
+      "title": "THEOS - 2 mission page",
+      "url": "https://www.eoportal.org/satellite-missions/theos-2"
+    }, {
+      "title": "GISTDA - Theos-2 - data access",
+      "url": "https://gistda.or.th/theos2a/?lg=EN"
+    }]
   }
 }
