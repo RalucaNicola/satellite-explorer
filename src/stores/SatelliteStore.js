@@ -238,7 +238,7 @@ class SatelliteStore {
             {
               type: 'object',
               resource: { href: featuredSatellite.model },
-              material: { color: [255, 255, 255] },
+              
               height: 100000,
               heading: this.heading
             }
